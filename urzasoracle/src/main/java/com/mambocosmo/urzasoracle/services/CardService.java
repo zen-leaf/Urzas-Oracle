@@ -14,9 +14,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
     @Override
     public Card construct(Map<String, String> fromData) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'construct'");
+        return getCONTEXT().getBean(Card.class, fromData);
     }
-    // <E extends GenericEntity, D extends GenericDTO, C extends GenericConverter<E,
-    // D>, R extends JpaRepository<E, IDType>
+
 }
