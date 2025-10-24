@@ -71,7 +71,7 @@ public class Card extends GenericEntity{
 
     private Boolean variation;
 
-    private CardExpansionSet set;
+    private CardExpansionSet expansion;
 
     private String ulings_uri;
 
