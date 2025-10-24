@@ -9,17 +9,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.mambocosmo.urzasoracle.DTO.GenericDTO;
 import com.mambocosmo.urzasoracle.converters.GenericConverter;
-import com.mambocosmo.urzasoracle.entities.Entity;
+import com.mambocosmo.urzasoracle.entities.GenericEntity;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
-@Data
-public abstract class GenericService<IDType, E extends Entity, D extends GenericDTO, C extends GenericConverter<E, D>, R extends JpaRepository<E, IDType>> {
-    private final R REPOSITORY;
-    private final ApplicationContext CONTEXT;
-    private final C CONVERTER;
+public abstract class GenericService<E extends GenericEntity, D extends GenericDTO, C extends GenericConverter<E, D>, R extends JpaRepository<E, String>> {
+    private R REPOSITORY;
+    private ApplicationContext CONTEXT;
+    private C CONVERTER;
 
     public abstract E construct(Map<String, String> fromData);
 
@@ -45,7 +43,7 @@ public abstract class GenericService<IDType, E extends Entity, D extends Generic
         return outDTO;
     }
 
-    public D getByID(IDType id) {
+    public D getByID(String id) {
         Optional<E> e = REPOSITORY.findById(id);
         if (!e.isPresent()) {
             return null;
@@ -53,7 +51,7 @@ public abstract class GenericService<IDType, E extends Entity, D extends Generic
         return CONVERTER.fromEToD(e.get());
     }
 
-    public boolean delete(IDType id) {
+    public boolean delete(String id) {
         try {
             REPOSITORY.deleteById(id);
             return true;

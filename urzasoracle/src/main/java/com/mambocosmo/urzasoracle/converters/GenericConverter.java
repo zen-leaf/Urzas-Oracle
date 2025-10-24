@@ -1,9 +1,10 @@
 package com.mambocosmo.urzasoracle.converters;
 
 import com.mambocosmo.urzasoracle.DTO.GenericDTO;
-import com.mambocosmo.urzasoracle.entities.Entity;
+import com.mambocosmo.urzasoracle.entities.GenericEntity;
 
-public interface GenericConverter<E extends Entity, D extends GenericDTO> {
+public interface GenericConverter<E extends GenericEntity, D extends GenericDTO> {
     public E fromDToE(D dto);
+
     public D fromEToD(E e);
 }
