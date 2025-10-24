@@ -1,12 +1,14 @@
 package com.mambocosmo.urzasoracle.entities;
 
-import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Entity
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class FreeCardCollection extends CardCollection{
+public class Artist extends GenericEntity{
+
+    private String string;
+
+    private String artist_name;
 
 }
