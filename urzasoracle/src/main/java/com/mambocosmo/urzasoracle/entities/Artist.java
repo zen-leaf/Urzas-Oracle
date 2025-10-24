@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class Artist extends GenericEntity{
 
-    private String string;
+    private String id;
 
     private String artist_name;
 
