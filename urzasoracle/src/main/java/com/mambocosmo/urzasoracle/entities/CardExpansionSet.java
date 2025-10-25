@@ -2,7 +2,7 @@ package com.mambocosmo.urzasoracle.entities;
 
 import java.time.LocalDate;
 
-import com.mambocosmo.urzasoracle.misc.SetType;
+import com.mambocosmo.urzasoracle.misc.enums.SetType;
 
 import jakarta.persistence.Id;
 import lombok.Data;

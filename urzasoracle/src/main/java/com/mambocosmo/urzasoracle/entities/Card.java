@@ -1,12 +1,14 @@
 package com.mambocosmo.urzasoracle.entities;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import com.mambocosmo.urzasoracle.misc.BorderColor;
-import com.mambocosmo.urzasoracle.misc.Format;
-import com.mambocosmo.urzasoracle.misc.Frame;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.mambocosmo.urzasoracle.misc.enums.BorderColor;
+import com.mambocosmo.urzasoracle.misc.enums.Format;
+import com.mambocosmo.urzasoracle.misc.enums.Frame;
+import com.mambocosmo.urzasoracle.misc.enums.WURBG;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,8 +17,9 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper=true)
-public class Card extends GenericEntity{
+@EqualsAndHashCode(callSuper = true)
+// @JsonIgnoreProperties(ignoreUnknown = true)
+public class Card extends GenericEntity {
 
     @Id
     private String id;
@@ -27,7 +30,7 @@ public class Card extends GenericEntity{
 
     private String lang;
 
-    private LocalDate released_at;
+    private String released_at;
 
     private String uri;
 
@@ -39,8 +42,11 @@ public class Card extends GenericEntity{
 
     private String image_status;
 
-    private Map<String,String> image_uris;
+    private Map<String, String> image_uris;
 
+    /*
+     * USUALLY MISSING IF @{card_faces} is not null
+     */
     private String mana_cost;
 
     private String cmc;
@@ -49,22 +55,26 @@ public class Card extends GenericEntity{
 
     private String oracle_text;
 
-    private List<String> colors;
-    
-    private List<String> color_identity;
-    
+    private String flavor_text;
+
+    private List<WURBG> colors;
+
+    private List<WURBG> color_identity;
+
     private List<String> keywords;
-    
+
+    // private List<CardFace> card_faces;
+
     private List<String> produced_mana;
-    
-    private List<Format> legalities;
+
+    private Map<Format, String> legalities;
 
     private Boolean reserverd;
 
     private Boolean game_changer;
 
     private Boolean foil;
-    
+
     private Boolean nonfoil;
 
     private List<String> finishes;
@@ -91,7 +101,8 @@ public class Card extends GenericEntity{
 
     private String card_back_id;
 
-    private Artist artist;
+    @JsonUnwrapped // Json mapper will create an instance of this obj and populate its fields
+    private Artist artistRef;
 
     private String illustration_id;
 
@@ -102,6 +113,6 @@ public class Card extends GenericEntity{
     private Boolean full_art;
 
     private Boolean textless;
-    
+
     private Boolean booster;
 }
