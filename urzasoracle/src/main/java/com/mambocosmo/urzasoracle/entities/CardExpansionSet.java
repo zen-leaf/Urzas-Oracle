@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.mambocosmo.urzasoracle.misc.SetType;
 
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 public class CardExpansionSet extends GenericEntity{
 
+    @Id
     private String id;
     
     private String code;

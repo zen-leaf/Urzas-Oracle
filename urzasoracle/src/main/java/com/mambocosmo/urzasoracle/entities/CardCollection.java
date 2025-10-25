@@ -1,5 +1,7 @@
 package com.mambocosmo.urzasoracle.entities;
 
+import java.util.Map;
+
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,5 +21,8 @@ public abstract class CardCollection extends GenericEntity{
 
 
     private String description;
+    
+
+    private Map<Card,Integer> cardList;
 
 }

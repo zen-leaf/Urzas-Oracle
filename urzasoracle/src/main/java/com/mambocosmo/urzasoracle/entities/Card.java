@@ -35,7 +35,13 @@ public class Card extends GenericEntity{
 
     private String layout;
 
+    private Boolean highres_image;
+
+    private String image_status;
+
     private Map<String,String> image_uris;
+
+    private String mana_cost;
 
     private String cmc;
 
@@ -82,6 +88,8 @@ public class Card extends GenericEntity{
     private Boolean digital;
 
     private String rarity;
+
+    private String card_back_id;
 
     private Artist artist;
 
