@@ -1,14 +1,12 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.util.Set;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -24,7 +22,7 @@ import lombok.EqualsAndHashCode;
 public class Artist extends GenericEntity {
     @Id
     @Column(name = "artist_id")
-    private String id;
+    private UUID id;
 
     @JsonAlias("artist")
     private String artist_name;

@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.util.Set;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -11,14 +12,16 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "card_parts")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CardPart extends GenericEntity {
     @Id
-    private String id;
+    private UUID id;
     private String component;
     private String name;
     private String type_line;

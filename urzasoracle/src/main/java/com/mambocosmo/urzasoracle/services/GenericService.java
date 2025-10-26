@@ -3,6 +3,7 @@ package com.mambocosmo.urzasoracle.services;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,7 +16,7 @@ import com.mambocosmo.urzasoracle.entities.GenericEntity;
 import lombok.Getter;
 
 @Getter
-public abstract class GenericService<E extends GenericEntity, D extends GenericDTO, C extends GenericConverter<E, D>, R extends JpaRepository<E, String>> {
+public abstract class GenericService<E extends GenericEntity, D extends GenericDTO, C extends GenericConverter<E, D>, R extends JpaRepository<E, UUID>> {
     @Autowired
     private R REPOSITORY;
         @Autowired
@@ -48,7 +49,7 @@ public abstract class GenericService<E extends GenericEntity, D extends GenericD
         return outDTO;
     }
 
-    public D getByID(String id) {
+    public D getByID(UUID id) {
         Optional<E> e = REPOSITORY.findById(id);
         if (!e.isPresent()) {
             return null;
@@ -56,7 +57,7 @@ public abstract class GenericService<E extends GenericEntity, D extends GenericD
         return CONVERTER.fromEToD(e.get());
     }
 
-    public boolean delete(String id) {
+    public boolean delete(UUID id) {
         try {
             REPOSITORY.deleteById(id);
             return true;

@@ -10,9 +10,11 @@ import com.mambocosmo.urzasoracle.entities.Artist;
 import com.mambocosmo.urzasoracle.repositories.ArtistRepository;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Service
 @Data
+@EqualsAndHashCode(callSuper=true)
 public class ArtistService extends GenericService<Artist, ArtistDTO, ArtistConverter, ArtistRepository> {
 
     @Override

@@ -148,10 +148,10 @@ public class Card extends GenericEntity {
     private List<String> tempname;
 
     @JsonProperty("artist_ids")
-    public void setArtistID(List<String> ids) {
+    public void setArtistID(List<UUID> ids) {
         artistRef = new HashSet<>();
         if (artistRef != null && !ids.isEmpty()) {
-            for (String string : ids) {
+            for (UUID string : ids) {
                 Artist a = new Artist();
                 a.setId(string);
                 artistRef.add(a);
