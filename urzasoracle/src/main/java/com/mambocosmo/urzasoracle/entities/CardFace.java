@@ -1,14 +1,12 @@
-package com.mambocosmo.urzasoracle.models;
+package com.mambocosmo.urzasoracle.entities;
 
 import java.util.List;
 import java.util.Map;
 
-import com.mambocosmo.urzasoracle.entities.IMappable;
-
 import lombok.Data;
 
 @Data
-public class CardFace implements IMappable {
+public class CardFace {
     private String object;
     private String name;
     private String mana_cost;
@@ -21,5 +19,5 @@ public class CardFace implements IMappable {
     private String artist;
     private String artist_id;
     private String illustration_id;
-    private Map<String,String> image_uris;
+    private Map<String, String> image_uris;
 }
