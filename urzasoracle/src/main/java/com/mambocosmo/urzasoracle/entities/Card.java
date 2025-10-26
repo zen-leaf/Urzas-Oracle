@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.mambocosmo.urzasoracle.misc.enums.AttractionLight;
 import com.mambocosmo.urzasoracle.misc.enums.BorderColor;
 import com.mambocosmo.urzasoracle.misc.enums.Format;
 import com.mambocosmo.urzasoracle.misc.enums.Frame;
@@ -74,8 +75,9 @@ public class Card extends GenericEntity {
     @ElementCollection
     @CollectionTable(name = "card_color_identity_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<WURBG> color_identity;
+    
     @ElementCollection
-    @CollectionTable(name = "keyword_table", joinColumns = @JoinColumn(name = "card_id"))
+    @CollectionTable(name = "card_keyword_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<String> keywords;
 
     @JsonUnwrapped
@@ -142,21 +144,43 @@ public class Card extends GenericEntity {
     private Boolean textless;
 
     private Boolean booster;
-    // printed_text - String
-    // flavor_name - String
-    // hand_modifier - String
-    // toughness - String
-    // watermark - String
-    // loyalty - String
-    // attraction_lights - Set<String> (le luci accese 12345 tipo)
-    // reserved - Boolean
+
+    private String printed_text;
+    
+    private String flavor_name;
+    
+    private String hand_modifier;
+    
+    private String toughness;
+    
+    private String watermark;
+    
+    private String loyalty;
+    
+    @ElementCollection
+    @CollectionTable(name = "card_attraction_lights_table", joinColumns = @JoinColumn(name = "card_id"))
+    private Set<AttractionLight> attraction_lights;
+    
+    private Boolean reserved;
+    
     // all_parts - Set<Card> ?
-    // color_indicator - Set<WURBG>
-    // life_modifier - String
-    // frame_effects - Set<String>
-    // printed_name - String
-    // power - String
-    // printed_type_line - String
-    // variation_of - String
+    
+    @ElementCollection
+    @CollectionTable(name = "card_color_indicator_table", joinColumns = @JoinColumn(name = "card_id"))
+    private Set<WURBG> color_indicator;
+    
+    private String life_modifier;
+    
+    @ElementCollection
+    @CollectionTable(name = "card_frame_effects_table", joinColumns = @JoinColumn(name = "card_id"))
+    private Set<String> frame_effects;
+    
+    private String printed_name;
+    
+    private String power;
+    
+    private String printed_type_line;
+    
+    private String variation_of;
 
 }
