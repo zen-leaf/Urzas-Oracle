@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/head :: head"></head>
+  <body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <header
+      class="text-center py-5 bg-black text-warning border-bottom border-warning"
+    >
+      <h1 class="display-4 fw-bold">Urza’s Oracle</h1>
+      <p class="lead text-light">
+        Il tuo compagno per esplorare il multiverso di Magic: The Gathering
+      </p>
+    </header>
+
+    <main class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card card-bg p-3 h-100 text-center">
+            <h3 class="text-warning">Cerca Carte</h3>
+            <p>Trova qualsiasi carta Magic per nome, colore o espansione.</p>
+            <a class="btn btn-outline-warning" th:href="@{/cards}">Vai</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card card-bg p-3 h-100 text-center">
+            <h3 class="text-warning">I tuoi Mazzi</h3>
+            <p>Crea, modifica e analizza i tuoi mazzi preferiti.</p>
+            <a class="btn btn-outline-warning" th:href="@{/decks}">Gestisci</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card card-bg p-3 h-100 text-center">
+            <h3 class="text-warning">Collezione</h3>
+            <p>
+              Tieni traccia delle carte che possiedi e scambia con altri
+              giocatori.
+            </p>
+            <a class="btn btn-outline-warning" th:href="@{/collection}"
+              >Visualizza</a
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div th:replace="fragments/footer :: footer"></div>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <nav
+      th:fragment="navbar"
+      class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-warning"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand text-warning fw-bold" th:href="@{/}"
+          >Urza’s Oracle</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/cards}">Carte</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/decks}">Mazzi</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/collection}">Collezione</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/community}">Community</a>
+            </li>
+          </ul>
+
+          <!-- searchbar -->
+          <form class="d-flex me-3" th:action="@{/search}" method="get">
+            <input
+              class="form-control me-2"
+              type="search"
+              name="query"
+              placeholder="Cerca carte..."
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-warning" type="submit">Cerca</button>
+          </form>
+
+          <!-- login link -->
+          <a class="btn btn-warning" th:href="@{/login}">Login</a>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
