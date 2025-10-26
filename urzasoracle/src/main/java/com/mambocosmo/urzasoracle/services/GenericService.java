@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,8 +16,11 @@ import lombok.Getter;
 
 @Getter
 public abstract class GenericService<E extends GenericEntity, D extends GenericDTO, C extends GenericConverter<E, D>, R extends JpaRepository<E, String>> {
+    @Autowired
     private R REPOSITORY;
+        @Autowired
     private ApplicationContext CONTEXT;
+    @Autowired
     private C CONVERTER;
 
     public abstract E construct(Map<String, String> fromData);
@@ -31,6 +35,7 @@ public abstract class GenericService<E extends GenericEntity, D extends GenericD
             REPOSITORY.save(fromEntity);
             return true;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }

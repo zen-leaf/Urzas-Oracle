@@ -2,20 +2,20 @@ package com.mambocosmo.urzasoracle.converters;
 
 import org.springframework.stereotype.Service;
 
-import com.mambocosmo.urzasoracle.DTO.CardDTO;
-import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.DTO.ArtistDTO;
+import com.mambocosmo.urzasoracle.entities.Artist;
 
 @Service
-public class CardConverter implements GenericConverter<Card, CardDTO> {
+public class ArtistConverter implements GenericConverter<Artist, ArtistDTO> {
 
     @Override
-    public Card fromDToE(CardDTO dto) {
+    public Artist fromDToE(ArtistDTO dto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'fromDToE'");
     }
 
     @Override
-    public CardDTO fromEToD(Card e) {
+    public ArtistDTO fromEToD(Artist e) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
     }

@@ -9,7 +9,10 @@ import com.mambocosmo.urzasoracle.converters.CardConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.repositories.CardRepository;
 
+import lombok.Data;
+
 @Service
+@Data
 public class CardService extends GenericService<Card, CardDTO, CardConverter, CardRepository> {
 
     @Override

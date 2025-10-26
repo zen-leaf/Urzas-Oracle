@@ -3,6 +3,7 @@ package com.mambocosmo.urzasoracle.entities;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -24,7 +25,7 @@ public class CardInDeck extends GenericEntity {
     @JoinColumn(name = "deck_id")
     private CardCollection deck;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @MapsId("card_id")
     @JoinColumn(name = "card_id")
     private Card card;
