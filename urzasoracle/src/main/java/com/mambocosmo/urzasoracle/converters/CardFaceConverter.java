@@ -1,8 +1,11 @@
 package com.mambocosmo.urzasoracle.converters;
 
+import org.springframework.stereotype.Service;
+
 import com.mambocosmo.urzasoracle.DTO.CardFaceDTO;
 import com.mambocosmo.urzasoracle.entities.CardFace;
 
+@Service
 public class CardFaceConverter implements GenericConverter<CardFace,CardFaceDTO>{
 
     @Override
