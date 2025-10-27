@@ -128,7 +128,7 @@ public class Card extends GenericEntity {
     @JoinColumn(name = "set_id", referencedColumnName = "expansion_id")
     private CardExpansionSet expansion;
 
-    private String ulings_uri;
+    private String rulings_uri;
 
     private String prints_search_uri;
 
