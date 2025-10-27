@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mambocosmo.urzasoracle.controllers.ArtistController;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.misc.Utils.Util;
 
@@ -38,6 +39,8 @@ public class UrzasoracleApplication {
 		// }
 		// System.out.println(params);
 		// }
+
+
 
 	}
 
