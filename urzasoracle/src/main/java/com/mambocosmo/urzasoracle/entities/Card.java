@@ -130,6 +130,13 @@ public class Card extends GenericEntity {
     @JoinColumn(name = "set_id", referencedColumnName = "expansion_id")
     private CardExpansionSet expansion;
 
+    @JsonProperty("set_id")
+    public void setCardExpansion(UUID id) {
+        CardExpansionSet ces = new CardExpansionSet();
+        ces.setId(id);
+        this.expansion = ces;
+    }
+
     private String rulings_uri = "";
 
     private String prints_search_uri = "";
@@ -216,7 +223,8 @@ public class Card extends GenericEntity {
     private Boolean reserved = false;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "foundIn")
-    // @JoinTable(name = "card_parts", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "part_id"))
+    // @JoinTable(name = "card_parts", joinColumns = @JoinColumn(name = "card_id"),
+    // inverseJoinColumns = @JoinColumn(name = "part_id"))
     private Set<CardPart> all_parts;
 
     @ElementCollection
