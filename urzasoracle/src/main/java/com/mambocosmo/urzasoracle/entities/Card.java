@@ -23,6 +23,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
@@ -148,9 +149,9 @@ public class Card extends GenericEntity {
 
     private UUID card_back_id;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "illustratedCards")
-    // @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name =
-    // "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+     @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name =
+    "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artistRef;
 
     @Transient
