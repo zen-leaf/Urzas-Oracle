@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.mambocosmo.urzasoracle.entities.StructuredCardCollection;
 
 @Repository
-public interface StructuredCardCollectionRepository  extends JpaRepository<StructuredCardCollectionRepository, UUID>{
+public interface StructuredCardCollectionRepository  extends JpaRepository<StructuredCardCollection, UUID>{
 
     
 

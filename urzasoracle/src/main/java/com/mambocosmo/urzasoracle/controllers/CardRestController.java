@@ -1,8 +1,6 @@
 package com.mambocosmo.urzasoracle.controllers;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
@@ -23,7 +22,6 @@ import com.mambocosmo.urzasoracle.services.CardPartService;
 import com.mambocosmo.urzasoracle.services.CardService;
 
 import lombok.Data;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Data
 @RestController

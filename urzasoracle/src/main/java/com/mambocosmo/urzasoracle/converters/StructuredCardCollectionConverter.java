@@ -4,9 +4,7 @@ package com.mambocosmo.urzasoracle.converters;
 
 import org.springframework.stereotype.Service;
 
-import com.mambocosmo.urzasoracle.DTO.CardExpansionSetDTO;
 import com.mambocosmo.urzasoracle.DTO.StructuredCardCollectionDTO;
-import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.entities.StructuredCardCollection;
 
 @Service

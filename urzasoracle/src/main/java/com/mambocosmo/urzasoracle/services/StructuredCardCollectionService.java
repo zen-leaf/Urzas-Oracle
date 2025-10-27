@@ -1,20 +1,25 @@
 package com.mambocosmo.urzasoracle.services;
 
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
+import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.StructuredCardCollectionDTO;
-import com.mambocosmo.urzasoracle.entities.GenericEntity;
+import com.mambocosmo.urzasoracle.converters.StructuredCardCollectionConverter;
+import com.mambocosmo.urzasoracle.entities.StructuredCardCollection;
+import com.mambocosmo.urzasoracle.repositories.StructuredCardCollectionRepository;
 
-public class StructuredCardCollectionService extends GenericService {
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-    
-
-
+@Service
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class StructuredCardCollectionService extends
+        GenericService<StructuredCardCollection, StructuredCardCollectionDTO, StructuredCardCollectionConverter, StructuredCardCollectionRepository> {
 
     @Override
-    public GenericEntity construct(Map fromData) {
+    public StructuredCardCollection construct(Map<String, String> fromData) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'construct'");
     }
@@ -22,4 +27,5 @@ public class StructuredCardCollectionService extends GenericService {
     public Object getByName(String name) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getByName'");
-    }}
+    }
+}

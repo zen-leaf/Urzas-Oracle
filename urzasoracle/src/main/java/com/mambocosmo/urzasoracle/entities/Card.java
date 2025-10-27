@@ -23,7 +23,6 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
@@ -169,7 +168,7 @@ public class Card extends GenericEntity {
             if (tempname != null) {
                 int index = 0;
                 for (Artist a : artistRef) {
-                    a.setArtist_name(tempname.get(index));
+                    a.setName(tempname.get(index));
                     index++;
                 }
             }
@@ -185,7 +184,7 @@ public class Card extends GenericEntity {
         } else if (artistRef.size() == tempString.size()) {
             int index = 0;
             for (Artist a : artistRef) {
-                a.setArtist_name(tempString.get(index));
+                a.setName(tempString.get(index));
                 index++;
             }
         }
