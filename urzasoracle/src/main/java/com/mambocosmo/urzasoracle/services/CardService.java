@@ -58,7 +58,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return getREPOSITORY().findByName(name);
     }
 
-    public List<Card> generateAllCards() {
+    public List<Card> generateAllCardsFromJSON() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
