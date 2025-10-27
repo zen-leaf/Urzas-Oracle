@@ -126,7 +126,7 @@ public class Card extends GenericEntity {
 
     private Boolean variation = false;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "set_id", referencedColumnName = "expansion_id")
     private CardExpansionSet expansion;
 

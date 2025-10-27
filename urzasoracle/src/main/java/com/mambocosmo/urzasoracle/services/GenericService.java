@@ -56,6 +56,13 @@ public abstract class GenericService<E extends GenericEntity, D extends GenericD
         }
         return CONVERTER.fromEToD(e.get());
     }
+    public E getEntityByID(UUID id) {
+        Optional<E> e = REPOSITORY.findById(id);
+        if (!e.isPresent()) {
+            return null;
+        }
+        return e.get();
+    }
 
     public boolean delete(UUID id) {
         try {
