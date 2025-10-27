@@ -2,11 +2,18 @@ package com.mambocosmo.urzasoracle.controllers;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.misc.Utils.Util;
@@ -17,7 +24,6 @@ import com.mambocosmo.urzasoracle.services.CardService;
 
 import lombok.Data;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Data
 @RestController
@@ -55,9 +61,9 @@ public class CardRestController {
             System.out.println("Saved card: " + e.getName());
         });
 
-        return myCards.size() + " cards saved. \n" + mySets.size() + " sets saved." ;
+        return myCards.size() + " cards saved. \n" + mySets.size() + " sets saved.";
     }
-    
+
     @GetMapping("/saveSet")
     public String saveSet() {
         List<CardExpansionSet> mySets = Util.generateAllSets();
@@ -70,14 +76,38 @@ public class CardRestController {
             System.out.println("Saved set: " + e.getName());
         });
 
-        return mySets.size() + " sets saved." ;
+        return mySets.size() + " sets saved.";
     }
-
-
 
     @GetMapping("/byname")
     public String getByName(@RequestParam String name) {
         return getCARDSERVICE().getByName(name).get(0).toString();
     }
-    
+
+    @GetMapping("/allCard")
+    public ResponseEntity<List<CardDTO>> getAllCard() {
+        List<CardDTO> cards = CARDSERVICE.getAll();
+
+        return ResponseEntity.ok().body(cards);
+    }
+
+    @GetMapping("byId/{id}")
+    public ResponseEntity<CardDTO> CardExpansionSetById(@PathVariable UUID id) {
+        CardDTO c = (CardDTO) CARDSERVICE.getByID(id);
+        if (c != null) {
+
+            return ResponseEntity.ok().body(c);
+        } else {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteCardExpansionSet(@PathVariable UUID id) {
+        CARDSERVICE.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
