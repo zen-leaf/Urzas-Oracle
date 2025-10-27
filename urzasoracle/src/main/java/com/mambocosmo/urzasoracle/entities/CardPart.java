@@ -28,8 +28,11 @@ public class CardPart extends GenericEntity {
     private String uri;
 
     @ManyToMany
-    @JoinTable(name = "card_part_relation", joinColumns = {
-            @JoinColumn(name = "part_id") }, inverseJoinColumns = {
-                    @JoinColumn(name = "cardref_id") })
+    @JoinTable(
+        name = "card_part_relation", 
+        joinColumns = {
+            @JoinColumn(name = "part_id") }, 
+        inverseJoinColumns = {
+            @JoinColumn(name = "cardref_id") })
     private Set<Card> foundIn;
 }

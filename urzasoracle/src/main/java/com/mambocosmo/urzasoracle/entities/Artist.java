@@ -26,12 +26,13 @@ public class Artist extends GenericEntity {
 
     @JsonAlias("artist")
     private String artist_name;
+    
     @ManyToMany
     @JoinTable(
         name = "artist_cards",
         joinColumns = {
             @JoinColumn(name = "artistref_id") }, 
-            inverseJoinColumns = {
+        inverseJoinColumns = {
             @JoinColumn(name = "cardref_id") })
     Set<Card> illustratedCards;
 

@@ -215,8 +215,8 @@ public class Card extends GenericEntity {
 
     private Boolean reserved = false;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "card_parts", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "part_id"))
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "foundIn")
+    // @JoinTable(name = "card_parts", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "part_id"))
     private Set<CardPart> all_parts;
 
     @ElementCollection
