@@ -44,8 +44,10 @@ public class CardRestController {
             getCARDSERVICE().save(e);
             System.out.println("Saved card: " + e.getName());
         });
-        Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
-        return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique faces found and "+myCards.size()+" cards saved.";
+        // Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
+        // return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique
+        // faces found and "+myCards.size()+" cards saved.";
+        return myCards.size() + " cards saved.";
     }
 
     @GetMapping("/saveSet")
