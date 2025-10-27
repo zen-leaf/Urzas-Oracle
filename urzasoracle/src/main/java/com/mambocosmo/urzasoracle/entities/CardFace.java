@@ -19,12 +19,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "card_faces")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CardFace {
+public class CardFace extends GenericEntity{
     @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @UuidGenerator
