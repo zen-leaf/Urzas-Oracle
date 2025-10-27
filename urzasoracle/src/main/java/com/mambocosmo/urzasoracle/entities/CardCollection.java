@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -15,7 +16,7 @@ import lombok.EqualsAndHashCode;
 public abstract class CardCollection extends GenericEntity {
 
     @Id
-    private String id;
+    private UUID id;
 
     private User owner;
 

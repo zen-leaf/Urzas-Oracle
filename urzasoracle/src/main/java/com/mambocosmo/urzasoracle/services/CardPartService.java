@@ -15,13 +15,10 @@ import lombok.EqualsAndHashCode;
 @Service
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class CardCollectionService
-        extends GenericService<CardPart, CardPartDTO, CardPartConverter, CardPartRepository> {
-
+public class CardPartService extends GenericService<CardPart, CardPartDTO, CardPartConverter, CardPartRepository> {
     @Override
     public CardPart construct(Map<String, String> fromData) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'construct'");
+        return getCONTEXT().getBean(CardPart.class, fromData);
     }
 
 }

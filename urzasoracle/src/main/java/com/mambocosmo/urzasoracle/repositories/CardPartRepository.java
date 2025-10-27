@@ -1,18 +1,13 @@
 package com.mambocosmo.urzasoracle.repositories;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardPart;
 
 @Repository
-public interface CardRepository extends JpaRepository<Card, UUID> {
+public interface CardPartRepository extends JpaRepository<CardPart, UUID> {
 
-        
-    
-
-    List<Card> findByName(String name);
 }

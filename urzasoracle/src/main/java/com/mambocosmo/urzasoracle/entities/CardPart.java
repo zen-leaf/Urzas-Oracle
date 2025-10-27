@@ -3,9 +3,8 @@ package com.mambocosmo.urzasoracle.entities;
 import java.util.Set;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -15,25 +14,25 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Entity
-@Table(name = "artists")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Artist extends GenericEntity {
+@EqualsAndHashCode(callSuper=true)
+@Entity
+@Table(name = "card_parts")
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CardPart extends GenericEntity {
     @Id
-    @Column(name = "artist_id")
     private UUID id;
+    private String component;
+    private String name;
+    private String type_line;
+    private String uri;
 
-    @JsonAlias("artist")
-    private String artist_name;
-    
     @ManyToMany
     @JoinTable(
-        name = "artist_cards",
+        name = "card_part_relation", 
         joinColumns = {
-            @JoinColumn(name = "artistref_id") }, 
+            @JoinColumn(name = "part_id") }, 
         inverseJoinColumns = {
             @JoinColumn(name = "cardref_id") })
-    Set<Card> illustratedCards;
-
+    private Set<Card> foundIn;
 }

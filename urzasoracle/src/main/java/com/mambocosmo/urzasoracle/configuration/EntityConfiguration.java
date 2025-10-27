@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import com.mambocosmo.urzasoracle.entities.Artist;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
+import com.mambocosmo.urzasoracle.entities.CardPart;
 import com.mambocosmo.urzasoracle.entities.FreeCardCollection;
 import com.mambocosmo.urzasoracle.entities.StructuredCardCollection;
 
@@ -21,6 +22,14 @@ public class EntityConfiguration {
         Card c = new Card();
         c.fromMap(fromData);
         return c;
+    }
+
+    @Bean
+    @Scope("prototype")
+    public CardPart cardPart(Map<String, String> fromData) {
+        CardPart cp = new CardPart();
+        cp.fromMap(fromData);
+        return cp;
     }
 
     @Bean

@@ -1,7 +1,9 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.util.Set;
+import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mambocosmo.urzasoracle.misc.enums.SetType;
 
 import jakarta.persistence.Column;
@@ -17,11 +19,12 @@ import lombok.EqualsAndHashCode;
 @Table(name = "ExpansionSets")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CardExpansionSet extends GenericEntity {
 
     @Id
     @Column(name = "expansion_id")
-    private String id;
+    private UUID id;
 
     private String code;
 
