@@ -74,7 +74,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     });
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
-
+                    myCard.getCard_faces().forEach(face -> System.out.println(face));
                     cardList.add(myCard);
                     // System.out.println(myCard.getName());
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
@@ -86,6 +86,45 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
             return cardList;
         } catch (IOException e) {
+            // TODO Auto-generated catch block
+            return null;
+
+        }
+    }
+
+    public Map<String, Integer> getUniqueCardFaces() {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode cardData;
+        try {
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/uniques.json"));
+            Map<String, Integer> uniqueFaces = new java.util.HashMap<>();
+            Long myTimer = System.nanoTime();
+            System.out.println("start");
+            cardData.forEach(e -> {
+                try {
+                    if(e.get("card_faces")==null) {
+                        return;
+                    }
+                    e.get("card_faces").forEach(face -> {
+                        String faceName = face.get("name").asText();
+                        System.out.println(faceName);
+                        if (uniqueFaces.containsKey(faceName)) {
+                            uniqueFaces.put(faceName, uniqueFaces.get(faceName) + 1);
+                        } else {
+                            uniqueFaces.put(faceName, 1);
+                        }
+                    });
+                } catch (IllegalArgumentException e1) {
+                    System.out.println("Error generating card!!! " + e1.getMessage());
+                }
+            });
+            System.out.println("Completed card generation - Generated cards in "
+                    + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
+
+            return uniqueFaces;
+        } catch (
+
+        IOException e) {
             // TODO Auto-generated catch block
             return null;
 

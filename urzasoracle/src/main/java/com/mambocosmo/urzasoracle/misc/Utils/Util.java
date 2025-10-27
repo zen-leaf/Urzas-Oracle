@@ -6,18 +6,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
-import com.mambocosmo.urzasoracle.services.CardExpansionSetService;
 
 import lombok.Data;
 

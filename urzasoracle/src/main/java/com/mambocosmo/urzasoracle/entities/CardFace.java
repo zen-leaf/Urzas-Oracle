@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
@@ -26,14 +27,20 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CardFace extends GenericEntity{
-    @Id
+public class CardFace extends GenericEntity {
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @UuidGenerator
-    @Column(name = "card_face_id")
-    private UUID id;
+    // @UuidGenerator
+    // @Column(name = "card_face_id")
+    // private UUID id;
+
+    @EmbeddedId
+    private CardFacePK faceid;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "ofCard", referencedColumnName = "card_id")
+    private Card faceOfCard;
 
     private String mana_cost;
 
@@ -63,8 +70,4 @@ public class CardFace extends GenericEntity{
     @MapKeyColumn(name = "image_type")
     @Column(name = "image_uri", length = 500)
     private Map<String, String> image_uris;
-
-    @ManyToOne
-    @JoinColumn(name = "card_id", referencedColumnName = "card_id", foreignKey = @ForeignKey(name = "fk_face_card"))
-    private Card faceOfCard;
 }

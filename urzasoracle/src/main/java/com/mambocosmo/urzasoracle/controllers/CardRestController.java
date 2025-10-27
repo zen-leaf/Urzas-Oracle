@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -36,22 +37,15 @@ public class CardRestController {
 
     @GetMapping("/saveAll")
     public String saveAll() {
-        List<Card> myCards = Util.generateAllCards();
-        List<CardExpansionSet> mySets = Util.generateAllSets();
+        // List<CardExpansionSet> mySets = Util.generateAllSets();
+        List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
         System.out.println("Saving card 'n' sets with its relationships");
-        // Card card = myCards.get(4);
-        // CardExpansionSet set = mySets.get(4);
-        mySets.forEach(e -> {
-            // Save the card - cascade will handle artists and parts
-            EXPANSIONSETSERVICE.save(e);
-            System.out.println("Saved set: " + e.getName());
-        });
         myCards.forEach(e -> {
             getCARDSERVICE().save(e);
             System.out.println("Saved card: " + e.getName());
         });
-
-        return myCards.size() + " cards saved. \n" + mySets.size() + " sets saved.";
+        Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
+        return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique faces found and "+myCards.size()+" cards saved.";
     }
 
     @GetMapping("/saveSet")
@@ -73,12 +67,11 @@ public class CardRestController {
     public String getByName(@RequestParam String name) {
         return getCARDSERVICE().getByName(name).get(0).toString();
     }
+
     @GetMapping("/setbyname")
     public String getMethodName(@RequestParam String name) {
         return getEXPANSIONSETSERVICE().getByName(name).toString();
     }
-    
-    
 
     @GetMapping("/allCard")
     public ResponseEntity<List<CardDTO>> getAllCard() {
