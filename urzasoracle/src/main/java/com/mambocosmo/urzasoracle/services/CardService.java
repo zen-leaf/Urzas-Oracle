@@ -1,5 +1,6 @@
 package com.mambocosmo.urzasoracle.services;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -14,12 +15,16 @@ import lombok.EqualsAndHashCode;
 
 @Service
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class CardService extends GenericService<Card, CardDTO, CardConverter, CardRepository> {
 
     @Override
     public Card construct(Map<String, String> fromData) {
         return getCONTEXT().getBean(Card.class, fromData);
+    }
+
+    public List<Card> getByName(String name) {
+        return getREPOSITORY().findByName(name);
     }
 
 }

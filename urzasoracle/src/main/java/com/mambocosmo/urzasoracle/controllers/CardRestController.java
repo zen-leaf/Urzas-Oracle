@@ -14,6 +14,8 @@ import com.mambocosmo.urzasoracle.services.CardPartService;
 import com.mambocosmo.urzasoracle.services.CardService;
 
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Data
 @RestController
@@ -39,9 +41,15 @@ public class CardRestController {
             e.setAll_parts(new HashSet<>());
         }
         // Save the card - cascade will handle artists and parts
-        SERVICE.save(e);
+        getSERVICE().save(e);
         System.out.println("Saved card: " + e.getName());
     });
         return myCards.size() + " cards saved.";
     }
+
+    @GetMapping("/byname")
+    public String getByName(@RequestParam String name) {
+        return getSERVICE().getByName(name).get(0).toString();
+    }
+    
 }

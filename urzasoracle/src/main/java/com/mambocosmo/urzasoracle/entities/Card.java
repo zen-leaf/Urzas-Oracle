@@ -46,21 +46,21 @@ public class Card extends GenericEntity {
 
     private UUID oracle_id;
 
-    private String name;
+    private String name = "";
 
-    private String lang;
+    private String lang = "";
 
-    private String released_at;
+    private String released_at = "";
 
-    private String uri;
+    private String uri = "";
 
-    private String scryfall_uri;
+    private String scryfall_uri = "";
 
-    private String layout;
+    private String layout = "";
 
-    private Boolean highres_image;
+    private Boolean highres_image = false;
 
-    private String image_status;
+    private String image_status = "";
 
     @ElementCollection
     @CollectionTable(name = "card_images", joinColumns = @JoinColumn(name = "card_id"))
@@ -71,15 +71,15 @@ public class Card extends GenericEntity {
     /*
      * USUALLY MISSING IF @{card_faces} is not null
      */
-    private String mana_cost;
+    private String mana_cost = "";
 
-    private String cmc;
+    private String cmc = "";
 
-    private String type_line;
+    private String type_line = "";
 
-    private String oracle_text;
+    private String oracle_text = "";
 
-    private String flavor_text;
+    private String flavor_text = "";
 
     @ElementCollection
     @CollectionTable(name = "card_color_table", joinColumns = @JoinColumn(name = "card_id"))
@@ -97,6 +97,8 @@ public class Card extends GenericEntity {
     @JsonUnwrapped
     private Set<CardFace> card_faces;
 
+    @ElementCollection
+    @CollectionTable(name = "card_produced_mana", joinColumns = @JoinColumn(name = "card_id"))
     private Set<String> produced_mana;
 
     @ElementCollection
@@ -104,44 +106,45 @@ public class Card extends GenericEntity {
     @MapKeyColumn(name = "format")
     private Map<Format, String> legalities;
 
-    private Boolean reserverd;
+    private Boolean reserverd = false;
 
-    private Boolean game_changer;
+    private Boolean game_changer = false;
 
-    private Boolean foil;
+    private Boolean foil = false;
 
-    private Boolean nonfoil;
+    private Boolean nonfoil = false;
 
     @ElementCollection
     @CollectionTable(name = "card_finishes", joinColumns = @JoinColumn(name = "card_id"))
     private Set<String> finishes;
 
-    private Boolean oversized;
+    private Boolean oversized = false;
 
-    private Boolean promo;
+    private Boolean promo = false;
 
-    private Boolean reprint;
+    private Boolean reprint = false;
 
-    private Boolean variation;
+    private Boolean variation = false;
 
     @ManyToOne
     @JoinColumn(name = "set_id", referencedColumnName = "expansion_id")
     private CardExpansionSet expansion;
 
-    private String ulings_uri;
+    private String rulings_uri = "";
 
-    private String prints_search_uri;
+    private String prints_search_uri = "";
 
-    private String collector_number;
+    private String collector_number = "";
 
-    private Boolean digital;
+    private Boolean digital = false;
 
-    private String rarity;
+    private String rarity = "";
 
     private UUID card_back_id;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "illustratedCards")
+    // @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name =
+    // "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artistRef;
 
     @Transient
@@ -182,35 +185,35 @@ public class Card extends GenericEntity {
 
     }
 
-    private String illustration_id;
+    private String illustration_id = "";
 
-    private BorderColor border_color;
+    private BorderColor border_color = BorderColor.NONE;
 
-    private Frame frame;
+    private Frame frame = Frame.NONE;
 
-    private Boolean full_art;
+    private Boolean full_art = false;
 
-    private Boolean textless;
+    private Boolean textless = false;
 
-    private Boolean booster;
+    private Boolean booster = false;
 
-    private String printed_text;
+    private String printed_text = "";
 
-    private String flavor_name;
+    private String flavor_name = "";
 
-    private String hand_modifier;
+    private String hand_modifier = "";
 
-    private String toughness;
+    private String toughness = "";
 
-    private String watermark;
+    private String watermark = "";
 
-    private String loyalty;
+    private String loyalty = "";
 
     @ElementCollection
     @CollectionTable(name = "card_attraction_lights_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<AttractionLight> attraction_lights;
 
-    private Boolean reserved;
+    private Boolean reserved = false;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "card_parts", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "part_id"))
@@ -220,18 +223,18 @@ public class Card extends GenericEntity {
     @CollectionTable(name = "card_color_indicator_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<WURBG> color_indicator;
 
-    private String life_modifier;
+    private String life_modifier = "";
 
     @ElementCollection
     @CollectionTable(name = "card_frame_effects_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<String> frame_effects;
 
-    private String printed_name;
+    private String printed_name = "";
 
-    private String power;
+    private String power = "";
 
-    private String printed_type_line;
+    private String printed_type_line = "";
 
-    private String variation_of;
+    private String variation_of = "";
 
 }
