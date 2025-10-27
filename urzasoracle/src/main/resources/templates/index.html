@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+  <!-- Include HEAD fragment -->
+  <head th:replace="fragments/head :: head('Home - Urza’s Oracle')"></head>
+
+  <body class="bg-black text-light">
+    <!-- Include NAVBAR fragment -->
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <!-- Contenuto principale -->
+    <header
+      class="text-center py-5 bg-black text-warning border-bottom border-warning"
+    >
+      <h1 class="display-4 fw-bold">Urza’s Oracle</h1>
+      <p class="lead text-secondary">
+        Il portale definitivo per i fan di Magic: The Gathering
+      </p>
+      <a href="/cards" class="btn btn-warning mt-3">Scopri le Carte</a>
+    </header>
+
+    <section class="container my-5">
+      <h2 class="text-warning mb-4">Benvenuto nel tuo TCG Finder</h2>
+      <p>
+        Trova le carte più rare, analizza i mazzi più forti e resta aggiornato
+        sul meta competitivo.
+      </p>
+
+      <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+          <div class="card bg-dark text-light border-warning">
+            <div class="card-body">
+              <h5 class="card-title text-warning">Ricerca Avanzata</h5>
+              <p class="card-text">Filtra le carte per set, colore o rarità.</p>
+              <a href="/search" class="btn btn-outline-warning btn-sm"
+                >Cerca ora</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="card bg-dark text-light border-warning">
+            <div class="card-body">
+              <h5 class="card-title text-warning">Collezione Personale</h5>
+              <p class="card-text">
+                Gestisci e mostra la tua collezione di carte.
+              </p>
+              <a href="/collection" class="btn btn-outline-warning btn-sm"
+                >Vai alla collezione</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="card bg-dark text-light border-warning">
+            <div class="card-body">
+              <h5 class="card-title text-warning">Statistiche del Meta</h5>
+              <p class="card-text">
+                Consulta i mazzi più vincenti del momento.
+              </p>
+              <a href="/meta" class="btn btn-outline-warning btn-sm"
+                >Scopri di più</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Include FOOTER fragment -->
+    <div th:replace="fragments/footer :: footer"></div>
+  </body>
+</html>

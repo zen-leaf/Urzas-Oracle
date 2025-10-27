@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/head :: head"></head>
+  <body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <div class="container py-5">
+      <h2 class="text-warning mb-4">
+        Risultati per "<span th:text="${query}"></span>"
+      </h2>
+      <div th:if="${#lists.isEmpty(results)}">
+        <p>Nessuna carta trovata.</p>
+      </div>
+      <div th:if="${!#lists.isEmpty(results)}" class="row g-3">
+        <div class="col-md-3" th:each="card : ${results}">
+          <div class="card card-bg text-center p-2">
+            <img
+              th:src="${card.imageUrl}"
+              class="img-fluid rounded mb-2"
+              alt="Carta Magic"
+            />
+            <h6 th:text="${card.name}" class="text-warning"></h6>
+            <small th:text="${card.type}"></small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+  </body>
+</html>
