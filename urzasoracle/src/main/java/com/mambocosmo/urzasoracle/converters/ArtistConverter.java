@@ -10,8 +10,8 @@ public class ArtistConverter implements GenericConverter<Artist, ArtistDTO> {
 
     @Override
     public Artist fromDToE(ArtistDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromDToE'");
+        // Artist a = new 
+        throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
     }
 
     @Override

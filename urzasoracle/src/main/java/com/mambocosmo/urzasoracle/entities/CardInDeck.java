@@ -14,7 +14,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-
 public class CardInDeck extends GenericEntity {
     @EmbeddedId
     private CardDeckPK id;

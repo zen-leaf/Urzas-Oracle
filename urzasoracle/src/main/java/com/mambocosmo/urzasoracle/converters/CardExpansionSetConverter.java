@@ -1,8 +1,11 @@
 package com.mambocosmo.urzasoracle.converters;
 
+import org.springframework.stereotype.Service;
+
 import com.mambocosmo.urzasoracle.DTO.CardExpansionSetDTO;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 
+@Service
 public class CardExpansionSetConverter implements GenericConverter<CardExpansionSet,CardExpansionSetDTO>{
 
     @Override

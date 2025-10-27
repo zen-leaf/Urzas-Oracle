@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 
 public class Util {
     public static Set<String> generateUniqueFieldNames(String insideOf) {
@@ -46,7 +47,7 @@ public class Util {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/uniques.json"));
+            cardData = mapper.readTree(new File("src\\main\\resources\\json\\test.json"));
 
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
@@ -66,6 +67,37 @@ public class Util {
                     + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
 
             return cardList;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            return null;
+
+        }
+    }
+
+    public static List<CardExpansionSet> generateAllSets() {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode setData;
+        try {
+            setData = mapper.readTree(new File("src\\main\\resources\\json\\AllSets.json"));
+
+            List<CardExpansionSet> setList = new ArrayList<>();
+            Long myTimer = System.nanoTime();
+            System.out.println("start");
+            setData.forEach(e -> {
+                try {
+                    CardExpansionSet mySet = null;
+                    mySet = mapper.treeToValue(e, new TypeReference<CardExpansionSet>() {
+                    });
+                    setList.add(mySet);
+                    // System.out.println(myCard.getName());
+                } catch (JsonProcessingException | IllegalArgumentException e1) {
+                    System.out.println("Error generating set!!! " + e1.getMessage());
+                }
+            });
+            System.out.println("Completed set generation - Generated " + setList.size() + " sets in "
+                    + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
+
+            return setList;
         } catch (IOException e) {
             // TODO Auto-generated catch block
             return null;
