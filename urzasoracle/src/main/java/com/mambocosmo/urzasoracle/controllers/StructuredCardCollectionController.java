@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.DTO.StructuredCardCollectionDTO;
 import com.mambocosmo.urzasoracle.services.StructuredCardCollectionService;
 

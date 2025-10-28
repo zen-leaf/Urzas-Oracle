@@ -13,9 +13,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true, exclude = "foundIn")
+@ToString(callSuper = true, exclude = "foundIn")
 @Entity
 @Table(name = "card_parts")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,11 +30,8 @@ public class CardPart extends GenericEntity {
     private String uri;
 
     @ManyToMany
-    @JoinTable(
-        name = "card_part_relation", 
-        joinColumns = {
-            @JoinColumn(name = "part_id") }, 
-        inverseJoinColumns = {
-            @JoinColumn(name = "cardref_id") })
+    @JoinTable(name = "card_part_relation", joinColumns = {
+            @JoinColumn(name = "part_id") }, inverseJoinColumns = {
+                    @JoinColumn(name = "cardref_id") })
     private Set<Card> foundIn;
 }

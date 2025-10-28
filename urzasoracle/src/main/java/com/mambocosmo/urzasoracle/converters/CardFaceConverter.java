@@ -6,7 +6,7 @@ import com.mambocosmo.urzasoracle.DTO.CardFaceDTO;
 import com.mambocosmo.urzasoracle.entities.CardFace;
 
 @Service
-public class CardFaceConverter implements GenericConverter<CardFace,CardFaceDTO>{
+public class CardFaceConverter implements GenericConverter<CardFace, CardFaceDTO> {
 
     @Override
     public CardFace fromDToE(CardFaceDTO dto) {
@@ -16,8 +16,20 @@ public class CardFaceConverter implements GenericConverter<CardFace,CardFaceDTO>
 
     @Override
     public CardFaceDTO fromEToD(CardFace e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
+        
+        CardFaceDTO dto = new CardFaceDTO();
+        dto.setId(e.getId());
+        dto.setName(e.getName());
+        dto.setMana_cost(e.getMana_cost());
+        dto.setType_line(e.getType_line());
+        dto.setOracle_text(e.getOracle_text());
+        dto.setPower(e.getPower());
+        dto.setToughness(e.getToughness());
+        dto.setLoyalty(e.getLoyalty());
+        dto.setArtist(e.getArtist());
+        dto.setIllustration_id(e.getIllustration_id());
+        dto.setImage_uris(e.getImage_uris());
+        return dto;
     }
 
 }

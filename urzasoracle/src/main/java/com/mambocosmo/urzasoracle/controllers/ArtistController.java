@@ -1,16 +1,5 @@
 package com.mambocosmo.urzasoracle.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.mambocosmo.urzasoracle.DTO.ArtistDTO;
-import com.mambocosmo.urzasoracle.DTO.CardExpansionSetDTO;
-import com.mambocosmo.urzasoracle.entities.Artist;
-import com.mambocosmo.urzasoracle.services.ArtistService;
-
-import ch.qos.logback.classic.pattern.Util;
-import lombok.Data;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,7 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mambocosmo.urzasoracle.DTO.ArtistDTO;
+import com.mambocosmo.urzasoracle.services.ArtistService;
+
+import lombok.Data;
 
 @Data
 @RestController
