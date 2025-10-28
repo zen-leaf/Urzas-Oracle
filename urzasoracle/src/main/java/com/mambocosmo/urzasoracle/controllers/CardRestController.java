@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CardRestController {
 
     private final CardService CARDSERVICE;
-    private final CardExpansionSetService SETSERVICE;
+    private final CardExpansionSetService EXPANSIONSETSERVICE;
 
     private final ArtistService ARTSERVICE;
     private final CardPartService CARDPARTSERVICE;
@@ -39,18 +39,10 @@ public class CardRestController {
         // CardExpansionSet set = mySets.get(4);
         mySets.forEach(e -> {
             // Save the card - cascade will handle artists and parts
-            SETSERVICE.save(e);
+            EXPANSIONSETSERVICE.save(e);
             System.out.println("Saved set: " + e.getName());
         });
         myCards.forEach(e -> {
-            // Initialize sets if null to prevent NPE
-            if (e.getArtistRef() == null) {
-                e.setArtistRef(new HashSet<>());
-            }
-            if (e.getAll_parts() == null) {
-                e.setAll_parts(new HashSet<>());
-            }
-            // Save the card - cascade will handle artists and parts
             getCARDSERVICE().save(e);
             System.out.println("Saved card: " + e.getName());
         });
@@ -66,7 +58,7 @@ public class CardRestController {
         // CardExpansionSet set = mySets.get(4);
         mySets.forEach(e -> {
             // Save the card - cascade will handle artists and parts
-            SETSERVICE.save(e);
+            EXPANSIONSETSERVICE.save(e);
             System.out.println("Saved set: " + e.getName());
         });
 
@@ -79,5 +71,10 @@ public class CardRestController {
     public String getByName(@RequestParam String name) {
         return getCARDSERVICE().getByName(name).get(0).toString();
     }
+    @GetMapping("/setbyname")
+    public String getMethodName(@RequestParam String name) {
+        return getEXPANSIONSETSERVICE().getByName(name).toString();
+    }
+    
     
 }
