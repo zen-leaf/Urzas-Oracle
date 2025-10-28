@@ -20,8 +20,7 @@ public class CardCollectionService
 
     @Override
     public CardCollection construct(Map<String, String> fromData) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'construct'");
+        return getCONTEXT().getBean(CardCollection.class, fromData);
     }
 
     public Object getByName(String name) {

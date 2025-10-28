@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 
@@ -18,12 +19,16 @@ public class CardInDeck extends GenericEntity {
     @EmbeddedId
     private CardDeckPK id;
     private String quantity;
-
+    
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("deck_id")
     @JoinColumn(name = "deck_id")
     private CardCollection deck;
-
+    
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @MapsId("card_id")
     @JoinColumn(name = "card_id")
