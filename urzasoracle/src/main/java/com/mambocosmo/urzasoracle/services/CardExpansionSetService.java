@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.CardExpansionSetDTO;
 import com.mambocosmo.urzasoracle.converters.CardExpansionSetConverter;
-import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.repositories.CardExpansionSetRepository;
 

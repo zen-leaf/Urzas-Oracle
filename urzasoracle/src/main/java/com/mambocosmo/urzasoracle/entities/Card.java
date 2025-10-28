@@ -7,8 +7,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.mambocosmo.urzasoracle.misc.enums.AttractionLight;
 import com.mambocosmo.urzasoracle.misc.enums.BorderColor;
@@ -93,9 +97,23 @@ public class Card extends GenericEntity {
     @CollectionTable(name = "card_keyword_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<String> keywords;
 
-    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "faceOfCard")
-    @JsonUnwrapped
+    @OneToMany(mappedBy = "faceOfCard", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    // @JsonUnwrapped
+    @OnDelete(action = OnDeleteAction.CASCADE)
+
     private Set<CardFace> card_faces;
+
+    @JsonSetter("card_faces")
+    public void setCard_faces(Set<CardFace> faces) {
+        this.card_faces = faces;
+        if (faces != null && !faces.isEmpty()) {
+            for (CardFace face : faces) {
+
+                face.setFaceOfCard(this);
+
+            }
+        }
+    }
 
     @ElementCollection
     @CollectionTable(name = "card_produced_mana", joinColumns = @JoinColumn(name = "card_id"))
@@ -126,7 +144,7 @@ public class Card extends GenericEntity {
 
     private Boolean variation = false;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "set_id", referencedColumnName = "expansion_id")
     private CardExpansionSet expansion;
 
@@ -149,9 +167,9 @@ public class Card extends GenericEntity {
 
     private UUID card_back_id;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "illustratedCards")
-    // @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name =
-    // "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Artist> artistRef;
 
     @Transient
@@ -169,7 +187,7 @@ public class Card extends GenericEntity {
             if (tempname != null) {
                 int index = 0;
                 for (Artist a : artistRef) {
-                    a.setArtist_name(tempname.get(index));
+                    a.setName(tempname.get(index));
                     index++;
                 }
             }
@@ -185,7 +203,7 @@ public class Card extends GenericEntity {
         } else if (artistRef.size() == tempString.size()) {
             int index = 0;
             for (Artist a : artistRef) {
-                a.setArtist_name(tempString.get(index));
+                a.setName(tempString.get(index));
                 index++;
             }
         }

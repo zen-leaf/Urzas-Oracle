@@ -22,4 +22,9 @@ public class ArtistService extends GenericService<Artist, ArtistDTO, ArtistConve
         return getCONTEXT().getBean(Artist.class, fromData);
     }
 
+    public Object getByName(String name) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getByName'");
+    }
+
 }
