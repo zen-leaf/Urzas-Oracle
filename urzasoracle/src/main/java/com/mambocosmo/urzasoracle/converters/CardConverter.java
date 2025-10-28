@@ -16,8 +16,11 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
 
     @Override
     public CardDTO fromEToD(Card e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
+        CardDTO dto = new CardDTO();
+        dto.setId(e.getId());
+        dto.setName(e.getName());
+        dto.setImages(e.getImage_uris());
+        return dto;
     }
 
 }

@@ -50,6 +50,12 @@ public class CardRestController {
         return myCards.size() + " cards saved.";
     }
 
+    @GetMapping("/delete")
+    public String deleteone(@RequestParam String param) {
+        return new String();
+    }
+    
+
     @GetMapping("/saveSet")
     public String saveSet() {
         List<CardExpansionSet> mySets = Util.generateAllSets();
