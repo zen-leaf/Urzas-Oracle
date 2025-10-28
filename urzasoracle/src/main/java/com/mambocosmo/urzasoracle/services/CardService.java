@@ -42,6 +42,11 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         if (fromEntity.getAll_parts() == null) {
             fromEntity.setAll_parts(new HashSet<>());
         }
+
+        if (fromEntity.getCard_faces() == null) {
+            fromEntity.setCard_faces(new HashSet<>());
+        }
+
         // EXPANSIONSETSERVICE.findById
         System.out.println("Card from expansion:" + fromEntity.getExpansion().getName());
 
@@ -50,20 +55,23 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            e.printStackTrace();    
+            e.printStackTrace();
             return false;
         }
     }
 
-    public List<Card> getByName(String name) {
-        return getREPOSITORY().findByName(name);
+    public List<CardDTO> getByName(String name) {
+        List<CardDTO> out = getREPOSITORY().findByName(name).stream().map(e -> {
+            return getCONVERTER().fromEToD(e);
+        }).toList();
+        return out;
     }
 
     public List<Card> generateAllCardsFromJSON() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/singleCard.json"));
 
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
@@ -75,7 +83,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     });
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
-                    //myCard.getCard_faces().forEach(face -> System.out.println(face));
+                    // myCard.getCard_faces().forEach(face -> System.out.println(face));
+                    System.out.println(e.toString());
                     cardList.add(myCard);
                     // System.out.println(myCard.getName());
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
@@ -103,7 +112,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             System.out.println("start");
             cardData.forEach(e -> {
                 try {
-                    if(e.get("card_faces")==null) {
+                    if (e.get("card_faces") == null) {
                         return;
                     }
                     e.get("card_faces").forEach(face -> {

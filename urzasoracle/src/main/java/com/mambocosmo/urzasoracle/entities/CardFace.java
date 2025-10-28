@@ -23,11 +23,14 @@ import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(name = "card_faces")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = "faceOfCard")
+@EqualsAndHashCode(callSuper = true, exclude = "faceOfCard")
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CardFace extends GenericEntity {
     @Id
@@ -59,6 +62,8 @@ public class CardFace extends GenericEntity {
     private String power;
 
     private String toughness;
+
+    private String loyalty;
 
     private String flavor_text;
 

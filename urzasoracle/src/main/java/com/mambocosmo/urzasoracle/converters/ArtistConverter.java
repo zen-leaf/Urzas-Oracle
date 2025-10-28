@@ -10,14 +10,16 @@ public class ArtistConverter implements GenericConverter<Artist, ArtistDTO> {
 
     @Override
     public Artist fromDToE(ArtistDTO dto) {
-        // Artist a = new 
+        // Artist a = new
         throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
     }
 
     @Override
     public ArtistDTO fromEToD(Artist e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
+        ArtistDTO dto = new ArtistDTO();
+        dto.setId(e.getId());
+        dto.setArtist_name(e.getName());
+        return dto;
     }
 
 }

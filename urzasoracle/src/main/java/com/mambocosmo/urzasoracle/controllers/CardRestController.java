@@ -37,11 +37,11 @@ public class CardRestController {
 
     @GetMapping("/saveAll")
     public String saveAll() {
-        // List<CardExpansionSet> mySets = Util.generateAllSets();
         List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
         System.out.println("Saving card 'n' sets with its relationships");
         myCards.forEach(e -> {
             getCARDSERVICE().save(e);
+            System.out.println(e.getCard_faces());
             System.out.println("Saved card: " + e.getName());
         });
         // Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
@@ -54,7 +54,6 @@ public class CardRestController {
     public String deleteone(@RequestParam String param) {
         return new String();
     }
-    
 
     @GetMapping("/saveSet")
     public String saveSet() {
@@ -73,7 +72,12 @@ public class CardRestController {
 
     @GetMapping("/byname")
     public String getByName(@RequestParam String name) {
+        CardDTO c = new CardDTO();
+        if (getCARDSERVICE().getByName(name).size() == 0) {
+            return "No card found with name: " + name;
+        }
         return getCARDSERVICE().getByName(name).get(0).toString();
+
     }
 
     @GetMapping("/setbyname")
