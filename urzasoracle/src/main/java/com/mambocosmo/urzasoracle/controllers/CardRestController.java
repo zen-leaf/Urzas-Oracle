@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResponseErrorHandler;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
@@ -71,15 +72,22 @@ public class CardRestController {
         return mySets.size() + " sets saved.";
     }
 
+    // @GetMapping("/byname")
+    // public ResponseEntity<List<CardDTO>> getByName(@RequestParam String name) {
+    // List<CardDTO> cards = getCARDSERVICE().getByName(name);
+    // if (cards.size() == 0) {
+    // return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    // }
+
+    // return ResponseEntity.ok(getCARDSERVICE().getByName(name));
+
+    // }
+
     @GetMapping("/byname")
-    public ResponseEntity<List<CardDTO>> getByName(@RequestParam String name) {
-        List<CardDTO> cards = getCARDSERVICE().getByName(name);
-        if (cards.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        return ResponseEntity.ok(getCARDSERVICE().getByName(name));
-
+    public ResponseEntity<Page<CardDTO>> getByName(@RequestParam String name,
+            @RequestParam(defaultValue = "0") Integer size,
+            @RequestParam(defaultValue = "10") Integer page) {
+        return ResponseEntity.ok(CARDSERVICE.getByNamePaged(name, page, size));
     }
 
     @GetMapping("/setbyname")
@@ -88,12 +96,12 @@ public class CardRestController {
     }
 
     @GetMapping("/allCard")
-  public ResponseEntity<Page<CardDTO>> getAllCard(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-    Page<CardDTO> cards = CARDSERVICE.getAllPaged(page, size);
-    return ResponseEntity.ok(cards);
-}
+    public ResponseEntity<Page<CardDTO>> getAllCard(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<CardDTO> cards = CARDSERVICE.getAllPaged(page, size);
+        return ResponseEntity.ok(cards);
+    }
 
     @GetMapping("byId/{id}")
     public ResponseEntity<CardDTO> CardExpansionSetById(@PathVariable UUID id) {

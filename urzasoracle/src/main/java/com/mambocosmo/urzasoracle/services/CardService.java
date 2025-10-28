@@ -3,6 +3,7 @@ package com.mambocosmo.urzasoracle.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -71,12 +71,20 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return out;
     }
 
+    public Page<CardDTO> getByNamePaged(String name, Integer numeroPagina, Integer dimensione) {
+        Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+        Page<Card> page = getREPOSITORY().findByNameContainingIgnoreCase(name, pageable);
+
+        return page.map(card -> getCONVERTER().fromEToD(card));
+    }
+
     public List<Card> generateAllCardsFromJSON() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-           
-             cardData = mapper.readTree(new File("JAVITA148-ProjectWork\\urzasoracle\\src\\main\\resources\\json\\test.json"));
+
+            cardData = mapper
+                    .readTree(new File("JAVITA148-ProjectWork\\urzasoracle\\src\\main\\resources\\json\\test.json"));
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
             System.out.println("start");
@@ -146,11 +154,10 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     public Page<CardDTO> getAllPaged(int numeroPagina, int dimensione) {
-    Pageable pageable = PageRequest.of(numeroPagina, dimensione);
-    Page<Card> page = getREPOSITORY().findAll(pageable);
+        Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+        Page<Card> page = getREPOSITORY().findAll(pageable);
 
-   
-    return page.map(card -> getCONVERTER().fromEToD(card));
-}
+        return page.map(card -> getCONVERTER().fromEToD(card));
+    }
 
 }
