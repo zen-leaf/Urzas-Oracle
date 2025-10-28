@@ -93,7 +93,7 @@ public class Card extends GenericEntity {
     @CollectionTable(name = "card_keyword_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<String> keywords;
 
-    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "faceOfCard")
+    @OneToMany(mappedBy = "faceOfCard")
     @JsonUnwrapped
     private Set<CardFace> card_faces;
 
@@ -149,9 +149,8 @@ public class Card extends GenericEntity {
 
     private UUID card_back_id;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-     @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name =
-    "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artistRef;
 
     @Transient

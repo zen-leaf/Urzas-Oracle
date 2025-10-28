@@ -50,6 +50,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();    
             return false;
         }
     }
@@ -62,7 +63,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/singleCard.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
 
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
@@ -74,7 +75,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     });
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
-                    myCard.getCard_faces().forEach(face -> System.out.println(face));
+                    //myCard.getCard_faces().forEach(face -> System.out.println(face));
                     cardList.add(myCard);
                     // System.out.println(myCard.getName());
                 } catch (JsonProcessingException | IllegalArgumentException e1) {

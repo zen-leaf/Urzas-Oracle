@@ -14,6 +14,8 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -28,13 +30,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CardFace extends GenericEntity {
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // @UuidGenerator
-    // @Column(name = "card_face_id")
-    // private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @UuidGenerator
+    @Column(name = "card_face_id")
+    private UUID id;
 
-    @EmbeddedId
-    private CardFacePK faceid;
+    // @EmbeddedId
+    // private CardFacePK faceid;
 
     private String name;
 
