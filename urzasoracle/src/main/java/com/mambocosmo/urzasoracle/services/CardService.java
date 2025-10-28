@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -71,8 +75,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
-
+           
+             cardData = mapper.readTree(new File("JAVITA148-ProjectWork\\urzasoracle\\src\\main\\resources\\json\\test.json"));
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
             System.out.println("start");
@@ -140,5 +144,13 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
         }
     }
+
+    public Page<CardDTO> getAllPaged(int numeroPagina, int dimensione) {
+    Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+    Page<Card> page = getREPOSITORY().findAll(pageable);
+
+   
+    return page.map(card -> getCONVERTER().fromEToD(card));
+}
 
 }

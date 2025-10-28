@@ -53,7 +53,7 @@ public class Util {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode setData;
         try {
-            setData = mapper.readTree(new File("urzasoracle/src/main/resources/json/AllSets.json"));
+            setData = mapper.readTree(new File("JAVITA148-ProjectWork\\urzasoracle\\src\\main\\resources\\json\\AllSets.json"));
 
             List<CardExpansionSet> setList = new ArrayList<>();
             Long myTimer = System.nanoTime();

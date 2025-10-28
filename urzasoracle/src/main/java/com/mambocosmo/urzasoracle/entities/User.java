@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,7 +14,7 @@ import lombok.EqualsAndHashCode;
 public class User extends GenericEntity{
 
     @Id
-    private String id;
+    private UUID id;
 
 
     private String username;
@@ -30,4 +31,5 @@ public class User extends GenericEntity{
 
     private LocalDate registerDate;
 
+    private String role;
 }

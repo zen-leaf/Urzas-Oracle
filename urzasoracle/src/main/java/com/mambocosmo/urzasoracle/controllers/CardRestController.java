@@ -3,6 +3,7 @@ package com.mambocosmo.urzasoracle.controllers;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,11 +88,12 @@ public class CardRestController {
     }
 
     @GetMapping("/allCard")
-    public ResponseEntity<List<CardDTO>> getAllCard() {
-        List<CardDTO> cards = CARDSERVICE.getAll();
-
-        return ResponseEntity.ok().body(cards);
-    }
+  public ResponseEntity<Page<CardDTO>> getAllCard(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+    Page<CardDTO> cards = CARDSERVICE.getAllPaged(page, size);
+    return ResponseEntity.ok(cards);
+}
 
     @GetMapping("byId/{id}")
     public ResponseEntity<CardDTO> CardExpansionSetById(@PathVariable UUID id) {
