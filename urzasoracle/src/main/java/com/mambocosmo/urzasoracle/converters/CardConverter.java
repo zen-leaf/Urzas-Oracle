@@ -26,12 +26,12 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
 
     @Override
     public CardDTO fromEToD(Card e) {
-        System.out.println("CARDFACELIST " + e.getCard_faces());
+        // System.out.println("CARDFACELIST " + e.getCard_faces());
         CardDTO dto = new CardDTO();
         dto.setId(e.getId());
         dto.setName(e.getName());
         dto.setImages(e.getImage_uris());
-        System.out.println("ARTISTREFF " + e.getArtistRef());
+        // System.out.println("ARTISTREFF " + e.getArtistRef());
         dto.setArtistRef(new ArrayList<>());
         if (e.getArtistRef() != null)
             e.getArtistRef().forEach(entry -> {

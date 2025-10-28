@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
-import com.mambocosmo.urzasoracle.misc.Utils.Util;
 import com.mambocosmo.urzasoracle.services.ArtistService;
 import com.mambocosmo.urzasoracle.services.CardExpansionSetService;
 import com.mambocosmo.urzasoracle.services.CardPartService;
@@ -39,7 +38,7 @@ public class CardRestController {
     @GetMapping("/saveAll")
     public String saveAll() {
         List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
-        System.out.println("Saving card 'n' sets with its relationships");
+        System.out.println("Saving cards with their relationships");
         myCards.forEach(e -> {
             getCARDSERVICE().save(e);
             System.out.println(e.getCard_faces());
@@ -58,13 +57,13 @@ public class CardRestController {
 
     @GetMapping("/saveSet")
     public String saveSet() {
-        List<CardExpansionSet> mySets = Util.generateAllSets();
-        System.out.println("Saving card 'n' sets with its relationships");
+        List<CardExpansionSet> mySets = getEXPANSIONSETSERVICE().generateAllSetsFromJSON();
+        System.out.println("Saving sets with their relationships");
         // Card card = myCards.get(4);
         // CardExpansionSet set = mySets.get(4);
         mySets.forEach(e -> {
             // Save the card - cascade will handle artists and parts
-            EXPANSIONSETSERVICE.save(e);
+            getEXPANSIONSETSERVICE().save(e);
             System.out.println("Saved set: " + e.getName());
         });
 

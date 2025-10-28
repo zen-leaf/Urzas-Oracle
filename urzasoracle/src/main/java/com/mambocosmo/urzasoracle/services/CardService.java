@@ -76,7 +76,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         JsonNode cardData;
         try {
            
-             cardData = mapper.readTree(new File("JAVITA148-ProjectWork\\urzasoracle\\src\\main\\resources\\json\\test.json"));
+             cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
             System.out.println("start");
