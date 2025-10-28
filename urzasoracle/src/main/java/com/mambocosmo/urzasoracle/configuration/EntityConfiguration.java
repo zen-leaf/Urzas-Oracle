@@ -8,10 +8,9 @@ import org.springframework.context.annotation.Scope;
 
 import com.mambocosmo.urzasoracle.entities.Artist;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.entities.CardPart;
-import com.mambocosmo.urzasoracle.entities.FreeCardCollection;
-import com.mambocosmo.urzasoracle.entities.StructuredCardCollection;
 
 @Configuration
 public class EntityConfiguration {
@@ -50,18 +49,10 @@ public class EntityConfiguration {
 
     @Bean
     @Scope("prototype")
-    public StructuredCardCollection structuredCardCollection(Map<String, String> fromData) {
-        StructuredCardCollection scc = new StructuredCardCollection();
-        scc.fromMap(fromData);
-        return scc;
+    public CardCollection cardCollection(Map<String, String> fromData) {
+        CardCollection cc = new CardCollection();
+        cc.fromMap(fromData);
+        return cc;
     }
 
-    @Bean
-    @Scope("prototype")
-    public FreeCardCollection freeCardCollection(Map<String, String> fromData) {
-        FreeCardCollection fcc = new FreeCardCollection();
-        fcc.fromMap(fromData);
-        return fcc;
-
-    }
 }
