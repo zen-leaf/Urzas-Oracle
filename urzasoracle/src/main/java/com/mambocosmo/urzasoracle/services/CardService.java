@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 
 @Service
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class CardService extends GenericService<Card, CardDTO, CardConverter, CardRepository> {
 
     @Override
@@ -26,5 +26,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     public List<Card> getByName(String name) {
         return getREPOSITORY().findByName(name);
     }
-
+    
+    public List<Card> searchByName(String name) {
+        return getREPOSITORY().findByNameContainingIgnoreCase(name);
+    }
 }
