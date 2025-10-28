@@ -19,8 +19,10 @@ import lombok.Getter;
 public abstract class GenericService<E extends GenericEntity, D extends GenericDTO, C extends GenericConverter<E, D>, R extends JpaRepository<E, UUID>> {
     @Autowired
     private R REPOSITORY;
-        @Autowired
+
+    @Autowired
     private ApplicationContext CONTEXT;
+
     @Autowired
     private C CONVERTER;
 
@@ -55,6 +57,14 @@ public abstract class GenericService<E extends GenericEntity, D extends GenericD
             return null;
         }
         return CONVERTER.fromEToD(e.get());
+    }
+
+    public E getEntityByID(UUID id) {
+        Optional<E> e = REPOSITORY.findById(id);
+        if (!e.isPresent()) {
+            return null;
+        }
+        return e.get();
     }
 
     public boolean delete(UUID id) {

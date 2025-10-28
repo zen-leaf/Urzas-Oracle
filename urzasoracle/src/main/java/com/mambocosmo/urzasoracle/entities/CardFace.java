@@ -13,6 +13,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -20,29 +22,42 @@ import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(name = "card_faces")
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CardFace extends GenericEntity{
+public class CardFace extends GenericEntity {
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @UuidGenerator
     @Column(name = "card_face_id")
     private UUID id;
 
+    // @EmbeddedId
+    // private CardFacePK faceid;
+
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "ofCard", referencedColumnName = "card_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Card faceOfCard;
 
     private String mana_cost;
 
     private String type_line;
 
+    @Column(length = 2048)
     private String oracle_text;
 
     @ElementCollection
-    @CollectionTable(name = "card_face_colors", joinColumns = @JoinColumn(name = "card_face_id", foreignKey = @ForeignKey(name = "fk_face_colors")))
+    @CollectionTable(name = "card_face_colors", joinColumns = @JoinColumn(name = "card_face_id"))
     @Column(name = "color")
     private List<String> colors;
 
@@ -50,6 +65,9 @@ public class CardFace extends GenericEntity{
 
     private String toughness;
 
+    private String loyalty;
+
+    @Column(length = 512)
     private String flavor_text;
 
     private String artist;
@@ -63,8 +81,4 @@ public class CardFace extends GenericEntity{
     @MapKeyColumn(name = "image_type")
     @Column(name = "image_uri", length = 500)
     private Map<String, String> image_uris;
-
-    @ManyToOne
-    @JoinColumn(name = "card_id", referencedColumnName = "card_id", foreignKey = @ForeignKey(name = "fk_face_card"))
-    private Card faceOfCard;
 }
