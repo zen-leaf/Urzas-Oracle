@@ -10,11 +10,9 @@ import lombok.Data;
 public class CardDTO implements GenericDTO {
 
     private UUID id;
-
     private String name;
-
     private Map<String, String> images;
-
+    private CardExpansionSetDTO expansionSet;
     private List<ArtistDTO> artistRef;
     private List<CardPartDTO> cardParts;
     private List<CardFaceDTO> cardFaces;

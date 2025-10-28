@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(name = "ExpansionSets")
@@ -51,5 +52,7 @@ public class CardExpansionSet extends GenericEntity {
     private String icon_svg_uri;
 
     @OneToMany(mappedBy = "expansion", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Card> cardList;
 }

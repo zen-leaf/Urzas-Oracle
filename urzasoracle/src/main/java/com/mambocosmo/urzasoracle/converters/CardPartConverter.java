@@ -16,8 +16,13 @@ public class CardPartConverter implements GenericConverter<CardPart, CardPartDTO
 
     @Override
     public CardPartDTO fromEToD(CardPart e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
+        CardPartDTO dto = new CardPartDTO();
+        dto.setId(e.getId());
+        dto.setComponent(e.getComponent());
+        dto.setName(e.getName());
+        dto.setType_line(e.getType_line());
+        dto.setUri(e.getUri());
+        return dto;
     }
 
 }

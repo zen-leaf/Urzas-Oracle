@@ -29,6 +29,7 @@ public class CardCollection extends GenericEntity {
     private List<Format> legalIn;
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    
     private List<CardInDeck> cardList;
 
 }
