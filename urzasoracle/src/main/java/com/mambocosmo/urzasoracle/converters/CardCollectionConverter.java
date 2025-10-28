@@ -10,14 +10,26 @@ public class CardCollectionConverter  implements GenericConverter<CardCollection
 
     @Override
     public CardCollection fromDToE(CardCollectionDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromDToE'");
+        CardCollection cc = new CardCollection();
+            cc.setId(dto.getId());
+            cc.setOwner(dto.getOwner());
+            cc.setName(dto.getName());
+            cc.setDescription(dto.getDescription());
+            cc.setLegalIn(dto.getLegalIn());
+            cc.setCardList(dto.getCardList());
+        return cc;
     }
 
     @Override
     public CardCollectionDTO fromEToD(CardCollection e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromEToD'");
+        CardCollectionDTO cc = new CardCollectionDTO();
+            cc.setId(e.getId());
+            cc.setOwner(e.getOwner());
+            cc.setName(e.getName());
+            cc.setDescription(e.getDescription());
+            cc.setLegalIn(e.getLegalIn());
+            cc.setCardList(e.getCardList());
+        return cc;
     }
     
 }

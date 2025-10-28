@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -28,8 +27,8 @@ import lombok.ToString;
 @Entity
 @Table(name = "card_faces")
 @Data
-@ToString(exclude = "faceOfCard")
-@EqualsAndHashCode(callSuper = true, exclude = "faceOfCard")
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CardFace extends GenericEntity {
@@ -46,16 +45,19 @@ public class CardFace extends GenericEntity {
 
     @ManyToOne
     @JoinColumn(name = "ofCard", referencedColumnName = "card_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Card faceOfCard;
 
     private String mana_cost;
 
     private String type_line;
 
+    @Column(length = 2048)
     private String oracle_text;
 
     @ElementCollection
-    @CollectionTable(name = "card_face_colors", joinColumns = @JoinColumn(name = "card_face_id", foreignKey = @ForeignKey(name = "fk_face_colors")))
+    @CollectionTable(name = "card_face_colors", joinColumns = @JoinColumn(name = "card_face_id"))
     @Column(name = "color")
     private List<String> colors;
 
@@ -65,6 +67,7 @@ public class CardFace extends GenericEntity {
 
     private String loyalty;
 
+    @Column(length = 512)
     private String flavor_text;
 
     private String artist;

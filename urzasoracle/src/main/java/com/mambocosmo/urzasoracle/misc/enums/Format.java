@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.misc.enums;
 
 public enum Format {
+    free,
     standard,
     future,
     historic,

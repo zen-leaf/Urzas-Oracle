@@ -15,4 +15,5 @@ public interface CardRepository extends JpaRepository<Card, UUID> {
     
 
     List<Card> findByName(String name);
+    List<Card> findByNameContainingIgnoreCase(String namePart);
 }

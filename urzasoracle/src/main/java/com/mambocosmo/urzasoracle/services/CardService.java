@@ -61,7 +61,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     public List<CardDTO> getByName(String name) {
-        List<CardDTO> out = getREPOSITORY().findByName(name).stream().map(e -> {
+        List<CardDTO> out = getREPOSITORY().findByNameContainingIgnoreCase(name).stream().map(e -> {
             return getCONVERTER().fromEToD(e);
         }).toList();
         return out;
@@ -71,7 +71,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/singleCard.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
 
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();

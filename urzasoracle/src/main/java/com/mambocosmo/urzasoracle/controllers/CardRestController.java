@@ -1,7 +1,6 @@
 package com.mambocosmo.urzasoracle.controllers;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
@@ -71,12 +71,13 @@ public class CardRestController {
     }
 
     @GetMapping("/byname")
-    public String getByName(@RequestParam String name) {
-        CardDTO c = new CardDTO();
-        if (getCARDSERVICE().getByName(name).size() == 0) {
-            return "No card found with name: " + name;
+    public ResponseEntity<List<CardDTO>> getByName(@RequestParam String name) {
+        List<CardDTO> cards = getCARDSERVICE().getByName(name);
+        if (cards.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return getCARDSERVICE().getByName(name).get(0).toString();
+
+        return ResponseEntity.ok(getCARDSERVICE().getByName(name));
 
     }
 
