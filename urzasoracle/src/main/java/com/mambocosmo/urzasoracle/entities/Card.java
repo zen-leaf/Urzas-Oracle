@@ -81,8 +81,10 @@ public class Card extends GenericEntity {
 
     private String type_line = "";
 
+    @Column(length = 2048)
     private String oracle_text = "";
 
+    @Column(length = 512)
     private String flavor_text = "";
 
     @ElementCollection
@@ -100,7 +102,6 @@ public class Card extends GenericEntity {
     @OneToMany(mappedBy = "faceOfCard", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     // @JsonUnwrapped
     @OnDelete(action = OnDeleteAction.CASCADE)
-
     private Set<CardFace> card_faces;
 
     @JsonSetter("card_faces")
@@ -123,6 +124,8 @@ public class Card extends GenericEntity {
     @CollectionTable(name = "card_legal_formats", joinColumns = @JoinColumn(name = "card_id"))
     @MapKeyColumn(name = "format")
     private Map<Format, String> legalities;
+    // creare un oggetto dedicato che setta un field per chiave al posto di avere una mappa
+    // LOW PRIORITY
 
     private Boolean reserverd = false;
 
@@ -166,6 +169,13 @@ public class Card extends GenericEntity {
     private String rarity = "";
 
     private UUID card_back_id;
+
+    @ManyToMany(cascade = { CascadeType.ALL }) // mapped by foundIn in
+                                                                     // CardPart
+    @JoinTable(name = "card_parts_relation", joinColumns = @JoinColumn(name =
+    "card_id"), inverseJoinColumns = @JoinColumn(name = "part_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<CardPart> all_parts;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
@@ -239,11 +249,6 @@ public class Card extends GenericEntity {
     private Set<AttractionLight> attraction_lights;
 
     private Boolean reserved = false;
-
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "foundIn")
-    // @JoinTable(name = "card_parts", joinColumns = @JoinColumn(name = "card_id"),
-    // inverseJoinColumns = @JoinColumn(name = "part_id"))
-    private Set<CardPart> all_parts;
 
     @ElementCollection
     @CollectionTable(name = "card_color_indicator_table", joinColumns = @JoinColumn(name = "card_id"))

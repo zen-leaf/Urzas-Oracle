@@ -25,6 +25,7 @@ public abstract class CardCollection extends GenericEntity {
     private String description;
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    
     private List<CardInDeck> cardList;
 
 }
