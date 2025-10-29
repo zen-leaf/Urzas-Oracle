@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 
 @Service
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class CardService extends GenericService<Card, CardDTO, CardConverter, CardRepository> {
 
     private final CardExpansionSetService EXPANSIONSETSERVICE;

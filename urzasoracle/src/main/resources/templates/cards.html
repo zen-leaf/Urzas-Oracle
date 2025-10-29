@@ -41,6 +41,47 @@
         <h5 class="alert-heading">Nessuna carta trovata</h5>
         <p>Prova un altro termine o ricarica la pagina.</p>
         <a th:href="@{/cards}" class="btn btn-sm btn-warning">Mostra tutte</a>
+
+<head th:replace="~{fragments/head :: head('Carte Magic')}"></head>
+
+<body class="bg-dark text-light">
+
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <main class="container-fluid py-5">
+
+    <header class="text-center mb-5">
+      <h1 class="display-4 fw-bold text-warning mb-3">Carte Magic: The Gathering</h1>
+      <p class="lead text-secondary mb-4">
+        Sfoglia tutte le carte archiviate nel database — filtrabili per nome e con paginazione.
+      </p>
+
+
+      <form th:action="@{/cards}" method="get" class="mx-auto" style="max-width:700px;">
+        <div class="input-group input-group-lg shadow">
+          <input type="text" name="q" class="form-control bg-dark text-warning border-warning"
+            placeholder="Cerca per nome..." th:value="${query}">
+          <button class="btn btn-warning fw-bold" type="submit">Cerca</button>
+          <th:block th:if="${query != ''}">
+            <a th:href="@{/cards}" class="btn btn-outline-warning">Reset</a>
+          </th:block>
+        </div>
+      </form>
+    </header>
+
+    <section>
+      <div class="text-center mb-4">
+        <span class="badge bg-warning text-dark fs-6 px-3 py-2 shadow-sm">
+          <span th:text="${totElements}"></span> carte trovate
+        </span>
+      </div>
+
+
+      <div th:if="${lista == null or #lists.isEmpty(lista)}" class="alert alert-warning text-center mx-auto"
+        style="max-width: 600px;">
+        <h5 class="alert-heading">Nessuna carta trovata</h5>
+        <p>Prova un altro termine o ricarica la pagina.</p>
+        <a th:href="@{/cards}" class="btn btn-sm btn-warning">Mostra tutte</a>
       </div>
 
 

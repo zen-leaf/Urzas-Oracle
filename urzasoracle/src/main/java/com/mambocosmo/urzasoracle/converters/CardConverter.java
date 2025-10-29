@@ -1,6 +1,8 @@
 package com.mambocosmo.urzasoracle.converters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,15 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         CardDTO dto = new CardDTO();
         dto.setId(e.getId());
         dto.setName(e.getName());
+        dto.setManaCost(e.getMana_cost());
+        dto.setTypeline(e.getType_line());
         dto.setImages(e.getImage_uris());
+        dto.setColorIdentity(e.getColor_identity().stream().map(entry -> entry.toString()).toList());
+        Map<String, String> tempLegal = new HashMap<>();
+        e.getLegalities().forEach((key, value) -> {
+            tempLegal.put(key.toString().toLowerCase(), value);
+        });
+        dto.setLegalities(tempLegal);
         System.out.println("ARTISTREFF " + e.getArtistRef());
         dto.setArtistRef(new ArrayList<>());
         if (e.getArtistRef() != null)
