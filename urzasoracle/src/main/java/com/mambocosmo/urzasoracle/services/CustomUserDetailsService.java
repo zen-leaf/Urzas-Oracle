@@ -24,11 +24,11 @@ public class CustomUserDetailsService implements UserDetailsService{
         User user = userRepository.findByUsername(username);
         if (user == null) throw new UsernameNotFoundException("User not found");
 
-        // aggiungiamo il prefisso ROLE_ al volo
+        
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole()) // Spring aggiunge automaticamente ROLE_ se usi .roles()
+                .roles(user.getRole()) 
                 .build();
     }
 }
