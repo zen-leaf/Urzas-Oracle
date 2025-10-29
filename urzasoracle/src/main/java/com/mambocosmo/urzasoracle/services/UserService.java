@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,30 +12,29 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.mambocosmo.urzasoracle.entities.UrzaUser;
-import com.mambocosmo.urzasoracle.DTO.CardExpansionSetDTO;
 import com.mambocosmo.urzasoracle.DTO.UserDTO;
-import com.mambocosmo.urzasoracle.converters.CardExpansionSetConverter;
 import com.mambocosmo.urzasoracle.converters.UserConverter;
-import com.mambocosmo.urzasoracle.entities.CardCollection;
-import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
-import com.mambocosmo.urzasoracle.repositories.CardExpansionSetRepository;
 import com.mambocosmo.urzasoracle.repositories.UserRepository;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Service
 @Data
-public class UserService implements UserDetailsService {
+@EqualsAndHashCode(callSuper = true)
 
+public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter, UserRepository>
+        implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-  
     private final PasswordEncoder passwordEncoder;
 
     public UrzaUser construct(Map<String, String> fromData) {
         return getCONTEXT().getBean(UrzaUser.class, fromData);
     }
+
     public boolean registerUser(Map<String, String> userData) {
         if (getUserRepository().findByUsername(userData.get("username")) != null) {
             return false;
