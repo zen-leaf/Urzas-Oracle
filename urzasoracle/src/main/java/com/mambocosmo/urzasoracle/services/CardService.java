@@ -48,7 +48,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         }
 
         if (fromEntity.getCard_faces() == null) {
-            fromEntity.setCard_faces(new HashSet<>());
+            fromEntity.setCard_faces(new ArrayList<>());
         }
 
         System.out.println("Card from expansion:" + fromEntity.getExpansion().getName());
@@ -78,8 +78,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     // NUOVO: Prendi una singola carta per ID (UUID)
-    public Card getCardById(UUID id) {
-        return getREPOSITORY().findById(id).orElse(null);
+    public CardDTO getCardById(UUID id) {
+        return getCONVERTER().fromEToD(getREPOSITORY().findById(id).orElse(null));
     }
 
     public List<Card> generateAllCardsFromJSON() {

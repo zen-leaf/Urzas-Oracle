@@ -55,8 +55,8 @@
         <!-- Immagine Carta -->
         <div class="col-lg-3">
           <img
-            th:if="${card.image_uris != null and card.image_uris['png'] != null}"
-            th:src="${card.image_uris['png']}"
+            th:if="${card.images != null and card.images['png'] != null}"
+            th:src="${card.images['png']}"
             th:alt="${card.name}"
             class="img-fluid rounded shadow"
             style="
@@ -68,7 +68,7 @@
             "
           />
           <div
-            th:if="${card.image_uris == null or card.image_uris['png'] == null}"
+            th:if="${card.images == null or card.images['png'] == null}"
             class="w-100 rounded d-flex align-items-center justify-content-center text-secondary"
             style="
               aspect-ratio: 488/680;
@@ -95,7 +95,7 @@
             <p
               class="text-secondary mb-1"
               style="font-size: 1.1rem; font-weight: 500"
-              th:text="${card.type_line}"
+              th:text="${card.typeline}"
             ></p>
           </div>
           <hr class="border-warning mb-4" style="opacity: 0.3" />
@@ -103,13 +103,13 @@
           <!-- Mana Cost come testo -->
           <div
             class="mb-4"
-            th:if="${card.mana_cost != null and card.mana_cost != ''}"
+            th:if="${card.manaCost != null and card.manaCost != ''}"
           >
             <small class="text-secondary d-block mb-2">MANA COST</small>
             <p
               class="text-warning fw-bold"
               style="font-size: 1.1rem"
-              th:text="${card.mana_cost}"
+              th:text="${card.manaCost}"
             ></p>
           </div>
 
@@ -119,7 +119,7 @@
               <small class="text-secondary">SET</small>
               <p
                 class="text-light mb-0 fs-5"
-                th:text="${card.expansion != null} ? ${card.expansion.name} : 'N/A'"
+                th:text="${card.expansionSet != null} ? ${card.expansionSet.name} : 'N/A'"
               ></p>
             </div>
             <div class="col-6">
@@ -133,7 +133,7 @@
               <small class="text-secondary">COLLECTOR NUMBER</small>
               <p
                 class="text-light mb-0 fs-5"
-                th:text="${card.collector_number} ?: 'N/A'"
+                th:text="${card.collectorNumber} ?: 'N/A'"
               ></p>
             </div>
           </div>
@@ -186,7 +186,7 @@
           <!-- Oracle Text -->
           <div
             class="mb-4"
-            th:if="${card.oracle_text != null and card.oracle_text != ''}"
+            th:if="${card.oracleText != null and card.oracleText != ''}"
           >
             <small class="text-secondary d-block mb-2">ORACLE TEXT</small>
             <p
@@ -196,14 +196,14 @@
                 line-height: 1.6;
                 font-size: 0.95rem;
               "
-              th:text="${card.oracle_text}"
+              th:text="${card.oracleText}"
             ></p>
           </div>
 
           <!-- Flavor Text -->
           <div
             class="mb-4"
-            th:if="${card.flavor_text != null and card.flavor_text != ''}"
+            th:if="${card.flavorText != null and card.flavorText != ''}"
           >
             <small class="text-secondary d-block mb-2">FLAVOR TEXT</small>
             <p
@@ -215,22 +215,18 @@
                 padding-left: 1rem;
                 font-size: 0.95rem;
               "
-              th:text="${card.flavor_text}"
+              th:text="${card.flavorText}"
             ></p>
           </div>
 
           <!-- Artista -->
-          <div
-            class="mb-4"
-            th:if="${card.artistRef != null and !#sets.isEmpty(card.artistRef)}"
-          >
+
             <small class="text-secondary d-block mb-2">ILLUSTRATED BY</small>
             <p
               class="text-light"
               style="font-size: 0.95rem"
-              th:text="${#strings.listJoin(#maps.values(card.artistRef), ', ')}"
+              th:text="${#strings.listJoin(card.artistNames, ', ')}"
             ></p>
-          </div>
 
           <!-- Bottone Torna -->
           <div class="mt-5">

@@ -39,7 +39,7 @@ public class CardController {
     @Transactional(readOnly = true)
     public String getCardInfo(@PathVariable UUID id, Model model) {
         try {
-            Card card = getCARDSERVICE().getCardById(id);
+            CardDTO card = getCARDSERVICE().getCardById(id);
             if (card == null) {
                 System.out.println("Card not found with id: " + id);
                 return "redirect:/cards";

@@ -34,19 +34,26 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         dto.setName(e.getName());
         dto.setManaCost(e.getMana_cost());
         dto.setTypeline(e.getType_line());
-        dto.setImages(e.getImage_uris());
+        dto.setImages(e.getImage_uris().isEmpty() ? e.getCard_faces().get(1).getImage_uris() : e.getImage_uris());
+        dto.setCardFaces(e.getCard_faces().stream().map(e1 -> getCARDFACECONVERTER().fromEToD(e1)).toList());
+        dto.setFlavorText(e.getFlavor_text());
+        dto.setOracleText(e.getOracle_text());
         dto.setColorIdentity(e.getColor_identity().stream().map(entry -> entry.toString()).toList());
+        dto.setRarity(e.getRarity());
+        dto.setCollectorNumber(e.getCollector_number());
         Map<String, String> tempLegal = new HashMap<>();
         e.getLegalities().forEach((key, value) -> {
             tempLegal.put(key.toString().toLowerCase(), value);
         });
         dto.setLegalities(tempLegal);
         // System.out.println("ARTISTREFF " + e.getArtistRef());
-        dto.setArtistRef(new ArrayList<>());
-        if (e.getArtistRef() != null)
-            e.getArtistRef().forEach(entry -> {
-                dto.getArtistRef().add(getARTISTCONVERTER().fromEToD(entry));
-            });
+        dto.setArtistIds(new ArrayList<>());
+        dto.setArtistNames(new ArrayList<>());
+
+        e.getArtistRef().forEach(entry -> {
+            dto.getArtistIds().add(entry.getId());
+            dto.getArtistNames().add(entry.getName());
+        });
 
         dto.setCardParts(new ArrayList<>());
         if (e.getAll_parts() != null) {
