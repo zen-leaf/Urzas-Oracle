@@ -20,7 +20,7 @@ public class CardCollection extends GenericEntity {
     @Id
     private UUID id;
 
-    private User owner;
+    private UrzaUser owner;
 
     private String name;
 

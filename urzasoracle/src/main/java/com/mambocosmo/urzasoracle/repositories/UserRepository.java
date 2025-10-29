@@ -5,29 +5,24 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Repository;
 
-
-import com.mambocosmo.urzasoracle.entities.User;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID>{
+public interface UserRepository extends JpaRepository<UrzaUser, UUID> {
 
-    
+    UrzaUser findByUsernameAndPassword(String username, String password);
 
-    User findByUsernameAndPassword(String username,String password);
+    UrzaUser findByEmail(String email);
 
-    User findByEmail(String email);
-    User findByUsername(String username);
-    List<User> findByRole(String role);
+    UrzaUser findByUsername(String username);
 
-   
-    User save(Map<String,String> map);
+    List<UrzaUser> findByAuthorities(List<? extends GrantedAuthority> role);
 
-  
-    @Query("UPDATE User u SET u.role = :role WHERE u.username= :username")
-    User addRole(String username,String role);
+    UrzaUser save(Map<String, String> map);
 
-   
+    // UrzaUser addRole();
+
 }

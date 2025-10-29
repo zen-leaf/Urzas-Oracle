@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mambocosmo.urzasoracle.entities.User;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.services.UserService;
 
 @Controller
@@ -27,7 +27,7 @@ public class ProfileController {
             return "redirect:/auth/login";
         }
 
-        User user = userService.findByUsername(principal.getName());
+        UrzaUser user = userService.findByUsername(principal.getName());
         if (user == null) {
             return "redirect:/auth/login";
         }

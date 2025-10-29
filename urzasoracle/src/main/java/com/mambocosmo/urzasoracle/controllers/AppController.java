@@ -1,10 +1,13 @@
 package com.mambocosmo.urzasoracle.controllers;
 
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.mambocosmo.urzasoracle.services.CardService;
+import com.mambocosmo.urzasoracle.services.UserService;
 
 import lombok.Data;
 
@@ -13,9 +16,11 @@ import lombok.Data;
 public class AppController {
 
     private final CardService cardService;
+    private final UserService userService;
 
     @GetMapping("/")
     public String home(Model model) {
+
         // Carica le prime 150 carte per il mosaico della home
         var topCards = cardService.getAllPaged(0, 150).getContent();
         model.addAttribute("topCards", topCards);
@@ -39,8 +44,6 @@ public class AppController {
         model.addAttribute("active", "register");
         return "register";
     }
-
-
 
     @GetMapping("/403")
     public String forbidden(Model model) {
