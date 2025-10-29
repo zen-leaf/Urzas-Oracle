@@ -5,7 +5,7 @@
   <body class="bg-dark text-light">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <!-- TAPPEZZERIA DI CARTE - SCORRIMENTO ORIZZONTALE INFINITO PERFETTO -->
+    <!-- TAPPEZZERIA DI CARTE - SCORRIMENTO DIAGONALE INFINITO -->
     <div class="cards-full-background" id="cardsMosaicFull">
       <!-- Carte dal database usando Thymeleaf -->
       <th:block th:each="card : ${topCards}">
@@ -225,6 +225,13 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 
     <style>
+      /* DISABILITA SCROLL - HOME PAGE SOLO CARTE */
+      html {
+        overflow: hidden;
+        height: 100vh;
+        max-height: 100vh;
+      }
+
       body {
         background: linear-gradient(
           180deg,
@@ -234,7 +241,10 @@
         );
         font-family: "Roboto", sans-serif;
         min-height: 100vh;
+        height: 100vh;
+        max-height: 100vh;
         position: relative;
+        overflow: hidden;
         overflow-x: hidden;
       }
 
@@ -249,23 +259,23 @@
         z-index: 100;
       }
 
-      /* ANIMAZIONE SEAMLESS INFINITA */
-      @keyframes scrollCardsHorizontal {
+      /* ANIMAZIONE DIAGONALE INFINITA - RALLENTATA */
+      @keyframes scrollCardsDiagonal {
         0% {
-          transform: translateX(0);
+          transform: translateX(0) translateY(0);
         }
         100% {
-          transform: translateX(-66.666%);
+          transform: translateX(-66.666%) translateY(-66.666%);
         }
       }
 
-      /* TAPPEZZERIA DI CARTE - 300% WIDTH PER LOOP PERFETTO */
+      /* TAPPEZZERIA DI CARTE - SCORRIMENTO DIAGONALE INFINITO - FIXED */
       .cards-full-background {
-        position: absolute;
-        top: 0;
+        position: fixed;
+        top: 70px;
         left: 0;
         width: 300%;
-        min-height: 100vh;
+        height: 300%;
         pointer-events: none;
         z-index: 0;
         overflow: hidden;
@@ -274,7 +284,7 @@
         align-content: flex-start;
         gap: 4px;
         padding: 10px;
-        animation: scrollCardsHorizontal 180s linear infinite;
+        animation: scrollCardsDiagonal 300s linear infinite;
         will-change: transform;
       }
 
@@ -316,11 +326,11 @@
 
       /* Overlay scuro - SOLO SOPRA LE CARTE, NON SU NAV/FOOTER */
       .content-overlay {
-        position: absolute;
-        top: 0;
+        position: fixed;
+        top: 70px;
         left: 0;
         width: 100%;
-        min-height: 100vh;
+        height: calc(100vh - 70px);
         background: radial-gradient(
           ellipse at center,
           rgba(11, 15, 26, 0.3) 0%,
@@ -376,7 +386,7 @@
     </style>
 
     <script>
-      // Replica le carte per riempire il 300% width
+      // Replica le carte per riempire il 300% width e height
       document.addEventListener("DOMContentLoaded", function () {
         const container = document.getElementById("cardsMosaicFull");
         const originalCards = Array.from(
@@ -385,7 +395,7 @@
 
         console.log("Carte originali:", originalCards.length);
 
-        // Duplica 5 volte per riempire il 300% della larghezza
+        // Duplica 5 volte per riempire il 300%
         for (let i = 0; i < 5; i++) {
           originalCards.forEach((card) => {
             const clone = card.cloneNode(true);
