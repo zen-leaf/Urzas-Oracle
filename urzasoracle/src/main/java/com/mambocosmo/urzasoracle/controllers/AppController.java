@@ -40,11 +40,7 @@ public class AppController {
         return "register";
     }
 
-    @GetMapping("/profile")
-    public String profilePage(Model model) {
-        model.addAttribute("active", "profile");
-        return "profile";
-    }
+
 
     @GetMapping("/403")
     public String forbidden(Model model) {

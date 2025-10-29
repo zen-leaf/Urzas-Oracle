@@ -1,54 +1,46 @@
 package com.mambocosmo.urzasoracle.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import com.mambocosmo.urzasoracle.services.CustomUserDetailsService;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebMvc
+@EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/css/**", "/js/**", "/img/**","/about").permitAll()
-                .requestMatchers("/**", "/", "/auth/**", "/decks", "/collection", "/register").permitAll()
-                .requestMatchers("/auth/register", "/cards").permitAll()
-                .requestMatchers("/cards_details/**").hasAnyRole("ADMIN", "USER")
-                .requestMatchers("/admin/**", "/about").hasRole("ADMIN")
-                .anyRequest().authenticated()
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/", "/home", "/cardinfo","/cards", "/cards/**", "/about", "/css/**", "/js/**", "/img/**", "/auth/register").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/profile/**").authenticated()
+                .anyRequest().permitAll()
             )
-            .exceptionHandling(ex -> ex.accessDeniedPage("//403"))
             .formLogin(form -> form
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/auth/login")
                 .defaultSuccessUrl("/", true)
+                .failureUrl("/auth/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
+                .logoutUrl("/auth/logout")
                 .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .permitAll()
-            )
-            .userDetailsService(userDetailsService)
-            .csrf(csrf -> csrf.disable()); 
+            );
+
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        
-        return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }
-
