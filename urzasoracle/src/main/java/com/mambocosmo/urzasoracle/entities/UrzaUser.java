@@ -1,7 +1,6 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

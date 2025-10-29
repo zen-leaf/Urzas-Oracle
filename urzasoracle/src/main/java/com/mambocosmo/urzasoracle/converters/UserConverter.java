@@ -1,6 +1,5 @@
 package com.mambocosmo.urzasoracle.converters;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.UserDTO;
