@@ -23,7 +23,8 @@ public class AppController {
     public String registerPage() {
         return "register"; // register.html in templates
     }
-        @GetMapping("/profile")
+
+    @GetMapping("/profile")
     public String profilePage() {
         return "register"; // register.html in templates
     }
