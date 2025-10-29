@@ -59,7 +59,7 @@ public class EntityConfiguration {
     public CardCollection cardCollection(Map<String, String> fromData) {
         CardCollection cc = new CardCollection();
         cc.fromMap(fromData);
-        UrzaUser u = getUSERSERVICE().getByUsername("dummy_user2");
+        UrzaUser u = getUSERSERVICE().findByUsername("dummy_user2");
         cc.setOwner(u);
         return cc;
     }
