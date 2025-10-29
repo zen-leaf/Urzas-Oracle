@@ -9,25 +9,25 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 
-import com.mambocosmo.urzasoracle.entities.User;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID>{
+public interface UserRepository extends JpaRepository<UrzaUser, UUID>{
 
     
 
-    User findByUsernameAndPassword(String username,String password);
+    UrzaUser findByUsernameAndPassword(String username,String password);
 
-    User findByEmail(String email);
-    User findByUsername(String username);
-    List<User> findByRole(String role);
+    UrzaUser findByEmail(String email);
+    UrzaUser findByUsername(String username);
+    List<UrzaUser> findByRole(String role);
 
    
-    User save(Map<String,String> map);
+    UrzaUser save(Map<String,String> map);
 
   
     @Query("UPDATE User u SET u.role = :role WHERE u.username= :username")
-    User addRole(String username,String role);
+    UrzaUser addRole(String username,String role);
 
    
 }

@@ -21,7 +21,7 @@ import lombok.ToString;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class User extends GenericEntity{
+public class UrzaUser extends GenericEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,7 +11,7 @@ import com.mambocosmo.urzasoracle.converters.CardExpansionSetConverter;
 import com.mambocosmo.urzasoracle.converters.UserConverter;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
-import com.mambocosmo.urzasoracle.entities.User;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.repositories.CardExpansionSetRepository;
 import com.mambocosmo.urzasoracle.repositories.UserRepository;
 
@@ -19,12 +19,12 @@ import lombok.Data;
 
 @Service
 @Data
-public class UserService extends GenericService<User, UserDTO, UserConverter, UserRepository> {
-    public User construct(Map<String, String> fromData) {
-        return getCONTEXT().getBean(User.class, fromData);
+public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter, UserRepository> {
+    public UrzaUser construct(Map<String, String> fromData) {
+        return getCONTEXT().getBean(UrzaUser.class, fromData);
     }
 
-    public User getByUsername(String name) {
+    public UrzaUser getByUsername(String name) {
         return getREPOSITORY().findByUsername(name);
     }
 

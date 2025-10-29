@@ -36,7 +36,7 @@ public class CardCollection extends GenericEntity {
 
     @ManyToOne
     @JoinColumn(name = "ofUser")
-    private User owner;
+    private UrzaUser owner;
 
     private String name;
 

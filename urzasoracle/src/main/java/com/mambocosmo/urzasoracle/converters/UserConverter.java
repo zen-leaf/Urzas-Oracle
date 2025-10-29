@@ -3,16 +3,16 @@ package com.mambocosmo.urzasoracle.converters;
 import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.UserDTO;
-import com.mambocosmo.urzasoracle.entities.User;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 
 import lombok.Data;
 @Service
 @Data
-public class UserConverter  implements GenericConverter <User, UserDTO>{
+public class UserConverter  implements GenericConverter <UrzaUser, UserDTO>{
 
     @Override
-    public User fromDToE(UserDTO dto) {
-       User u = new User();
+    public UrzaUser fromDToE(UserDTO dto) {
+       UrzaUser u = new UrzaUser();
        u.setId(dto.getId());
        u.setUsername(dto.getUsername());
        u.setEmail(dto.getEmail());
@@ -24,7 +24,7 @@ public class UserConverter  implements GenericConverter <User, UserDTO>{
     }
 
     @Override
-    public UserDTO fromEToD(User e) {
+    public UserDTO fromEToD(UrzaUser e) {
         UserDTO dto = new UserDTO();
         dto.setId( e.getId());
         dto.setUsername(e.getUsername());

@@ -11,7 +11,7 @@ import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.entities.CardPart;
-import com.mambocosmo.urzasoracle.entities.User;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.services.UserService;
 
 import lombok.Data;
@@ -59,15 +59,15 @@ public class EntityConfiguration {
     public CardCollection cardCollection(Map<String, String> fromData) {
         CardCollection cc = new CardCollection();
         cc.fromMap(fromData);
-        User u = getUSERSERVICE().getByUsername("dummy_user2");
+        UrzaUser u = getUSERSERVICE().getByUsername("dummy_user2");
         cc.setOwner(u);
         return cc;
     }
     
     @Bean
     @Scope("prototype")
-    public User user(Map<String, String> fromData) {
-        User u = new User();
+    public UrzaUser user(Map<String, String> fromData) {
+        UrzaUser u = new UrzaUser();
         u.fromMap(fromData);
         return u;
     }
