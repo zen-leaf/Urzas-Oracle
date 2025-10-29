@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/head :: head('Carte Magic')}"></head>
+
 <body class="bg-dark text-light">
-  
+
   <div th:replace="~{fragments/navbar :: navbar}"></div>
 
   <main class="container-fluid py-5">
-    
+
     <header class="text-center mb-5">
       <h1 class="display-4 fw-bold text-warning mb-3">Carte Magic: The Gathering</h1>
       <p class="lead text-secondary mb-4">
         Sfoglia tutte le carte archiviate nel database — filtrabili per nome e con paginazione.
       </p>
 
-      
+
       <form th:action="@{/cards}" method="get" class="mx-auto" style="max-width:700px;">
         <div class="input-group input-group-lg shadow">
           <input type="text" name="q" class="form-control bg-dark text-warning border-warning"
-                 placeholder="Cerca per nome..."
-                 th:value="${query}">
+            placeholder="Cerca per nome..." th:value="${query}">
           <button class="btn btn-warning fw-bold" type="submit">Cerca</button>
           <th:block th:if="${query != ''}">
             <a th:href="@{/cards}" class="btn btn-outline-warning">Reset</a>
@@ -30,40 +31,38 @@
     <section>
       <div class="text-center mb-4">
         <span class="badge bg-warning text-dark fs-6 px-3 py-2 shadow-sm">
-          <span th:text="${cards.totalElements}"></span> carte trovate
+          <span th:text="${totElements}"></span> carte trovate
         </span>
       </div>
 
-      
-      <div th:if="${cards.empty}" class="alert alert-warning text-center mx-auto" style="max-width: 600px;">
+
+      <div th:if="${lista == null or #lists.isEmpty(lista)}" class="alert alert-warning text-center mx-auto"
+        style="max-width: 600px;">
         <h5 class="alert-heading">Nessuna carta trovata</h5>
         <p>Prova un altro termine o ricarica la pagina.</p>
         <a th:href="@{/cards}" class="btn btn-sm btn-warning">Mostra tutte</a>
       </div>
 
-      
-      <div class="row g-4 justify-content-center" th:if="${!cards.empty}">
-        <th:block th:each="card : ${cards.content}">
+
+      <div class="row g-4 justify-content-center" th:if="${not #lists.isEmpty(lista)}">
+        <th:block th:each="card : ${lista}">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
             <div class="card bg-dark border-secondary h-100 shadow-sm card-hover">
-              
-              <img th:if="${card.image_uris != null and card.image_uris.get('normal') != null}"
-                   th:src="${card.image_uris.get('normal')}"
-                   th:alt="${card.name}"
-                   class="card-img-top"
-                   loading="lazy"
-                   style="object-fit: cover; height: 330px; border-bottom: 1px solid #333;">
+              <!-- <span th:text="${card.name}"></span> -->
+              <img th:if="${card.images != null and card.images.get('png') != null}" th:src="${card.images.get('png')}"
+                th:alt="${card.name}" class="card-img-top" loading="lazy"
+                style="object-fit: cover; height: 330px; border-bottom: 1px solid #333;">
 
-              
+
               <div class="card-body p-3">
                 <h6 class="card-title text-warning fw-bold mb-1" th:text="${card.name}">Nome Carta</h6>
-                <p class="small text-secondary mb-2" th:text="${card.type_line}">Tipo Carta</p>
+                <p class="small text-secondary mb-2" th:text="${card.typeline}">Tipo Carta</p>
 
-                
-                <div class="text-muted small">
-                  <div th:if="${card.expansion != null}">
+
+                <div class="text-secondary small">
+                  <div th:if="${card.expansionSet != null}">
                     <strong>Set:</strong>
-                    <span th:text="${card.expansion.expansion_name}">N/A</span>
+                    <span th:text="${card.expansionSet.name}">N/A</span>
                   </div>
                   <div th:if="${card.artistRef != null and !#lists.isEmpty(card.artistRef)}">
                     <strong>Artista:</strong>
@@ -73,19 +72,20 @@
                   </div>
                 </div>
 
-           
-                <div th:if="${card.color_identity != null and !#lists.isEmpty(card.color_identity)}"
-                     class="mt-2 small text-muted">
-                  <strong>Colori:</strong>
-                  <span th:each="c : ${card.color_identity}">
-                    <span th:text="${c}"></span><span th:if="${!#lists.isLast(card.color_identity, c)}">, </span>
-                  </span>
+
+                <div th:if="${card.colorIdentity != null and !#lists.isEmpty(card.colorIdentity)}"
+                  class="mt-2 small text-secondary">
+                   <strong>Colori:</strong>
+                  <span th:each="c, stat : ${card.colorIdentity}">
+                   <span th:text="${c}"></span>
+                    <span th:if="${not stat.last}">, </span> 
+                  </span> 
                 </div>
 
-    
-                <div th:if="${card.legalities != null}" class="mt-2 small text-muted">
+
+                <div th:if="${card.legalities != null}" class="mt-2 small text-secondary">
                   <strong>Standard:</strong>
-                  <span th:text="${card.legalities['standard']}">N/A</span>
+                  <span th:text="${card.legalities.get('standard')}">N/A</span>
                 </div>
               </div>
             </div>
@@ -95,24 +95,22 @@
     </section>
 
 
-    <nav th:if="${cards.totalPages > 1}" class="d-flex justify-content-center mt-5">
+    <nav th:if="${totalPages > 1}" class="d-flex justify-content-center mt-5">
       <ul class="pagination pagination-lg">
-        <li class="page-item" th:classappend="${cards.first} ? 'disabled'">
+        <li class="page-item" th:classappend="${currentPage==0} ? 'disabled'">
           <a class="page-link bg-dark text-warning border-warning"
-             th:href="@{/cards(page=${cards.number - 1}, q=${query})}">&laquo;</a>
+            th:href="@{/cards(page=${totalPages - 1}, q=${query})}">&laquo;</a>
         </li>
 
-        <li class="page-item"
-            th:each="i : ${#numbers.sequence(0, cards.totalPages - 1)}"
-            th:classappend="${i == cards.number} ? 'active'">
-          <a class="page-link bg-dark text-warning border-warning"
-             th:href="@{/cards(page=${i}, q=${query})}"
-             th:text="${i + 1}"></a>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+          th:classappend="${i == currentPage} ? 'active'">
+          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${i}, q=${query})}"
+            th:text="${i + 1}"></a>
         </li>
 
-        <li class="page-item" th:classappend="${cards.last} ? 'disabled'">
+        <li class="page-item" th:classappend="${currentPage ==totalPages} ? 'disabled'">
           <a class="page-link bg-dark text-warning border-warning"
-             th:href="@{/cards(page=${cards.number + 1}, q=${query})}">&raquo;</a>
+            th:href="@{/cards(page=${currentPage + 1}, q=${query})}">&raquo;</a>
         </li>
       </ul>
     </nav>
@@ -166,4 +164,5 @@
     }
   </style>
 </body>
+
 </html>
