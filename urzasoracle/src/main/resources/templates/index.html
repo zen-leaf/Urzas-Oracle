@@ -5,29 +5,55 @@
   <body class="bg-dark text-light">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
+    <!-- TAPPEZZERIA DI CARTE - SCORRIMENTO ORIZZONTALE INFINITO PERFETTO -->
+    <div class="cards-full-background" id="cardsMosaicFull">
+      <!-- Carte dal database usando Thymeleaf -->
+      <th:block th:each="card : ${topCards}">
+        <div
+          class="mosaic-card-full"
+          th:if="${card.images != null and card.images.get('png') != null}"
+          th:style="'background-image: url(' + ${card.images.get('png')} + ');'"
+        ></div>
+      </th:block>
+    </div>
+
+    <!-- Overlay scuro per leggibilità contenuto -->
+    <div class="content-overlay"></div>
+
     <main class="container-fluid py-5">
-      <!-- Hero Section -->
+      <!-- Hero Section - TESTO GRANDE -->
       <header class="text-center mb-5">
         <h1
-          class="display-3 fw-bold text-warning mb-3"
-          style="text-shadow: 0 0 20px rgba(255, 193, 7, 0.5)"
+          class="display-1 fw-bold text-warning mb-4"
+          style="
+            text-shadow: 0 0 30px rgba(255, 193, 7, 0.6);
+            font-size: 4rem;
+            letter-spacing: 3px;
+          "
         >
           Urza's Oracle
         </h1>
-        <p class="lead text-secondary mb-4" style="font-size: 1.3rem">
+        <p
+          class="lead text-secondary mb-4"
+          style="font-size: 1.8rem; font-weight: 500"
+        >
           Il portale definitivo per i fan di
-          <span class="text-warning fw-bold">Magic: The Gathering</span>
+          <span class="text-warning fw-bold" style="font-size: 2rem"
+            >Magic: The Gathering</span
+          >
         </p>
-        <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <div class="d-flex gap-4 justify-content-center flex-wrap">
           <a
             href="/cards"
-            class="btn btn-warning btn-lg fw-bold shadow px-4 py-2"
+            class="btn btn-warning btn-lg fw-bold shadow px-5 py-3"
+            style="font-size: 1.2rem"
           >
             Scopri le Carte
           </a>
           <a
             href="/search"
-            class="btn btn-outline-warning btn-lg fw-bold px-4 py-2"
+            class="btn btn-outline-warning btn-lg fw-bold px-5 py-3"
+            style="font-size: 1.2rem"
           >
             Ricerca Avanzata
           </a>
@@ -38,10 +64,13 @@
       <section class="container mb-5">
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center">
-            <h2 class="text-warning mb-4 fw-bold">
+            <h2 class="text-warning mb-4 fw-bold" style="font-size: 2.5rem">
               Benvenuto nel tuo TCG Finder
             </h2>
-            <p class="text-secondary fs-5">
+            <p
+              class="text-secondary fs-5"
+              style="font-size: 1.3rem; line-height: 1.8"
+            >
               Trova le carte più rare, crea una tua collezione personale o
               esplora deck creativi.
               <span class="text-warning fw-bold">Urza's Oracle</span> è qui per
@@ -80,7 +109,7 @@
                   Filtra le carte per set, colore, rarità e molto altro.
                 </p>
                 <a
-                  href="/search"
+                  href="/cards"
                   class="btn btn-outline-warning btn-sm fw-bold px-4"
                 >
                   Cerca ora
@@ -174,14 +203,17 @@
             );
           "
         >
-          <h3 class="text-warning fw-bold mb-3">Inizia la tua avventura ora</h3>
-          <p class="text-secondary mb-4 fs-5">
+          <h3 class="text-warning fw-bold mb-3" style="font-size: 2rem">
+            Inizia la tua avventura ora
+          </h3>
+          <p class="text-secondary mb-4 fs-5" style="font-size: 1.3rem">
             Esplora migliaia di carte, crea mazzi competitivi e connettiti con
             la community globale di Magic.
           </p>
           <a
             href="/cards"
             class="btn btn-warning btn-lg fw-bold shadow px-5 py-3"
+            style="font-size: 1.2rem"
           >
             Inizia Ora
           </a>
@@ -202,6 +234,107 @@
         );
         font-family: "Roboto", sans-serif;
         min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* NAVBAR e FOOTER NON vengono coperte */
+      nav {
+        position: relative;
+        z-index: 100;
+      }
+
+      footer {
+        position: relative;
+        z-index: 100;
+      }
+
+      /* ANIMAZIONE SEAMLESS INFINITA */
+      @keyframes scrollCardsHorizontal {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-66.666%);
+        }
+      }
+
+      /* TAPPEZZERIA DI CARTE - 300% WIDTH PER LOOP PERFETTO */
+      .cards-full-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 300%;
+        min-height: 100vh;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: 4px;
+        padding: 10px;
+        animation: scrollCardsHorizontal 180s linear infinite;
+        will-change: transform;
+      }
+
+      /* Carte tappezzeria - responsive */
+      .mosaic-card-full {
+        width: 160px;
+        height: 230px;
+        flex-shrink: 0;
+        border-radius: 6px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #1a1a2e;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 193, 7, 0.15);
+        opacity: 0.7;
+      }
+
+      @media (max-width: 1024px) {
+        .mosaic-card-full {
+          width: 140px;
+          height: 200px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .mosaic-card-full {
+          width: 120px;
+          height: 170px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .mosaic-card-full {
+          width: 100px;
+          height: 140px;
+        }
+      }
+
+      /* Overlay scuro - SOLO SOPRA LE CARTE, NON SU NAV/FOOTER */
+      .content-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100vh;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(11, 15, 26, 0.3) 0%,
+          rgba(11, 15, 26, 0.6) 50%,
+          rgba(11, 15, 26, 0.8) 100%
+        );
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      main {
+        position: relative;
+        z-index: 2;
+        background: transparent;
       }
 
       .card-hover {
@@ -241,5 +374,30 @@
         letter-spacing: 1px;
       }
     </style>
+
+    <script>
+      // Replica le carte per riempire il 300% width
+      document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("cardsMosaicFull");
+        const originalCards = Array.from(
+          container.querySelectorAll(".mosaic-card-full")
+        );
+
+        console.log("Carte originali:", originalCards.length);
+
+        // Duplica 5 volte per riempire il 300% della larghezza
+        for (let i = 0; i < 5; i++) {
+          originalCards.forEach((card) => {
+            const clone = card.cloneNode(true);
+            container.appendChild(clone);
+          });
+        }
+
+        console.log(
+          "Carte totali:",
+          container.querySelectorAll(".mosaic-card-full").length
+        );
+      });
+    </script>
   </body>
 </html>
