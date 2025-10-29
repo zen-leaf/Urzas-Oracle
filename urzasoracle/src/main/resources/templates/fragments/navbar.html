@@ -90,7 +90,7 @@
             <span
               class="badge bg-warning text-dark ms-2"
               sec:authentication="principal.authorities[0].authority"
-              th:text="${#strings.replace(#authorization.authentication.authorities[0].authority, 'DISPLAY_NAME_', '')}"
+              th:text="${#strings.replace(#authorization.authentication.authorities[0].authority, 'ROLE_', '')}"
               >ROLE</span
             >
           </a>

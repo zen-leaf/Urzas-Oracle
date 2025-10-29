@@ -27,18 +27,18 @@
           class="display-1 fw-bold text-warning mb-4"
           style="
             text-shadow: 0 0 30px rgba(255, 193, 7, 0.6);
-            font-size: 4rem;
+            font-size: 5.5rem;
             letter-spacing: 3px;
           "
         >
           Urza's Oracle
         </h1>
         <p
-          class="lead text-secondary mb-4"
-          style="font-size: 1.8rem; font-weight: 500"
+          class="lead mb-4"
+          style="font-size: 2.3rem; font-weight: 500; color: #ffffff"
         >
           Il portale definitivo per i fan di
-          <span class="text-warning fw-bold" style="font-size: 2rem"
+          <span class="text-warning fw-bold" style="font-size: 2.5rem"
             >Magic: The Gathering</span
           >
         </p>
@@ -46,14 +46,14 @@
           <a
             href="/cards"
             class="btn btn-warning btn-lg fw-bold shadow px-5 py-3"
-            style="font-size: 1.2rem"
+            style="font-size: 1.4rem"
           >
             Scopri le Carte
           </a>
           <a
             href="/search"
             class="btn btn-outline-warning btn-lg fw-bold px-5 py-3"
-            style="font-size: 1.2rem"
+            style="font-size: 1.4rem"
           >
             Ricerca Avanzata
           </a>
@@ -64,12 +64,16 @@
       <section class="container mb-5">
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center">
-            <h2 class="text-warning mb-4 fw-bold" style="font-size: 2.5rem">
+            <h2 class="text-warning mb-4 fw-bold" style="font-size: 3.2rem">
               Benvenuto nel tuo TCG Finder
             </h2>
             <p
-              class="text-secondary fs-5"
-              style="font-size: 1.3rem; line-height: 1.8"
+              style="
+                font-size: 1.6rem;
+                line-height: 1.8;
+                color: #ffffff;
+                font-weight: 600;
+              "
             >
               Trova le carte più rare, crea una tua collezione personale o
               esplora deck creativi.
@@ -102,15 +106,27 @@
                     />
                   </svg>
                 </div>
-                <h5 class="card-title text-warning fw-bold mb-3">
+                <h5
+                  class="card-title text-warning fw-bold mb-3"
+                  style="font-size: 1.5rem"
+                >
                   Ricerca Avanzata
                 </h5>
-                <p class="card-text text-secondary mb-4">
+                <p
+                  class="card-text"
+                  style="
+                    color: #ffffff;
+                    margin-bottom: 1rem;
+                    font-weight: 600;
+                    font-size: 1.15rem;
+                  "
+                >
                   Filtra le carte per set, colore, rarità e molto altro.
                 </p>
                 <a
                   href="/cards"
                   class="btn btn-outline-warning btn-sm fw-bold px-4"
+                  style="font-size: 1.1rem"
                 >
                   Cerca ora
                 </a>
@@ -136,15 +152,27 @@
                     />
                   </svg>
                 </div>
-                <h5 class="card-title text-warning fw-bold mb-3">
+                <h5
+                  class="card-title text-warning fw-bold mb-3"
+                  style="font-size: 1.5rem"
+                >
                   Collezione Personale
                 </h5>
-                <p class="card-text text-secondary mb-4">
+                <p
+                  class="card-text"
+                  style="
+                    color: #ffffff;
+                    margin-bottom: 1rem;
+                    font-weight: 600;
+                    font-size: 1.15rem;
+                  "
+                >
                   Gestisci e mostra la tua collezione di carte preferite.
                 </p>
                 <a
                   href="/collection"
                   class="btn btn-outline-warning btn-sm fw-bold px-4"
+                  style="font-size: 1.1rem"
                 >
                   Vai alla collezione
                 </a>
@@ -173,15 +201,27 @@
                     />
                   </svg>
                 </div>
-                <h5 class="card-title text-warning fw-bold mb-3">
+                <h5
+                  class="card-title text-warning fw-bold mb-3"
+                  style="font-size: 1.5rem"
+                >
                   Cerca Mazzi
                 </h5>
-                <p class="card-text text-secondary mb-4">
+                <p
+                  class="card-text"
+                  style="
+                    color: #ffffff;
+                    margin-bottom: 1rem;
+                    font-weight: 600;
+                    font-size: 1.15rem;
+                  "
+                >
                   Consulta e scopri i mazzi condivisi da altri giocatori.
                 </p>
                 <a
                   href="/decks"
                   class="btn btn-outline-warning btn-sm fw-bold px-4"
+                  style="font-size: 1.1rem"
                 >
                   Esplora
                 </a>
@@ -190,39 +230,7 @@
           </div>
         </div>
       </section>
-
-      <!-- Call to Action -->
-      <section class="container text-center my-5">
-        <div
-          class="p-5 bg-dark border border-warning rounded shadow-lg"
-          style="
-            background: linear-gradient(
-              135deg,
-              rgba(26, 16, 51, 0.8) 0%,
-              rgba(11, 15, 26, 0.9) 100%
-            );
-          "
-        >
-          <h3 class="text-warning fw-bold mb-3" style="font-size: 2rem">
-            Inizia la tua avventura ora
-          </h3>
-          <p class="text-secondary mb-4 fs-5" style="font-size: 1.3rem">
-            Esplora migliaia di carte, crea mazzi competitivi e connettiti con
-            la community globale di Magic.
-          </p>
-          <a
-            href="/cards"
-            class="btn btn-warning btn-lg fw-bold shadow px-5 py-3"
-            style="font-size: 1.2rem"
-          >
-            Inizia Ora
-          </a>
-        </div>
-      </section>
     </main>
-
-    <!-- Include FOOTER fragment -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
 
     <style>
       /* DISABILITA SCROLL - HOME PAGE SOLO CARTE */

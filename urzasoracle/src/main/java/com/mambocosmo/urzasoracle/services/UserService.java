@@ -54,7 +54,7 @@ public class UserService {
         user.setUsername(userData.get("username"));
         user.setPassword(passwordEncoder.encode(userData.get("password")));
         user.setEmail(userData.get("email"));
-        user.setDisplayName(userData.get("username"));
+        user.setDisplayName(userData.get("displayName"));
         user.setRole("ADMIN");
         user.setRegisterDate(LocalDate.now());
 
