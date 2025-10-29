@@ -57,4 +57,11 @@ public class UrzaUser extends GenericEntity implements UserDetails {
         return true;
     }
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JoinColumn(referencedColumnName = "owner")
+    private Set<CardCollection> userDecks;
+
 }

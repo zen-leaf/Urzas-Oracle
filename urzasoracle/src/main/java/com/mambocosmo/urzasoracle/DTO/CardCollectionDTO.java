@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.DTO;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.mambocosmo.urzasoracle.entities.CardInDeck;
@@ -16,7 +17,7 @@ private UUID id;
     private UrzaUser owner;
     private String name;
     private String description;
-    private List<Format> legalIn;
+    private Map<Format,String> legalIn;
     private List<CardInDeck> cardList;
 
 }
