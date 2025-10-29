@@ -29,6 +29,11 @@ public class AppController {
         return "login";
     }
 
+    @GetMapping("/about")
+    public String aboutPage() {
+        return "about"; // about.html in templates
+    }
+
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("active", "register");

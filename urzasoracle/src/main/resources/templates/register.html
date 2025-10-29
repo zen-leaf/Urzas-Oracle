@@ -29,7 +29,7 @@
         style="width: 100%; max-width: 500px"
       >
         <form
-          th:action="@{/register}"
+          th:action="@{/auth/register}"
           method="post"
           class="needs-validation"
           novalidate
@@ -209,7 +209,7 @@
             <p class="text-secondary mb-0">Hai già un account?</p>
             <a
               class="btn btn-outline-warning btn-sm fw-bold mt-2"
-              th:href="@{/login}"
+              th:href="@{/auth/login}"
             >
               Accedi Qui
             </a>

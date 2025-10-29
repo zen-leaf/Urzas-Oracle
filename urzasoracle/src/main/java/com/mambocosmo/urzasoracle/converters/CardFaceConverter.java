@@ -28,7 +28,7 @@ public class CardFaceConverter implements GenericConverter<CardFace, CardFaceDTO
         dto.setLoyalty(e.getLoyalty());
         dto.setArtist(e.getArtist());
         dto.setIllustration_id(e.getIllustration_id());
-        dto.setImage_uris(e.getImage_uris());
+        dto.setImages(e.getImage_uris());
         return dto;
     }
 

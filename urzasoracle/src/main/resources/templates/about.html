@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('Chi Siamo')}"></head>
+
+<body class="bg-dark text-light">
+
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <main class="container py-4">
+    <h1 class="mb-4">Chi Siamo</h1>
+    <p>
+      Benvenuti nel nostro sito! Siamo un team di appassionati di carte collezionabili,
+      dedicati a fornire la migliore esperienza possibile per i nostri utenti.
+    </p>
+    <p>
+      La nostra missione è quella di creare una comunità dove gli amanti delle carte
+      possano condividere, scambiare e collezionare le loro carte preferite.
+    </p>
+    <h2 class="mt-4">Il Nostro Team</h2>
+    <ul>
+      <li><strong>Jeremy Da Roit</strong> - Fondatore e CEO</li>
+      <li><strong>Matteo Di Lernia</strong> - Sviluppatore Frontend</li>
+      <li><strong>Lorenzo Subashi</strong> - Sviluppatore Frontend</li>
+      <li><strong>Gemma Ruggiu</strong> - Sviluppatrice Backend</li>
+      <li><strong>Lorenzo Malara</strong> - Sviluppatore Backend</li>
+    </ul>
+    <h2 class="mt-4">Contattaci</h2>
+    <p>
+      Se hai domande o suggerimenti, non esitare a contattarci all'indirizzo
+      <a href="mailto:info@esempio.com" class="text-light">info@esempio.com</a>.
+    </p>
+  </main>
+
+  <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
