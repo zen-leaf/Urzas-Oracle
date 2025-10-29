@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public interface IMappable {
     default void fromMap(Map<String, String> in) {
@@ -33,6 +34,10 @@ public interface IMappable {
                                 case "BigDecimal":
                                     Double paramProxyBD = Double.valueOf(objectProxy);
                                     param = BigDecimal.valueOf(paramProxyBD);
+                                    break;
+                                
+                                case "UUID":
+                                    param = UUID.fromString(objectProxy);
                                     break;
                             
                                 case "BigInteger":
