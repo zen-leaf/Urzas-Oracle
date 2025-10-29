@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.controllers;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
@@ -20,7 +22,6 @@ import lombok.Data;
 @Data
 public class CardController {
 
-    // private final CardRepository cardRepository;
     private final CardService CARDSERVICE;
 
     @GetMapping("/cards")
@@ -32,9 +33,21 @@ public class CardController {
         model.addAttribute("totalPages", cardPage.getTotalPages());
         model.addAttribute("totElements", cardPage.getTotalElements());
         model.addAttribute("pageSize", cardPage.getSize());
-            model.addAttribute("active", "cards");
+        model.addAttribute("active", "cards");
         return "cards";
     }
+
+@GetMapping("/cards/{id}")
+public String getCardInfo(@PathVariable UUID id, Model model) {
+    Card card = getCARDSERVICE().getCardById(id);
+    if (card == null) {
+        return "redirect:/cards";
+    }
+    model.addAttribute("card", card);
+    model.addAttribute("active", "cards");
+    return "cardinfo";
+}
+
 
     @GetMapping("/card/search")
     public String listCards(
