@@ -6,7 +6,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class CardFaceDTO implements GenericDTO{
+public class CardFaceDTO implements GenericDTO {
 
     private UUID id;
     private String name;
@@ -18,6 +18,6 @@ public class CardFaceDTO implements GenericDTO{
     private String loyalty;
     private String artist;
     private String illustration_id;
-    private Map<String, String> image_uris;
+    private Map<String, String> images;
 
 }
