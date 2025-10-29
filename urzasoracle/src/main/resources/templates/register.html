@@ -158,6 +158,39 @@
               minlength="6"
               required
             />
+            <!-- Is Admin -->
+            <br />
+            <div class="mb-4">
+              <label for="isAdmin" class="form-label text-warning fw-bold mb-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="#ffc107"
+                  class="bi bi-shield-lock"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M5.5 9a.5.5 0 0 1 .5.5v1.5h1V9.5a.5.5 0 0 1 1 0V11h1V9.5a.5.5 0 0 1 1 0V11h.5a.5.5 0 0 1 .5.5v1A5.53 5.53 0 0 1 8 16a5.53 5.53 0 0 1-4-1.5v-1a.5.5 0 0 1 .5-.5h.5V9.5a.5.5 0 0 1 1 0V11h1V9.5a.5.5 0 0 1 .5-.5z"
+                  />
+                </svg>
+                Is Admin
+              </label>
+              <select
+                id="isAdmin"
+                name="isAdmin"
+                class="form-select bg-dark text-warning border-warning form-select-lg"
+                required
+              >
+                <option value="" disabled selected>Seleziona...</option>
+                <option value="true">Sì</option>
+                <option value="false">No</option>
+              </select>
+              <div class="invalid-feedback text-warning">
+                Seleziona se l'utente è admin.
+              </div>
+            </div>
+
             <div class="invalid-feedback text-warning">
               Le password non corrispondono.
             </div>

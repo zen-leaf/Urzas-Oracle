@@ -32,6 +32,7 @@ public class CardController {
         model.addAttribute("totalPages", cardPage.getTotalPages());
         model.addAttribute("totElements", cardPage.getTotalElements());
         model.addAttribute("pageSize", cardPage.getSize());
+            model.addAttribute("active", "cards");
         return "cards";
     }
 
