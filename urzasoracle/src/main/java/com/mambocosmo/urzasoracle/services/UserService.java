@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.services;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,37 @@ import lombok.Data;
 @Service
 @Data
 public class UserService  extends GenericService<User, UserDTO, UserConverter, UserRepository>{
-    public User construct(Map<String, String> fromData) {
-       return getCONTEXT().getBean(User.class, fromData);
+
+
+   @Override
+    public User construct(Map<String, String> userData) {
+        return construct(userData, "USER");
     }
 
+    public User construct(Map<String, String> userData, String role) {
+        User user = new User();
+        user.setUsername(userData.get("username"));
+        user.setPassword(userData.get("password")); // password in chiaro
+        user.setRole(role); // "ADMIN" o "USER"
+        return user;
+    }
 
-    
-    
+    public boolean registerUser(Map<String, String> userData) {
+        UUID id = UUID.fromString(userData.get("id"));
+        if (getREPOSITORY().existsById(id)) return false;
+
+        User user = construct(userData, "USER");
+        getREPOSITORY().save(user);
+        return true;
+    }
+
+    public boolean registerAdmin(Map<String, String> userData) {
+        UUID id = UUID.fromString(userData.get("id"));
+        if (getREPOSITORY().existsById(id)) return false;
+
+        User user = construct(userData, "ADMIN");
+        getREPOSITORY().save(user);
+        return true;
+    }
 }
+
