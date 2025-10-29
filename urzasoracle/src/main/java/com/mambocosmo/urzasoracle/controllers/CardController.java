@@ -35,7 +35,7 @@ public class CardController {
         return "cards";
     }
 
-    @GetMapping
+    @GetMapping("/card/search")
     public String listCards(
             @RequestParam(required = false) String q,
             @RequestParam(defaultValue = "0") int page,
