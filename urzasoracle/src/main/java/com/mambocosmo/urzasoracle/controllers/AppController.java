@@ -19,6 +19,11 @@ public class AppController {
         return "login"; // login.html in templates
     }
 
+    @GetMapping("/about")
+    public String aboutPage() {
+        return "about"; // about.html in templates
+    }
+
     @GetMapping("/register")
     public String registerPage() {
         return "register"; // register.html in templates
