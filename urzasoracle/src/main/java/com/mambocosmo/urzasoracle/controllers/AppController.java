@@ -3,39 +3,54 @@ package com.mambocosmo.urzasoracle.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mambocosmo.urzasoracle.services.CardService;
+
+import lombok.Data;
 
 @Controller
-@RequestMapping("/")
+@Data
 public class AppController {
+
+    private final CardService cardService;
 
     @GetMapping("/")
     public String home(Model model) {
-        return "index";
+        // Carica le prime 150 carte per il mosaico della home
+        var topCards = cardService.getAllPaged(0, 150).getContent();
+        model.addAttribute("topCards", topCards);
+        model.addAttribute("active", "home");
+        return "index"; // index.html
     }
 
     @GetMapping("/login")
-    public String loginPage() {
-        return "login"; // login.html in templates
+    public String loginPage(Model model) {
+        model.addAttribute("active", "login");
+        return "login";
+    }
+
+    @GetMapping("/about")
+    public String aboutPage() {
+        return "about"; // about.html in templates
     }
 
     @GetMapping("/register")
-    public String registerPage() {
-        return "register"; // register.html in templates
+    public String registerPage(Model model) {
+        model.addAttribute("active", "register");
+        return "register";
     }
 
-    @GetMapping("/profile")
-    public String profilePage() {
-        return "register"; // register.html in templates
-    }
+
 
     @GetMapping("/403")
-    public String forbidden() {
+    public String forbidden(Model model) {
+        model.addAttribute("active", "error");
         return "403";
     }
 
     @GetMapping("/error")
-    public String error() {
+    public String error(Model model) {
+        model.addAttribute("active", "error");
         return "error";
     }
 }
