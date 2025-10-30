@@ -43,9 +43,9 @@ public class CardCollection extends GenericEntity {
 
     private String description;
 
-    private Format mainDeckFormat;
+    @Column(nullable = true)
+    private Format mainDeckFormat;  // ← TORNA A Format, NON String!
 
-    //candidate to remove
     @ElementCollection
     @CollectionTable(name = "deck_legal_formats", joinColumns = @JoinColumn(name = "deck_id"))
     @MapKeyColumn(name = "format")
@@ -53,5 +53,4 @@ public class CardCollection extends GenericEntity {
 
     @OneToMany(mappedBy = "id.deck", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CardInDeck> cardList = new ArrayList<>();
-
 }
