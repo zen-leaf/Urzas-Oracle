@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 
 @Service
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class CardService extends GenericService<Card, CardDTO, CardConverter, CardRepository> {
 
     private final CardExpansionSetService EXPANSIONSETSERVICE;
@@ -43,7 +43,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             fromEntity.setArtistRef(new HashSet<>());
         }
         if (fromEntity.getAll_parts() == null) {
-            fromEntity.setAll_parts(new HashSet<>());
+            fromEntity.setAll_parts(new ArrayList<>());
         }
 
         if (fromEntity.getCard_faces() == null) {
@@ -76,7 +76,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
 
-    //Prendi una singola carta per ID (UUID)
+    // Prendi una singola carta per ID (UUID)
     public CardDTO getCardById(UUID id) {
         return getCONVERTER().fromEToD(getREPOSITORY().findById(id).orElse(null));
     }
@@ -152,7 +152,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
-    
+
     public List<Card> getAllCardEntities() {
         List<Card> page = getREPOSITORY().findAll();
 

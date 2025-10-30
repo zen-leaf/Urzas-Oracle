@@ -124,7 +124,8 @@ public class Card extends GenericEntity {
     @CollectionTable(name = "card_legal_formats", joinColumns = @JoinColumn(name = "card_id"))
     @MapKeyColumn(name = "format")
     private Map<Format, String> legalities;
-    // creare un oggetto dedicato che setta un field per chiave al posto di avere una mappa
+    // creare un oggetto dedicato che setta un field per chiave al posto di avere
+    // una mappa
     // LOW PRIORITY
 
     private Boolean reserverd = false;
@@ -171,11 +172,10 @@ public class Card extends GenericEntity {
     private UUID card_back_id;
 
     @ManyToMany(cascade = { CascadeType.ALL }) // mapped by foundIn in
-                                                                     // CardPart
-    @JoinTable(name = "card_parts_relation", joinColumns = @JoinColumn(name =
-    "card_id"), inverseJoinColumns = @JoinColumn(name = "part_id"))
+                                               // CardPart
+    @JoinTable(name = "card_parts_relation", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "part_id"))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<CardPart> all_parts;
+    private List<CardPart> all_parts;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "card_artists", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))

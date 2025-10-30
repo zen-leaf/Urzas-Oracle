@@ -1,0 +1,70 @@
+.card-container {
+    perspective: 1000px;
+    /* Establishes a 3D perspective for child elements */
+    margin-bottom: 30px;
+}
+
+.magic-card {
+    width: 250px;
+    height: 350px;
+    position: relative;
+    /* Needed for absolute positioning of faces */
+    transform-style: preserve-3d;
+    /* Crucial for 3D flipping */
+    transition: transform 0.1s ease-out;
+    /* For smooth drag response */
+    cursor: grab;
+    user-select: none;
+}
+
+.card-face {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
+    backface-visibility: hidden;
+    /* Hides the backside of the face when flipped */
+    -webkit-backface-visibility: hidden;
+    /* For Safari */
+    /* border: 5px solid gold; */
+    /* The iconic MTG gold border */
+    /* background-color: #333; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* padding: 10px; */
+    box-sizing: border-box;
+}
+
+.card-front {
+    transform: rotateY(0deg);
+    /* Default state */
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    /* Starts flipped over */
+    /* border: 5px solid silver; */
+    /* A different border for the back */
+    /* background-color: #444; */
+    /* Placeholder for a generic Magic card back image */
+    /* background-image: url('https://upload.wikimedia.org/wikipedia/en/a/aa/Magic_the_gathering-card_back.jpg'); */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    /* Hide content of back face, just show image */
+    justify-content: center;
+    align-items: center;
+    /* color: white; */
+    /* Optional: text like "Magic: The Gathering" */
+    /* font-size: 1.5em; */
+    /* text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); */
+    /* text-align: center; */
+    /* line-height: 1.2; */
+}
+
+/* .card-back-imageflip {
+    transform: rotateZ(180deg);
+} */

@@ -1,308 +1,215 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head :: head('Card info - Urza\'s Oracle')}"></head>
-  <!-- <head>
-    <meta charset="UTF-8" />
-    <title>Card Info - Urza's Oracle</title>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background: radial-gradient(
-            60% 40% at 20% 10%,
-            rgba(123, 31, 162, 0.15),
-            transparent 60%
-          ),
-          radial-gradient(
-            50% 35% at 80% 20%,
-            rgba(255, 193, 7, 0.08),
-            transparent 60%
-          ),
-          linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%);
-        font-family: "Roboto", sans-serif;
-        min-height: 100vh;
-      }
-      .magic-font {
-        font-family: "Crimson Text", Georgia, serif !important;
-        font-weight: 600;
-      }
-      .badge.bg-success {
-        background-color: #28a745 !important;
-        color: white !important;
-        padding: 0.3rem 0.6rem !important;
-        border-radius: 3px !important;
-        font-weight: bold !important;
-        font-size: 0.75rem !important;
-      }
-      .badge.bg-secondary {
-        background-color: #444 !important;
-        color: #888 !important;
-        padding: 0.3rem 0.6rem !important;
-        border-radius: 3px !important;
-        font-weight: bold !important;
-        font-size: 0.75rem !important;
-      }
-      /* Aggiunta: stile per icone mana se vuoi ripristinare futura visualizzazione SVG o font.. */
-    </style> -->
-  </head>
-  <body class="bg-dark text-light">
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <main class="container-fluid py-4">
-      <div class="row g-4">
-        <!-- Immagine Carta -->
-        <div class="col-lg-3">
-          <img
-            th:if="${card.images != null and card.images['png'] != null}"
-            th:src="${card.images['png']}"
-            th:alt="${card.name}"
-            class="img-fluid rounded shadow"
-            style="
+<head th:replace="~{fragments/head :: head('Card info - Urza\'s Oracle')}"></head>
+
+</head>
+
+<body class="bg-dark text-light">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <main class="container-fluid py-4">
+    <div class="row g-4">
+      <!-- Immagine Carta -->
+      <div class="col-lg-3">
+        <div class="card-container">
+          <div id="dragCard" class="magic-card">
+            <div class="card-face card-front">
+              <img th:if="${card.images != null and card.images['png'] != null}" th:src="${card.images['png']}"
+                th:alt="${card.name}" class="img-fluid shadow" style="
               width: 100%;
               aspect-ratio: 488/680;
               object-fit: contain;
               border: 2px solid rgba(255, 193, 7, 0.2);
+              border-radius: 0.85rem;
               background: rgba(26, 16, 51, 0.5);
-            "
-          />
-          <div
-            th:if="${card.images == null or card.images['png'] == null}"
-            class="w-100 rounded d-flex align-items-center justify-content-center text-secondary"
-            style="
+            " />
+            </div>
+
+            <div class="card-face card-back">
+              <div class="card-back-imageflip">
+                <img th:if="${card.backFace != null and card.backFace.images['png'] != null}"
+                  th:src="${card.backFace.images['png']}" th:alt="${card.name}" class="img-fluid shadow" style="
+              width: 100%;
+              aspect-ratio: 488/680;
+              object-fit: contain;
+              border: 2px solid rgba(255, 193, 7, 0.2);
+                            border-radius: 20px;
+
+              background: rgba(26, 16, 51, 0.5);
+            " />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div th:if="${card.images == null or card.images['png'] == null}"
+          class="w-100  d-flex align-items-center justify-content-center text-secondary" style="
               aspect-ratio: 488/680;
               background: rgba(108, 117, 125, 0.2);
               border: 2px dashed rgba(255, 193, 7, 0.2);
-            "
-          >
-            <span>No Image</span>
-          </div>
+            ">
+          <span>No Image</span>
         </div>
-        <!-- Informazioni sulla carta -->
-        <div class="col-lg-9">
-          <!-- Nome e Tipo -->
-          <div class="mb-3">
-            <h1
-              class="fw-bold text-warning mb-2"
-              style="
+      </div>
+      <!-- Informazioni sulla carta -->
+      <div class="col-lg-9">
+        <!-- Nome e Tipo -->
+        <div class="mb-3">
+          <h1 class="fw-bold text-warning mb-2" style="
                 font-size: 2.2rem;
                 text-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
                 font-family: 'Georgia', serif;
-              "
-              th:text="${card.name}"
-            ></h1>
-            <p
-              class="text-secondary mb-1"
-              style="font-size: 1.1rem; font-weight: 500"
-              th:text="${card.typeline}"
-            ></p>
-          </div>
-          <hr class="border-warning mb-4" style="opacity: 0.3" />
+              " th:text="${card.name}"></h1>
+          <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}"></p>
+        </div>
+        <hr class="border-warning mb-4" style="opacity: 0.3" />
 
-          <!-- Mana Cost come testo -->
-          <div
-            class="mb-4"
-            th:if="${card.manaCost != null and card.manaCost != ''}"
-          >
-            <small class="text-secondary d-block mb-2">MANA COST</small>
-            <p
-              class="text-warning fw-bold"
-              style="font-size: 1.1rem"
-              th:text="${card.manaCost}"
-            ></p>
-          </div>
+        <!-- Mana Cost come testo -->
+        <div class="mb-4" th:if="${card.manaCost != null and card.manaCost != ''}">
+          <small class="text-secondary d-block mb-2">MANA COST</small>
+          <p class="text-warning fw-bold replaceCandidate" style="font-size: 1.1rem" th:text="${card.manaCost}"></p>
+        </div>
 
-          <!-- Dati set, rarità, numero -->
-          <div class="row g-3 mb-4">
-            <div class="col-12">
-              <small class="text-secondary">SET</small>
-              <p
-                class="text-light mb-0 fs-5"
-                th:text="${card.expansionSet != null} ? ${card.expansionSet.name} : 'N/A'"
-              ></p>
-            </div>
-            <div class="col-6">
-              <small class="text-secondary">RARITY</small>
-              <p
-                class="text-light mb-0 fs-5"
-                th:text="${card.rarity} ?: 'N/A'"
-              ></p>
-            </div>
-            <div class="col-6">
-              <small class="text-secondary">COLLECTOR NUMBER</small>
-              <p
-                class="text-light mb-0 fs-5"
-                th:text="${card.collectorNumber} ?: 'N/A'"
-              ></p>
-            </div>
+        <!-- Dati set, rarità, numero -->
+        <div class="row g-3 mb-4">
+          <div class="col-12">
+            <small class="text-secondary">SET</small>
+            <p class="text-light mb-0 fs-5" th:text="${card.expansionSet != null} ? ${card.expansionSet.name} : 'N/A'">
+            </p>
           </div>
-          <hr class="border-warning mb-4" style="opacity: 0.3" />
+          <div class="col-6">
+            <small class="text-secondary">RARITY</small>
+            <p class="text-light mb-0 fs-5" th:text="${card.rarity} ?: 'N/A'"></p>
+          </div>
+          <div class="col-6">
+            <small class="text-secondary">COLLECTOR NUMBER</small>
+            <p class="text-light mb-0 fs-5" th:text="${card.collectorNumber} ?: 'N/A'"></p>
+          </div>
+        </div>
+        <hr class="border-warning mb-4" style="opacity: 0.3" />
 
-          <!-- Legalità e formati -->
-          <div
-            class="mb-4"
-            th:if="${card.legalities != null and !#maps.isEmpty(card.legalities)}"
-          >
-            <small class="text-secondary d-block mb-3">LEGALITY</small>
-            <div
-              style="
+        <!-- Legalità e formati -->
+        <div class="mb-4" th:if="${card.legalities != null and !#maps.isEmpty(card.legalities)}">
+          <small class="text-secondary d-block mb-3">LEGALITY</small>
+          <div style="
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.75rem;
-              "
-            >
-              <!-- Esempio per STANDARD -->
-              <div
-                class="legality-item"
-                th:with="status=${card.legalities.get('STANDARD')}"
-              >
-                <span class="text-light">Standard</span>
-                <span th:if="${status == 'legal'}" class="badge-legal"
-                  >LEGAL</span
-                >
-                <span th:if="${status != 'legal'}" class="badge-not-legal"
-                  >NOT LEGAL</span
-                >
-              </div>
-              <!-- altri formati -->
-              <div
-                class="legality-item"
-                th:with="status=${card.legalities.get('PIONEER')}"
-              >
-                <span class="text-light">Pioneer</span>
-                <span th:if="${status == 'legal'}" class="badge-legal"
-                  >LEGAL</span
-                >
-                <span th:if="${status != 'legal'}" class="badge-not-legal"
-                  >NOT LEGAL</span
-                >
-              </div>
-              <!-- aggiungi altri formati come necessario -->
+              ">
+            <!-- Esempio per STANDARD -->
+            <div class="legality-item" th:with="status=${card.legalities.get('STANDARD')}">
+              <span class="text-light">Standard</span>
+              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
             </div>
+            <!-- altri formati -->
+            <div class="legality-item" th:with="status=${card.legalities.get('PIONEER')}">
+              <span class="text-light">Pioneer</span>
+              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+            </div>
+            <!-- aggiungi altri formati come necessario -->
           </div>
-          <hr class="border-warning mb-4" style="opacity: 0.3" />
+        </div>
+        <hr class="border-warning mb-4" style="opacity: 0.3" />
 
-          <!-- Oracle Text -->
-          <div
-            class="mb-4"
-            th:if="${card.oracleText != null and card.oracleText != ''}"
-          >
-            <small class="text-secondary d-block mb-2">ORACLE TEXT</small>
-            <p
-              class="text-light replaceCandidate"
-              style="
+        <!-- Oracle Text -->
+        <div class="mb-4" th:if="${card.oracleText != null and card.oracleText != ''}">
+          <small class="text-secondary d-block mb-2">ORACLE TEXT</small>
+          <p class="text-light replaceCandidate" style="
                 white-space: pre-wrap;
                 line-height: 1.6;
                 font-size: 0.95rem;
-              "
-              th:text="${card.oracleText}"
-            ></p>
-          </div>
+              " th:text="${card.oracleText}"></p>
+        </div>
 
-          <!-- Flavor Text -->
-          <div
-            class="mb-4"
-            th:if="${card.flavorText != null and card.flavorText != ''}"
-          >
-            <small class="text-secondary d-block mb-2">FLAVOR TEXT</small>
-            <p
-              class="text-secondary fst-italic"
-              style="
+        <!-- Flavor Text -->
+        <div class="mb-4" th:if="${card.flavorText != null and card.flavorText != ''}">
+          <small class="text-secondary d-block mb-2">FLAVOR TEXT</small>
+          <p class="text-secondary fst-italic" style="
                 white-space: pre-wrap;
                 line-height: 1.6;
                 border-left: 3px solid rgba(255, 193, 7, 0.2);
                 padding-left: 1rem;
                 font-size: 0.95rem;
-              "
-              th:text="${card.flavorText}"
-            ></p>
-          </div>
+              " th:text="${card.flavorText}"></p>
+        </div>
 
-          <!-- Artista -->
+        <!-- Artista -->
 
-            <small class="text-secondary d-block mb-2">ILLUSTRATED BY</small>
-            <p
-              class="text-light"
-              style="font-size: 0.95rem"
-              th:text="${#strings.listJoin(card.artistNames, ', ')}"
-            ></p>
+        <small class="text-secondary d-block mb-2">ILLUSTRATED BY</small>
+        <p class="text-light" style="font-size: 0.95rem" th:text="${#strings.listJoin(card.artistNames, ', ')}"></p>
 
-          <!-- Bottone Torna -->
-          <div class="mt-5">
-            <a href="/cards" class="btn btn-outline-warning fw-bold"
-              >&larr; Back to Cards</a
-            >
-          </div>
+        <!-- Bottone Torna -->
+        <div class="mt-5">
+          <a href="/cards" class="btn btn-outline-warning fw-bold">&larr; Back to Cards</a>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+  <div th:replace="~{fragments/footer :: footer}"></div>
 
-    <style>
-      body {
-        background: radial-gradient(
-            60% 40% at 20% 10%,
-            rgba(123, 31, 162, 0.15),
-            transparent 60%
-          ),
-          radial-gradient(
-            50% 35% at 80% 20%,
-            rgba(255, 193, 7, 0.08),
-            transparent 60%
-          ),
-          linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%);
-        font-family: "Roboto", sans-serif;
-        min-height: 100vh;
-      }
+  <style>
+    body {
+      background: radial-gradient(60% 40% at 20% 10%,
+          rgba(123, 31, 162, 0.15),
+          transparent 60%),
+        radial-gradient(50% 35% at 80% 20%,
+          rgba(255, 193, 7, 0.08),
+          transparent 60%),
+        linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%);
+      font-family: "Roboto", sans-serif;
+      min-height: 100vh;
+    }
 
-      small {
-        font-size: 0.75rem !important;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
+    small {
+      font-size: 0.75rem !important;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
 
-      .btn-outline-warning:hover {
-        background-color: #ffc107;
-        color: #000;
-        transform: scale(1.05);
-      }
+    .btn-outline-warning:hover {
+      background-color: #ffc107;
+      color: #000;
+      transform: scale(1.05);
+    }
 
-      .legality-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.6rem;
-        background: rgba(26, 16, 51, 0.5);
-        border: 1px solid rgba(255, 193, 7, 0.1);
-        border-radius: 4px;
-        font-size: 0.9rem;
-      }
+    .legality-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem;
+      background: rgba(26, 16, 51, 0.5);
+      border: 1px solid rgba(255, 193, 7, 0.1);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
 
-      .badge-legal {
-        background: #28a745;
-        color: white;
-        padding: 0.3rem 0.6rem;
-        border-radius: 3px;
-        font-weight: bold;
-        font-size: 0.75rem;
-      }
+    .badge-legal {
+      background: #28a745;
+      color: white;
+      padding: 0.3rem 0.6rem;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
 
-      .badge-not-legal {
-        background: #444;
-        color: #888;
-        padding: 0.3rem 0.6rem;
-        border-radius: 3px;
-        font-weight: bold;
-        font-size: 0.75rem;
-      }
+    .badge-not-legal {
+      background: #444;
+      color: #888;
+      padding: 0.3rem 0.6rem;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
 
-      hr {
-        opacity: 0.2;
-      }
-    </style>
-  </body>
+    hr {
+      opacity: 0.2;
+    }
+  </style>
+  <script src="/js/cardrotate.js" defer></script>
+</body>
+
 </html>

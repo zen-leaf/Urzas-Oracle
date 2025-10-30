@@ -16,7 +16,6 @@ public class CardFaceConverter implements GenericConverter<CardFace, CardFaceDTO
 
     @Override
     public CardFaceDTO fromEToD(CardFace e) {
-        
         CardFaceDTO dto = new CardFaceDTO();
         dto.setId(e.getId());
         dto.setName(e.getName());
@@ -29,6 +28,8 @@ public class CardFaceConverter implements GenericConverter<CardFace, CardFaceDTO
         dto.setArtist(e.getArtist());
         dto.setIllustration_id(e.getIllustration_id());
         dto.setImages(e.getImage_uris());
+                // System.out.println("converting card face!\n"+dto);
+
         return dto;
     }
 
