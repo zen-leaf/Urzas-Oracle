@@ -60,6 +60,7 @@ public class EntityConfiguration {
     public CardCollection cardCollection(Map<String, String> fromData) {
         CardCollection cc = new CardCollection();
         cc.fromMap(fromData);
+        // TODO placeholder per testing
         UrzaUser u = getURZAUSERSERVICE().findByUsername("dummy_user");
         cc.setOwner(u);
         return cc;

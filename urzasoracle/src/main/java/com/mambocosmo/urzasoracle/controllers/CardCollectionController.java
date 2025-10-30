@@ -1,8 +1,10 @@
 package com.mambocosmo.urzasoracle.controllers;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
-import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.converters.CardConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
@@ -79,6 +80,7 @@ public class CardCollectionController {
       return "redirect:/allCardCollection";
    }
 
+   // TODO following methods for testing only
    // CREATE DUMMY USER -> CREATE DUMMY DECK -> MODIFY DUMMY DECK -> TEST USER-DECK
    // CASCADE DELETION
    // api/CardCollectionController/create-deckTEST
@@ -89,6 +91,7 @@ public class CardCollectionController {
       Map<String, String> testMap = new HashMap<>();
       testMap.put("name", "deck_dummy");
       testMap.put("description", "the worst deck ever");
+      testMap.put("mainDeckFormat", "free");
 
       return "saved:" + getCARDCOLLECTIONSERVICE().save(testMap) +
             "\nquello " + getURZAUSERSERVICE().findByUsername("dummy_user").getId().toString();
@@ -130,25 +133,58 @@ public class CardCollectionController {
    public String fillTestDeck() {
       CardCollection cc = getCARDCOLLECTIONSERVICE().getByName("deck_dummy").get(0);
       List<Card> allCards = getCARDSERVICE().getAllCardEntities();
-
-      for(int i = 0; i<50; i++){
+      long seed = System.nanoTime();
+      Collections.shuffle(allCards, new Random(seed));
+      // System.out.println("printing cc : " + cc);
+      cc.getCardList().clear();
+      for (int i = 0; i < 50; i++) {
          Card card = allCards.get(i);
          // System.out.println("\ninderisco carta : " + card.getName());
-         // CardInDeck cid = new CardInDeck(cc, card, String.valueOf((Math.round(Math.random()*2))+1));
+         // CardInDeck cid = new CardInDeck(cc, card,
+         // String.valueOf((Math.round(Math.random()*2))+1));
          // System.out.println("\ndentro card in deck : " + cid.toString());
          // cc.getCardList().add(cid);
-         cc.getCardList().add(new CardInDeck(cc, card, String.valueOf((Math.round(Math.random()*2))+1)));
+         cc.getCardList().add(new CardInDeck(cc, card, String.valueOf((Math.round(Math.random() * 2)) + 1)));
          // System.out.println("\ncard list post add: " + cc.getCardList());
-    
+
       }
-      
-      // System.out.println(" LAST PRINT !!!!!!!!!!!!!!!!!!!!!!!!!!!" + cc.getCardList());
+
+      // System.out.println(" LAST PRINT !!!!!!!!!!!!!!!!!!!!!!!!!!!" +
+      // cc.getCardList());
 
       getCARDCOLLECTIONSERVICE().save(cc);
 
-      return "filled :" + cc ;
-      // + "\nwith :" + cc.getCardList();
-      
+      return "filled :" + cc;
+
+   }
+
+   // api/CardCollectionController/add-test-user-deck
+   @GetMapping("/add-test-user-deck")
+   public String addTestUserDeck() {
+      try{
+         // UrzaUser userCheck = getURZAUSERSERVICE().findByUsername("dummy_user");
+         if (getURZAUSERSERVICE().findByUsername("dummy_user") == null){
+            Map<String, String> testMap = new HashMap<>();
+            testMap.put("username", "dummy_user");
+            testMap.put("displayName", "dummy_user_display");
+            testMap.put("password", "cane");
+            testMap.put("email", "asd@asd.it");
+            getURZAUSERSERVICE().registerUser(testMap);
+         }
+
+         // CardCollection deckCheck = getCARDCOLLECTIONSERVICE().getByName("deck_dummy").get(0);
+         if (getCARDCOLLECTIONSERVICE().getByName("deck_dummy").size() == 0){
+            createDeckTest();
+         }
+
+         fillTestDeck();
+
+      }
+      catch (Exception e){
+         e.printStackTrace();
+         return "error during generation";
+      }
+      return "created user and deck";
    }
 
 }

@@ -36,6 +36,7 @@ public class CardDeckPK implements Serializable {
         return "deck name : " + getDeck().getName() + " card name" + getCard().getName();
     }
 
+    //removing this breaks cardcollection list population
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

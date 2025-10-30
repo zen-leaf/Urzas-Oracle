@@ -44,7 +44,7 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
         }
 
         UrzaUser user = new UrzaUser();
-        user.setId(UUID.randomUUID());
+        // user.setId(UUID.randomUUID());
         user.setUsername(userData.get("username"));
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
@@ -65,7 +65,7 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
         }
 
         UrzaUser user = new UrzaUser();
-        user.setId(UUID.randomUUID());
+        // user.setId(UUID.randomUUID());
         user.setUsername(userData.get("username"));
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
