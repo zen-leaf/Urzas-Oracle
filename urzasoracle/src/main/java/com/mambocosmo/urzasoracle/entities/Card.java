@@ -102,10 +102,10 @@ public class Card extends GenericEntity {
     @OneToMany(mappedBy = "faceOfCard", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     // @JsonUnwrapped
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<CardFace> card_faces;
+    private List<CardFace> card_faces;
 
     @JsonSetter("card_faces")
-    public void setCard_faces(Set<CardFace> faces) {
+    public void setCard_faces(List<CardFace> faces) {
         this.card_faces = faces;
         if (faces != null && !faces.isEmpty()) {
             for (CardFace face : faces) {

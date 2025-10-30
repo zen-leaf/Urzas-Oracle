@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mambocosmo.urzasoracle.services.UserService;
+
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -19,32 +20,36 @@ public class AuthController {
     private UserService userService;
 
     @GetMapping("/login")
-    public String loginPage(){
-            return "login";
+    public String loginPage(@RequestParam(required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Username o password non validi");
+        }
+        model.addAttribute("active", "login");
+        return "login";
     }
      
     @GetMapping("/register")
-    public String register(){
-        return "/register";
+    public String register(Model model) {
+        model.addAttribute("active", "register");
+        return "register";
     }
 
-    
-   @PostMapping("/register")
-    public String registerUser(@RequestParam Map<String,String> userData, Model model) {
-    String role = userData.get("role");
+    @PostMapping("/register")
+    public String registerUser(@RequestParam Map<String, String> userData, Model model) {
+        String isAdmin = userData.get("isAdmin");
 
-    boolean success;
-    if ("admin".equalsIgnoreCase(role)) {
-        success = userService.registerAdmin(userData);
-    } else {
-        success = userService.registerUser(userData);
+        boolean success;
+        if ("true".equalsIgnoreCase(isAdmin)) {
+            success = userService.registerAdmin(userData);
+        } else {
+            success = userService.registerUser(userData);
+        }
+
+        if (!success) {
+            model.addAttribute("error", "Username o email già esistenti");
+            return "register";
+        }
+
+        return "redirect:/auth/login?registered=true";
     }
-
-    if (!success) {
-        return "redirect:/error";
-    }
-
-    return "redirect:/auth/login";
-}
-       
 }
