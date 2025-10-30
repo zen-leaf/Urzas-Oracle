@@ -1,13 +1,11 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +15,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class CardDeckPK implements Serializable {
 
     @EqualsAndHashCode.Exclude
@@ -36,7 +35,7 @@ public class CardDeckPK implements Serializable {
         return "deck name : " + getDeck().getName() + " card name" + getCard().getName();
     }
 
-    //removing this breaks cardcollection list population
+    // removing this breaks cardcollection list population
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -47,7 +46,8 @@ public class CardDeckPK implements Serializable {
         }
         CardDeckPK other = (CardDeckPK) obj;
         return card.getId() == other.card.getId() &&
-            deck.getId() == other.deck.getId();
+                deck.getId() == other.deck.getId();
     }
+    
 
 }
