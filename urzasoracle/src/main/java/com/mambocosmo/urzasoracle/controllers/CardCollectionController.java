@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.services.CardCollectionService;
 import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
@@ -25,7 +26,7 @@ import lombok.Data;
 @RequestMapping("api/CardCollectionController")
 public class CardCollectionController {
    private final CardCollectionService CARDCOLLECTIONSERVICE;
-   private final UrzaUserService USERSERVICE;
+   private final UrzaUserService URZAUSERSERVICE;
 
    @GetMapping("/allCardCollection")
    public ResponseEntity<List<CardCollectionDTO>> getAllCardCollection() {
@@ -81,7 +82,7 @@ public class CardCollectionController {
       testMap.put("description", "the worst deck ever");
 
       return "saved:" + getCARDCOLLECTIONSERVICE().save(testMap) +
-         "\nquello " + getUSERSERVICE().findByUsername("dummy_user").getId().toString();
+         "\nquello " + getURZAUSERSERVICE().findByUsername("dummy_user").getId().toString();
       // return "redirect:/allCardCollection";
    }
 
@@ -93,7 +94,25 @@ public class CardCollectionController {
       testMap.put("password", "clear");
       testMap.put("email", "asd@asd.it");
 
-      return "saved:" + getUSERSERVICE().save(testMap) +
+      return "saved:" + getURZAUSERSERVICE().save(testMap) +
+            "";
+      // return "redirect:/allCardCollection";
+   }
+   
+   @GetMapping("/modify-userTEST")
+   public String modifyUserTest() {
+      Map<String,String> testMap = new HashMap<>();
+      testMap.put("username", "dummy_user_modify");
+      testMap.put("password", "clear2");
+      testMap.put("email", "asd2@asd2.it");
+      
+      UrzaUser oldU = getURZAUSERSERVICE().findByUsername("dummy_user");
+      
+      oldU.setUsername(testMap.get("username"));
+      oldU.setPassword(testMap.get("password"));
+      oldU.setUsername(testMap.get("email"));
+      
+      return "saved:" + getURZAUSERSERVICE().save(oldU) +
             "";
       // return "redirect:/allCardCollection";
    }

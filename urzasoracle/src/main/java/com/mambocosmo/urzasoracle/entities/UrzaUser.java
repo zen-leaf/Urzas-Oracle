@@ -12,11 +12,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -31,12 +33,14 @@ public class UrzaUser extends GenericEntity implements UserDetails {
     @UuidGenerator
     private UUID id;
 
+    @Column(unique = true)
     private String username;
-
+    
     private String password;
-
+    
     List<? extends GrantedAuthority> authorities;
-
+    
+    @Column(unique = true)
     private String email;
 
     private String displayName;
