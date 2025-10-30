@@ -41,7 +41,7 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
             tempLegal.put(key.toString().toLowerCase(), value);
         });
         dto.setLegalities(tempLegal);
-        System.out.println("ARTISTREFF " + e.getArtistRef());
+        // System.out.println("ARTISTREFF " + e.getArtistRef());
         dto.setArtistRef(new ArrayList<>());
         if (e.getArtistRef() != null)
             e.getArtistRef().forEach(entry -> {

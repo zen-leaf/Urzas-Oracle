@@ -27,6 +27,7 @@ public class CardController {
     public String getAllCards(Model model, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Page<CardDTO> cardPage = getCARDSERVICE().getAllPaged(page, size);
+        //System.out.println("Card Page Size: " + cardPage.getContent().toString());
         model.addAttribute("lista", cardPage.getContent());
         model.addAttribute("currentPage", cardPage.getNumber());
         model.addAttribute("totalPages", cardPage.getTotalPages());
@@ -35,7 +36,7 @@ public class CardController {
         return "cards";
     }
 
-    @GetMapping("/card/search")
+    @GetMapping("/cards/search")
     public String listCards(
             @RequestParam(required = false) String q,
             @RequestParam(defaultValue = "0") int page,

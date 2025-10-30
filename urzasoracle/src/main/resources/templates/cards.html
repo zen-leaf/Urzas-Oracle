@@ -41,6 +41,47 @@
         <h5 class="alert-heading">Nessuna carta trovata</h5>
         <p>Prova un altro termine o ricarica la pagina.</p>
         <a th:href="@{/cards}" class="btn btn-sm btn-warning">Mostra tutte</a>
+
+<head th:replace="~{fragments/head :: head('Carte Magic')}"></head>
+
+<body class="bg-dark text-light">
+
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <main class="container-fluid py-5">
+
+    <header class="text-center mb-5">
+      <h1 class="display-4 fw-bold text-warning mb-3">Carte Magic: The Gathering</h1>
+      <p class="lead text-secondary mb-4">
+        Sfoglia tutte le carte archiviate nel database — filtrabili per nome e con paginazione.
+      </p>
+
+
+      <form th:action="@{/cards}" method="get" class="mx-auto" style="max-width:700px;">
+        <div class="input-group input-group-lg shadow">
+          <input type="text" name="q" class="form-control bg-dark text-warning border-warning"
+            placeholder="Cerca per nome..." th:value="${query}">
+          <button class="btn btn-warning fw-bold" type="submit">Cerca</button>
+          <th:block th:if="${query != ''}">
+            <a th:href="@{/cards}" class="btn btn-outline-warning">Reset</a>
+          </th:block>
+        </div>
+      </form>
+    </header>
+
+    <section>
+      <div class="text-center mb-4">
+        <span class="badge bg-warning text-dark fs-6 px-3 py-2 shadow-sm">
+          <span th:text="${totElements}"></span> carte trovate
+        </span>
+      </div>
+
+
+      <div th:if="${lista == null or #lists.isEmpty(lista)}" class="alert alert-warning text-center mx-auto"
+        style="max-width: 600px;">
+        <h5 class="alert-heading">Nessuna carta trovata</h5>
+        <p>Prova un altro termine o ricarica la pagina.</p>
+        <a th:href="@{/cards}" class="btn btn-sm btn-warning">Mostra tutte</a>
       </div>
 
 
@@ -49,8 +90,9 @@
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
             <div class="card bg-dark border-secondary h-100 shadow-sm card-hover">
               <!-- <span th:text="${card.name}"></span> -->
-              <img th:if="${card.images != null and card.images.get('png') != null}" th:src="${card.images.get('png')}"
-                th:alt="${card.name}" class="card-img-top" loading="lazy"
+              <img th:if="${  (!#maps.isEmpty(card.images) and #maps.containsKey(card.images,'png'))
+                        ||    (!#lists.isEmpty(card.cardFaces) and #maps.containsKey(card.cardFaces[0].images,'png')) }"
+                th:src="${!#maps.isEmpty(card.images) ? card.images.get('png') : card.cardFaces[0].images.get('png')}" th:alt="${card.name}" class="card-img-top" loading="lazy"
                 style="object-fit: cover; height: 330px; border-bottom: 1px solid #333;">
 
 
@@ -75,17 +117,18 @@
 
                 <div th:if="${card.colorIdentity != null and !#lists.isEmpty(card.colorIdentity)}"
                   class="mt-2 small text-secondary">
-                   <strong>Colori:</strong>
+                  <strong>Colori:</strong>
                   <span th:each="c, stat : ${card.colorIdentity}">
-                   <span th:text="${c}"></span>
-                    <span th:if="${not stat.last}">, </span> 
-                  </span> 
+                    <span th:text="${c}"></span>
+                    <span th:if="${not stat.last}">, </span>
+                  </span>
                 </div>
 
 
                 <div th:if="${card.legalities != null}" class="mt-2 small text-secondary">
                   <strong>Standard:</strong>
                   <span th:text="${card.legalities.get('standard')}">N/A</span>
+                  <span th:if="${#maps.isEmpty(card.images)}" th:text="${card.cardFaces[0].images.get('png')}">N/A</span>
                 </div>
               </div>
             </div>

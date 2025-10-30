@@ -84,8 +84,8 @@ public class CardRestController {
 
     @GetMapping("/byname")
     public ResponseEntity<Page<CardDTO>> getByName(@RequestParam String name,
-            @RequestParam(defaultValue = "0") Integer size,
-            @RequestParam(defaultValue = "10") Integer page) {
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
         return ResponseEntity.ok(CARDSERVICE.getByNamePaged(name, page, size));
     }
 

@@ -82,8 +82,9 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-           
-             cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+
+            cardData = mapper
+                    .readTree(new File("urzasoracle/src/main/resources/json/test.json"));
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
             System.out.println("start");
@@ -156,6 +157,12 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         Pageable pageable = PageRequest.of(numeroPagina, dimensione);
         Page<Card> page = getREPOSITORY().findAll(pageable);
 
+        return page.map(card -> getCONVERTER().fromEToD(card));
+    }
+    public Page<CardDTO> searchInCard(String searchTerm, int numeroPagina, int dimensione) {
+        Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+        Page<Card> page = getREPOSITORY()
+                .findByNameContainingIgnoreCase(searchTerm, pageable);
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
 
