@@ -77,7 +77,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
 
-    // NUOVO: Prendi una singola carta per ID (UUID)
+    //Prendi una singola carta per ID (UUID)
     public CardDTO getCardById(UUID id) {
         return getCONVERTER().fromEToD(getREPOSITORY().findById(id).orElse(null));
     }

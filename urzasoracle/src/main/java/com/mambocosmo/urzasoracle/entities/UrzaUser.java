@@ -63,11 +63,15 @@ public class UrzaUser extends GenericEntity implements UserDetails {
         return true;
     }
 
+    // AGGIUNGI QUESTO METODO
+    public boolean isAdmin() {
+        return authorities != null && authorities.stream()
+            .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+    }
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL }, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    // @JoinColumn(referencedColumnName = "owner")
     private Set<CardCollection> userDecks;
-
 }
