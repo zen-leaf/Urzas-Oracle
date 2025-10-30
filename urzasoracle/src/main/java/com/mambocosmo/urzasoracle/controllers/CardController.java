@@ -35,40 +35,6 @@ public class CardController {
         return "cards";
     }
 
-    @GetMapping("/cards/search")
-    public String listCards(
-            @RequestParam(required = false) String q,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int size,
-            Model model) {
-
-        List<Card> allCards;
-        // // if (q != null && !q.isBlank()) {
-        // // allCards = cardRepository.findByNameContainingIgnoreCase(q);
-        // // } else {
-        // // allCards = cardRepository.findAll();
-        // // }
-
-        // int total = allCards.size();
-        // int fromIndex = page * size;
-        // int toIndex = Math.min(fromIndex + size, total);
-
-        // List<Card> pageContent;
-        // if (fromIndex >= total || fromIndex < 0) {
-        // pageContent = List.of();
-        // } else {
-        // pageContent = allCards.subList(fromIndex, toIndex);
-        // }
-
-        // Page<Card> cardPage = new PageImpl<>(pageContent, PageRequest.of(page, size),
-        // total);
-
-        // model.addAttribute("cards", cardPage);
-        // model.addAttribute("query", q != null ? q : "");
-
-        return "cards";
-    }
-
     @GetMapping("/cards/{id}")
     @Transactional(readOnly = true)
     public String getCardInfo(@PathVariable UUID id, Model model) {
@@ -78,10 +44,10 @@ public class CardController {
                 System.out.println("Card not found with id: " + id);
                 return "redirect:/cards";
             }
-
+            
             // Log per debug
             System.out.println("Card found: " + card.getName());
-
+            
             model.addAttribute("card", card);
             model.addAttribute("active", "cards");
             return "cardinfo";
@@ -90,6 +56,5 @@ public class CardController {
             e.printStackTrace();
             return "redirect:/cards";
         }
-
     }
 }
