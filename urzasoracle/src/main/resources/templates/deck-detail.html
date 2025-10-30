@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Dettagli Mazzo')}">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+<body class="bg-dark text-light">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <main class="container-fluid py-5">
+    <!-- HEADER MAZZO -->
+    <header class="mb-5">
+      <div class="row align-items-center mb-4">
+        <div class="col-md-8">
+          <a th:href="@{/decks}" class="btn btn-outline-warning btn-sm mb-3">← Torna ai Mazzi</a>
+          <h1 class="display-4 fw-bold text-warning" th:text="${deck.name}"></h1>
+          <p class="lead text-secondary mb-3" th:text="${deck.description}"></p>
+          <div class="d-flex gap-3 align-items-center">
+            <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+              📋 <span th:text="${totalCards}"></span>/100 carte
+            </span>
+            <span class="badge bg-info text-dark fs-6 px-3 py-2">
+              🎮 Formato: <span th:text="${deck.mainDeckFormat}"></span>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <button class="btn btn-warning me-2 fw-bold" data-bs-toggle="modal" data-bs-target="#editDeckModal">✏️ Modifica</button>
+          <button class="btn btn-danger fw-bold" data-bs-toggle="modal" data-bs-target="#deleteDeckModal">🗑️ Elimina</button>
+        </div>
+      </div>
+      
+      <!-- PROGRESS BAR CARTE -->
+      <div class="progress" style="height: 25px;">
+        <div class="progress-bar bg-warning fw-bold" role="progressbar" th:style="'width: ' + ${(totalCards/100)*100} + '%'" th:text="${totalCards} + '/100'"></div>
+      </div>
+    </header>
+
+    <!-- SEZIONE CARTE -->
+    <section>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-warning mb-0">🃏 Carte nel Deck</h2>
+        <button class="btn btn-lg btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#addCardModal">+ Aggiungi Carte</button>
+      </div>
+
+      <!-- NESSUNA CARTA -->
+      <div th:if="${cards == null or #lists.isEmpty(cards)}" class="alert alert-warning text-center py-5">
+        <h4>Nessuna carta nel deck</h4>
+        <p class="text-secondary mb-3">Inizia aggiungendo carte!</p>
+        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addCardModal">Aggiungi Carte</button>
+      </div>
+
+      <!-- GRIGLIA CARTE SALVATE -->
+      <div class="row g-3" th:if="${not #lists.isEmpty(cards)}">
+        <th:block th:each="card : ${cards}">
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <div class="card-wrapper bg-dark border-2 border-secondary rounded" style="overflow: hidden;">
+              <img th:if="${card.imageUrl}" th:src="${card.imageUrl}" class="w-100" style="aspect-ratio: 488/680; object-fit: cover;" th:alt="${card.cardName}">
+              <div class="p-2 bg-dark text-center">
+                <h6 class="text-warning mb-1" th:text="${card.cardName}"></h6>
+                <p class="small text-muted mb-2" th:text="${card.typeline}"></p>
+                <div class="btn-group w-100" role="group">
+                  <button type="button" class="btn btn-sm btn-warning" th:data-card-id="${card.cardId}" onclick="decreaseQty(event)">−</button>
+                  <button type="button" class="btn btn-sm btn-outline-warning" disabled th:text="${card.quantity}"></button>
+                  <button type="button" class="btn btn-sm btn-warning" th:data-card-id="${card.cardId}" onclick="increaseQty(event)">+</button>
+                  <button type="button" class="btn btn-sm btn-danger" th:data-card-id="${card.cardId}" onclick="removeCard(event)">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: AGGIUNGI CARTE -->
+  <div class="modal fade" id="addCardModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content bg-dark border-warning">
+        <div class="modal-header border-warning">
+          <h5 class="modal-title text-warning">🔍 Aggiungi Carte al Deck</h5>
+          <div class="d-flex gap-2 align-items-center">
+            <span id="selectedInfo" style="display: none;" class="text-warning fw-bold">
+              ✓ Selezionate: <span id="selectedCount">0</span>
+            </span>
+            <button type="button" class="btn btn-success fw-bold" onclick="saveSelectedCards()" id="saveBtn" style="display: none;">💾 Salva</button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row g-2 mb-4 sticky-top bg-dark py-3">
+            <div class="col-md-5">
+              <input type="text" class="form-control bg-dark text-warning border-warning" id="searchInput" placeholder="Cerca carte...">
+            </div>
+            <div class="col-md-4">
+              <select class="form-select bg-dark text-warning border-warning" id="typeFilter">
+                <option value="">Tutti i tipi</option>
+                <option value="Creature">Creatura</option>
+                <option value="Instant">Istantaneo</option>
+                <option value="Sorcery">Stregoneria</option>
+                <option value="Enchantment">Incantesimo</option>
+                <option value="Artifact">Artefatto</option>
+                <option value="Land">Terreno</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-outline-warning w-100" onclick="clearFilters()">Reset</button>
+            </div>
+          </div>
+
+          <div class="text-center mb-3">
+            <small class="text-secondary">
+              📊 Carte disponibili: <strong><span id="resultCount">0</span></strong>
+            </small>
+          </div>
+
+          <div class="row g-3" id="cardGrid" style="max-height: 70vh; overflow-y: auto;">
+            <p class="text-center text-secondary col-12">⏳ Caricamento carte...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MODIFICA -->
+  <div class="modal fade" id="editDeckModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark border-warning">
+        <div class="modal-header border-warning">
+          <h5 class="modal-title text-warning">✏️ Modifica Mazzo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="editForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label text-warning">Nome</label>
+              <input type="text" class="form-control bg-dark text-warning border-warning" id="deckName" th:value="${deck.name}">
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-warning">Descrizione</label>
+              <textarea class="form-control bg-dark text-warning border-warning" id="deckDesc" th:text="${deck.description}"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-warning">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+            <button type="submit" class="btn btn-warning fw-bold">Salva</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ELIMINA -->
+  <div class="modal fade" id="deleteDeckModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark border-danger">
+        <div class="modal-header border-danger">
+          <h5 class="modal-title text-danger">⚠️ Elimina Mazzo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-secondary">Sei sicuro di voler eliminare questo mazzo? <strong>Questa azione non può essere annullata.</strong></p>
+        </div>
+        <div class="modal-footer border-danger">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+          <button type="button" class="btn btn-danger fw-bold" onclick="deleteDeck()">Elimina</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
+
+  <style>
+    body { background: linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%); }
+    .form-control:focus, .form-select:focus { background-color: #1a1a1a !important; color: #ffc107 !important; border-color: #ffc107 !important; }
+    .card-selector { cursor: pointer; transition: all 0.2s; border: 2px solid #333; border-radius: 0.5rem; position: relative; overflow: hidden; }
+    .card-selector:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(255,193,7,0.5); border-color: #ffc107; }
+    .card-selector.selected { outline: 3px solid #ffc107; }
+    .qty-badge { position: absolute; top: 5px; right: 5px; background: #ffc107; color: #000; padding: 5px 10px; border-radius: 50%; font-weight: bold; z-index: 10; }
+    .card-img { width: 100%; aspect-ratio: 488/680; object-fit: cover; display: block; }
+    .placeholder-card { aspect-ratio: 488/680; background: #333; display: flex; align-items: center; justify-content: center; color: #ffc107; font-size: 12px; }
+    .card-wrapper { transition: all 0.2s; }
+    .card-wrapper:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 193, 7, 0.2); border-color: #ffc107 !important; }
+    .btn-group .btn { border-color: #ffc107; }
+    .btn-group .btn:hover { background-color: #ffce3d !important; }
+  </style>
+
+  <script th:inline="javascript">
+    const deckId = /*[[${deck.id}]]*/ null;
+    const csrfToken = /*[[${_csrf.token}]]*/ '';
+    const csrfHeader = /*[[${_csrf.headerName}]]*/ 'X-CSRF-TOKEN';
+
+    let allCards = [];
+    let cardQuantities = new Map();
+
+    document.getElementById('addCardModal')?.addEventListener('show.bs.modal', function() {
+      if (allCards.length === 0) loadAllCards();
+    });
+
+    async function loadAllCards() {
+      try {
+        const res = await fetch('/decks/api/cards');
+        const data = await res.json();
+        allCards = data || [];
+        document.getElementById('resultCount').textContent = allCards.length;
+        displayCards();
+      } catch (e) { 
+        console.error('Errore:', e); 
+        alert('Errore caricamento carte');
+      }
+    }
+
+    function displayCards() {
+      let search = document.getElementById('searchInput').value.toLowerCase();
+      let type = document.getElementById('typeFilter').value;
+
+      let filtered = allCards.filter(card => {
+        let matchSearch = !search || (card.name && card.name.toLowerCase().includes(search));
+        let matchType = !type || (card.type_line && card.type_line.includes(type));
+        return matchSearch && matchType;
+      });
+
+      const html = filtered.slice(0, 100).map(card => {
+        const qty = cardQuantities.get(card.id) || 0;
+        let img = card.images?.normal || card.image_uris?.normal || card.imageUrl || '';
+        
+        return `
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <div class="card-selector ${qty > 0 ? 'selected' : ''}" onclick="toggleCard('${card.id}')">
+              ${img ? `<img src="${img}" class="card-img" loading="lazy">` : '<div class="placeholder-card">No Image</div>'}
+              ${qty > 0 ? `<div class="qty-badge">${qty}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('cardGrid').innerHTML = html;
+    }
+
+    function toggleCard(id) {
+      const qty = cardQuantities.get(id) || 0;
+      cardQuantities.set(id, qty > 0 ? 0 : 1);
+      updateDisplay();
+      displayCards();
+    }
+
+    function updateDisplay() {
+      const count = cardQuantities.size;
+      document.getElementById('selectedInfo').style.display = count > 0 ? 'block' : 'none';
+      document.getElementById('saveBtn').style.display = count > 0 ? 'block' : 'none';
+      document.getElementById('selectedCount').textContent = count;
+    }
+
+    async function saveSelectedCards() {
+      let count = 0;
+      for (const [id, qty] of cardQuantities) {
+        await fetch('/decks/' + deckId + '/cards/' + id + '?quantity=' + qty, {
+          method: 'POST',
+          headers: { [csrfHeader]: csrfToken }
+        }).then(r => r.ok && count++);
+      }
+      alert('✅ ' + count + ' carte salvate!');
+      location.reload();
+    }
+
+    function clearFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('typeFilter').value = '';
+      displayCards();
+    }
+
+    document.getElementById('searchInput')?.addEventListener('input', displayCards);
+    document.getElementById('typeFilter')?.addEventListener('change', displayCards);
+
+    function increaseQty(e) {
+      e.preventDefault();
+      const id = e.target.getAttribute('data-card-id');
+      fetch('/decks/' + deckId + '/cards/' + id + '/increase', {
+        method: 'PUT',
+        headers: { [csrfHeader]: csrfToken }
+      }).then(r => r.ok && location.reload());
+    }
+
+    function decreaseQty(e) {
+      e.preventDefault();
+      const id = e.target.getAttribute('data-card-id');
+      fetch('/decks/' + deckId + '/cards/' + id + '/decrease', {
+        method: 'PUT',
+        headers: { [csrfHeader]: csrfToken }
+      }).then(r => r.ok && location.reload());
+    }
+
+    function removeCard(e) {
+      e.preventDefault();
+      if (!confirm('Rimuovere questa carta?')) return;
+      const id = e.target.getAttribute('data-card-id');
+      fetch('/decks/' + deckId + '/cards/' + id, {
+        method: 'DELETE',
+        headers: { [csrfHeader]: csrfToken }
+      }).then(r => r.ok && location.reload());
+    }
+
+    document.getElementById('editForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      fetch('/decks/' + deckId + '?name=' + encodeURIComponent(document.getElementById('deckName').value) + '&description=' + encodeURIComponent(document.getElementById('deckDesc').value), {
+        method: 'PUT',
+        headers: { [csrfHeader]: csrfToken }
+      }).then(r => r.ok && location.reload());
+    });
+
+    function deleteDeck() {
+      fetch('/decks/' + deckId, {
+        method: 'DELETE',
+        headers: { [csrfHeader]: csrfToken }
+      }).then(r => r.ok && (window.location = '/decks'));
+    }
+  </script>
+</body>
+</html>
