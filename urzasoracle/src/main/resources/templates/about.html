@@ -8,7 +8,13 @@
   <div th:replace="~{fragments/navbar :: navbar}"></div>
 
   <main class="container py-4">
-    <h1 class="mb-4">Chi Siamo</h1>
+    <h1 class="mb-4"
+    style="
+            text-shadow: 0 0 30px rgba(255, 193, 7, 0.6);
+            font-size: 4rem;
+            letter-spacing: 3px;
+          "
+          >Chi Siamo</h1>
     <p>
       Benvenuti nel nostro sito! Siamo un team di appassionati di carte collezionabili,
       dedicati a fornire la migliore esperienza possibile per i nostri utenti.
@@ -35,3 +41,27 @@
   <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>
+<style>
+      body {
+        background: linear-gradient(
+          180deg,
+          #0b0f1a 0%,
+          #1a1033 50%,
+          #0b0f1a 100%
+        );
+        font-family: "Roboto", sans-serif;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* NAVBAR e FOOTER NON vengono coperte */
+      nav {
+        position: relative;
+        z-index: 100;
+      }
+
+      footer {
+        position: relative;
+        z-index: 100;
+      }
