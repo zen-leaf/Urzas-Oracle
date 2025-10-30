@@ -23,10 +23,12 @@ import lombok.EqualsAndHashCode;
 @Service
 @Data
 @EqualsAndHashCode(callSuper = true)
+
 public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter, UserRepository>
         implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public UrzaUser construct(Map<String, String> fromData) {
@@ -46,8 +48,8 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         user.setUsername(userData.get("username"));
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
-        user.setDisplayName(userData.get("displayName"));
-        user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        user.setDisplayName(userData.get("displayName")); // Default displayName = username
+        user.setAuthorities(List.of("ROLE_USER"));
         user.setRegisterDate(LocalDate.now());
 
         getUserRepository().save(user);
@@ -68,7 +70,7 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
         user.setDisplayName(userData.get("displayName"));
-        user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        user.setAuthorities(List.of("ROLE_ADMIN"));
         user.setRegisterDate(LocalDate.now());
 
         getUserRepository().save(user);
@@ -117,44 +119,6 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
             return false;
         }
         getUserRepository().delete(user);
-        return true;
-    }
-
-    // METODI PER ADMIN
-    public List<UrzaUser> findAllUsers() {
-        return getUserRepository().findAll();
-    }
-
-    public void deleteUserById(UUID id) {
-        getUserRepository().deleteById(id);
-    }
-
-    public UrzaUser findById(UUID id) {
-        return getUserRepository().findById(id).orElse(null);
-    }
-
-    public boolean updateUserByAdmin(UUID userId, String username, String email, String displayName) {
-        UrzaUser user = getUserRepository().findById(userId).orElse(null);
-        if (user == null || user.isAdmin()) {
-            return false;
-        }
-
-        // Verifica se username è già usato da un altro utente
-        UrzaUser existingUser = getUserRepository().findByUsername(username);
-        if (existingUser != null && !existingUser.getId().equals(userId)) {
-            return false;
-        }
-
-        // Verifica se email è già usata da un altro utente
-        UrzaUser existingEmail = getUserRepository().findByEmail(email);
-        if (existingEmail != null && !existingEmail.getId().equals(userId)) {
-            return false;
-        }
-
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setDisplayName(displayName);
-        getUserRepository().save(user);
         return true;
     }
 
