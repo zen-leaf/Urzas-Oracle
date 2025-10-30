@@ -15,8 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
+import com.mambocosmo.urzasoracle.DTO.CardDTO;
+import com.mambocosmo.urzasoracle.converters.CardConverter;
+import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardCollection;
+import com.mambocosmo.urzasoracle.entities.CardInDeck;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.services.CardCollectionService;
+import com.mambocosmo.urzasoracle.services.CardService;
 import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
@@ -27,6 +33,8 @@ import lombok.Data;
 public class CardCollectionController {
    private final CardCollectionService CARDCOLLECTIONSERVICE;
    private final UrzaUserService URZAUSERSERVICE;
+   private final CardService CARDSERVICE;
+   private final CardConverter CARDCONVERTER;
 
    @GetMapping("/allCardCollection")
    public ResponseEntity<List<CardCollectionDTO>> getAllCardCollection() {
@@ -76,20 +84,21 @@ public class CardCollectionController {
    // api/CardCollectionController/create-deckTEST
    @GetMapping("/create-deckTEST")
    public String createDeckTest() {
-      // System.out.println("test print" + getUSERSERVICE().getByUsername("dummy_user2").getId().toString());
-      Map<String,String> testMap = new HashMap<>();
+      // System.out.println("test print" +
+      // getUSERSERVICE().getByUsername("dummy_user2").getId().toString());
+      Map<String, String> testMap = new HashMap<>();
       testMap.put("name", "deck_dummy");
       testMap.put("description", "the worst deck ever");
 
       return "saved:" + getCARDCOLLECTIONSERVICE().save(testMap) +
-         "\nquello " + getURZAUSERSERVICE().findByUsername("dummy_user").getId().toString();
+            "\nquello " + getURZAUSERSERVICE().findByUsername("dummy_user").getId().toString();
       // return "redirect:/allCardCollection";
    }
 
    // api/CardCollectionController/create-userTEST
    @GetMapping("/create-userTEST")
    public String createUserTest() {
-      Map<String,String> testMap = new HashMap<>();
+      Map<String, String> testMap = new HashMap<>();
       testMap.put("username", "dummy_user");
       testMap.put("password", "clear");
       testMap.put("email", "asd@asd.it");
@@ -98,23 +107,48 @@ public class CardCollectionController {
             "";
       // return "redirect:/allCardCollection";
    }
-   
+
    @GetMapping("/modify-userTEST")
    public String modifyUserTest() {
-      Map<String,String> testMap = new HashMap<>();
+      Map<String, String> testMap = new HashMap<>();
       testMap.put("username", "dummy_user_modify");
       testMap.put("password", "clear2");
       testMap.put("email", "asd2@asd2.it");
-      
+
       UrzaUser oldU = getURZAUSERSERVICE().findByUsername("dummy_user");
-      
+
       oldU.setUsername(testMap.get("username"));
       oldU.setPassword(testMap.get("password"));
       oldU.setUsername(testMap.get("email"));
-      
+
       return "saved:" + getURZAUSERSERVICE().save(oldU) +
             "";
       // return "redirect:/allCardCollection";
+   }
+
+   @GetMapping("/fill-testDECK")
+   public String fillTestDeck() {
+      CardCollection cc = getCARDCOLLECTIONSERVICE().getByName("deck_dummy").get(0);
+      List<Card> allCards = getCARDSERVICE().getAllCardEntities();
+
+      for(int i = 0; i<50; i++){
+         Card card = allCards.get(i);
+         // System.out.println("\ninderisco carta : " + card.getName());
+         // CardInDeck cid = new CardInDeck(cc, card, String.valueOf((Math.round(Math.random()*2))+1));
+         // System.out.println("\ndentro card in deck : " + cid.toString());
+         // cc.getCardList().add(cid);
+         cc.getCardList().add(new CardInDeck(cc, card, String.valueOf((Math.round(Math.random()*2))+1)));
+         // System.out.println("\ncard list post add: " + cc.getCardList());
+    
+      }
+      
+      // System.out.println(" LAST PRINT !!!!!!!!!!!!!!!!!!!!!!!!!!!" + cc.getCardList());
+
+      getCARDCOLLECTIONSERVICE().save(cc);
+
+      return "filled :" + cc ;
+      // + "\nwith :" + cc.getCardList();
+      
    }
 
 }
