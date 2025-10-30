@@ -1,5 +1,6 @@
 package com.mambocosmo.urzasoracle.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -50,7 +51,7 @@ public class CardCollection extends GenericEntity {
     @MapKeyColumn(name = "format")
     private Map<Format, String> legalIn;
 
-    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CardInDeck> cardList;
+    @OneToMany(mappedBy = "id.deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CardInDeck> cardList = new ArrayList<>();
 
 }

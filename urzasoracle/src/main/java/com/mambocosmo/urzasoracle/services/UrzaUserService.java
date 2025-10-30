@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.mambocosmo.urzasoracle.DTO.UserDTO;
-import com.mambocosmo.urzasoracle.converters.UserConverter;
+import com.mambocosmo.urzasoracle.DTO.UrzaUserDTO;
+import com.mambocosmo.urzasoracle.converters.UrzaUserConverter;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
-import com.mambocosmo.urzasoracle.repositories.UserRepository;
+import com.mambocosmo.urzasoracle.repositories.UrzaUserRepository;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,10 +23,12 @@ import lombok.EqualsAndHashCode;
 @Service
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter, UserRepository>
+
+public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaUserConverter, UrzaUserRepository>
         implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UrzaUserRepository urzaUserRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public UrzaUser construct(Map<String, String> fromData) {
@@ -34,15 +36,15 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
     }
 
     public boolean registerUser(Map<String, String> userData) {
-        if (getUserRepository().findByUsername(userData.get("username")) != null) {
+        if (getUrzaUserRepository().findByUsername(userData.get("username")) != null) {
             return false;
         }
-        if (getUserRepository().findByEmail(userData.get("email")) != null) {
+        if (getUrzaUserRepository().findByEmail(userData.get("email")) != null) {
             return false;
         }
 
         UrzaUser user = new UrzaUser();
-        user.setId(UUID.randomUUID());
+        // user.setId(UUID.randomUUID());
         user.setUsername(userData.get("username"));
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
@@ -50,20 +52,20 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_USER")));
         user.setRegisterDate(LocalDate.now());
 
-        getUserRepository().save(user);
+        getUrzaUserRepository().save(user);
         return true;
     }
 
     public boolean registerAdmin(Map<String, String> userData) {
-        if (getUserRepository().findByUsername(userData.get("username")) != null) {
+        if (getUrzaUserRepository().findByUsername(userData.get("username")) != null) {
             return false;
         }
-        if (getUserRepository().findByEmail(userData.get("email")) != null) {
+        if (getUrzaUserRepository().findByEmail(userData.get("email")) != null) {
             return false;
         }
 
         UrzaUser user = new UrzaUser();
-        user.setId(UUID.randomUUID());
+        // user.setId(UUID.randomUUID());
         user.setUsername(userData.get("username"));
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
@@ -71,16 +73,16 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         user.setRegisterDate(LocalDate.now());
 
-        getUserRepository().save(user);
+        getUrzaUserRepository().save(user);
         return true;
     }
 
     public UrzaUser findByUsername(String username) {
-        return getUserRepository().findByUsername(username);
+        return getUrzaUserRepository().findByUsername(username);
     }
 
     public boolean updateUser(String username, Map<String, String> userData) {
-        UrzaUser user = getUserRepository().findByUsername(username);
+        UrzaUser user = getUrzaUserRepository().findByUsername(username);
         if (user == null) {
             return false;
         }
@@ -92,12 +94,12 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
             user.setDisplayName(userData.get("displayName"));
         }
 
-        getUserRepository().save(user);
+        getUrzaUserRepository().save(user);
         return true;
     }
 
     public boolean changePassword(String username, String currentPassword, String newPassword) {
-        UrzaUser user = getUserRepository().findByUsername(username);
+        UrzaUser user = getUrzaUserRepository().findByUsername(username);
         if (user == null) {
             return false;
         }
@@ -107,16 +109,16 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         }
 
         user.setPassword(getPasswordEncoder().encode(newPassword));
-        getUserRepository().save(user);
+        getUrzaUserRepository().save(user);
         return true;
     }
 
     public boolean deleteUser(String username) {
-        UrzaUser user = getUserRepository().findByUsername(username);
+        UrzaUser user = getUrzaUserRepository().findByUsername(username);
         if (user == null) {
             return false;
         }
-        getUserRepository().delete(user);
+        getUrzaUserRepository().delete(user);
         return true;
     }
 

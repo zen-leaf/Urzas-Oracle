@@ -10,9 +10,10 @@ import com.mambocosmo.urzasoracle.entities.Artist;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
+import com.mambocosmo.urzasoracle.entities.CardInDeck;
 import com.mambocosmo.urzasoracle.entities.CardPart;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
-import com.mambocosmo.urzasoracle.services.UserService;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
 
@@ -20,7 +21,7 @@ import lombok.Data;
 @Configuration
 public class EntityConfiguration {
 
-    private final UserService USERSERVICE;
+    private final UrzaUserService URZAUSERSERVICE;
 
     @Bean
     @Scope("prototype")
@@ -59,17 +60,26 @@ public class EntityConfiguration {
     public CardCollection cardCollection(Map<String, String> fromData) {
         CardCollection cc = new CardCollection();
         cc.fromMap(fromData);
-        UrzaUser u = getUSERSERVICE().findByUsername("dummy_user2");
+        // TODO placeholder per testing
+        UrzaUser u = getURZAUSERSERVICE().findByUsername("dummy_user");
         cc.setOwner(u);
         return cc;
     }
     
     @Bean
     @Scope("prototype")
-    public UrzaUser user(Map<String, String> fromData) {
+    public UrzaUser urzaUser(Map<String, String> fromData) {
         UrzaUser u = new UrzaUser();
         u.fromMap(fromData);
         return u;
     }
+    
+    // @Bean
+    // @Scope("prototype")
+    // public CardInDeck cardInDeck(Map<String, String> fromData) {
+    //     CardInDeck u = new CardInDeck();
+    //     u.fromMap(fromData);
+    //     return u;
+    // }
 
 }
