@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +26,7 @@ import lombok.EqualsAndHashCode;
 public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaUserConverter, UrzaUserRepository>
         implements UserDetailsService {
 
-    private final UrzaUserRepository urzaUserRepository;
+    private final UrzaUserRepository URZAUSEREPOSITORY;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -36,10 +35,10 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
     }
 
     public boolean registerUser(Map<String, String> userData) {
-        if (getUrzaUserRepository().findByUsername(userData.get("username")) != null) {
+        if (getURZAUSEREPOSITORY().findByUsername(userData.get("username")) != null) {
             return false;
         }
-        if (getUrzaUserRepository().findByEmail(userData.get("email")) != null) {
+        if (getURZAUSEREPOSITORY().findByEmail(userData.get("email")) != null) {
             return false;
         }
 
@@ -52,15 +51,15 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
         user.setAuthorities(List.of("ROLE_USER"));
         user.setRegisterDate(LocalDate.now());
 
-        getUrzaUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public boolean registerAdmin(Map<String, String> userData) {
-        if (getUrzaUserRepository().findByUsername(userData.get("username")) != null) {
+        if (getURZAUSEREPOSITORY().findByUsername(userData.get("username")) != null) {
             return false;
         }
-        if (getUrzaUserRepository().findByEmail(userData.get("email")) != null) {
+        if (getURZAUSEREPOSITORY().findByEmail(userData.get("email")) != null) {
             return false;
         }
 
@@ -73,16 +72,16 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
         user.setAuthorities(List.of("ROLE_ADMIN"));
         user.setRegisterDate(LocalDate.now());
 
-        getUrzaUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public UrzaUser findByUsername(String username) {
-        return getUrzaUserRepository().findByUsername(username);
+        return getURZAUSEREPOSITORY().findByUsername(username);
     }
 
     public boolean updateUser(String username, Map<String, String> userData) {
-        UrzaUser user = getUrzaUserRepository().findByUsername(username);
+        UrzaUser user = getURZAUSEREPOSITORY().findByUsername(username);
         if (user == null) {
             return false;
         }
@@ -94,12 +93,12 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
             user.setDisplayName(userData.get("displayName"));
         }
 
-        getUrzaUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public boolean changePassword(String username, String currentPassword, String newPassword) {
-        UrzaUser user = getUrzaUserRepository().findByUsername(username);
+        UrzaUser user = getURZAUSEREPOSITORY().findByUsername(username);
         if (user == null) {
             return false;
         }
@@ -109,16 +108,54 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
         }
 
         user.setPassword(getPasswordEncoder().encode(newPassword));
-        getUrzaUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public boolean deleteUser(String username) {
-        UrzaUser user = getUrzaUserRepository().findByUsername(username);
+        UrzaUser user = getURZAUSEREPOSITORY().findByUsername(username);
         if (user == null) {
             return false;
         }
-        getUrzaUserRepository().delete(user);
+        getURZAUSEREPOSITORY().delete(user);
+        return true;
+    }
+
+    // METODI PER ADMIN
+    public List<UrzaUser> findAllUsers() {
+        return getURZAUSEREPOSITORY().findAll();
+    }
+
+    public void deleteUserById(UUID id) {
+        getURZAUSEREPOSITORY().deleteById(id);
+    }
+
+    public UrzaUser findById(UUID id) {
+        return getURZAUSEREPOSITORY().findById(id).orElse(null);
+    }
+
+    public boolean updateUserByAdmin(UUID userId, String username, String email, String displayName) {
+        UrzaUser user = getURZAUSEREPOSITORY().findById(userId).orElse(null);
+        if (user == null || user.isAdmin()) {
+            return false;
+        }
+
+        // Verifica se username è già usato da un altro utente
+        UrzaUser existingUser = getURZAUSEREPOSITORY().findByUsername(username);
+        if (existingUser != null && !existingUser.getId().equals(userId)) {
+            return false;
+        }
+
+        // Verifica se email è già usata da un altro utente
+        UrzaUser existingEmail = getURZAUSEREPOSITORY().findByEmail(email);
+        if (existingEmail != null && !existingEmail.getId().equals(userId)) {
+            return false;
+        }
+
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setDisplayName(displayName);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 

@@ -3,7 +3,6 @@ package com.mambocosmo.urzasoracle.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +76,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
 
-    // NUOVO: Prendi una singola carta per ID (UUID)
+    //Prendi una singola carta per ID (UUID)
     public CardDTO getCardById(UUID id) {
         return getCONVERTER().fromEToD(getREPOSITORY().findById(id).orElse(null));
     }

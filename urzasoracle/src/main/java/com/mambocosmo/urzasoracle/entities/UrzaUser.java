@@ -42,13 +42,13 @@ public class UrzaUser extends GenericEntity implements UserDetails {
 
     @Column(unique = true)
     private String username;
-    
+
     private String password;
-    
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = ""))
     List<String> authorities;
-    
+
     @Column(unique = true)
     private String email;
 
@@ -97,11 +97,15 @@ public class UrzaUser extends GenericEntity implements UserDetails {
         return true;
     }
 
+    // AGGIUNGI QUESTO METODO
+    public boolean isAdmin() {
+        return authorities != null && authorities.stream()
+                .anyMatch(auth -> "ROLE_ADMIN".equals(auth));
+    }
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "owner", cascade = { CascadeType.ALL }, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    // @JoinColumn(referencedColumnName = "owner")
     private Set<CardCollection> userDecks;
-
 }

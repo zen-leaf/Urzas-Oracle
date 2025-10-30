@@ -1,12 +1,15 @@
 package com.mambocosmo.urzasoracle.controllers;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +39,12 @@ public class ProfileController {
         model.addAttribute("active", "profile");
         model.addAttribute("userCollectionCount", 0);
         model.addAttribute("userDecksCount", 0);
+
+        // Se l'utente è admin, mostra la lista di tutti gli utenti
+        if (user.isAdmin()) {
+            List<UrzaUser> allUsers = userService.findAllUsers();
+            model.addAttribute("allUsers", allUsers);
+        }
 
         return "profile";
     }
@@ -75,6 +84,75 @@ public class ProfileController {
         }
 
         return "redirect:/profile?success=password_changed";
+    }
+
+    // Admin: Elimina utente (solo non-admin)
+    @PostMapping("/delete-user/{id}")
+    public String deleteUser(@PathVariable UUID id, Principal principal) {
+        if (principal == null) {
+            return "redirect:/auth/login";
+        }
+
+        UrzaUser currentUser = userService.findByUsername(principal.getName());
+        if (currentUser == null || !currentUser.isAdmin()) {
+            return "redirect:/profile?error=not_authorized";
+        }
+
+        // Trova l'utente da eliminare
+        UrzaUser userToDelete = userService.findById(id);
+        if (userToDelete == null) {
+            return "redirect:/profile?error=user_not_found";
+        }
+
+        // Impedisci all'admin di eliminare se stesso
+        if (currentUser.getId().equals(id)) {
+            return "redirect:/profile?error=cannot_delete_self";
+        }
+
+        // Impedisci di eliminare altri admin
+        if (userToDelete.isAdmin()) {
+            return "redirect:/profile?error=cannot_delete_admin";
+        }
+
+        userService.deleteUserById(id);
+        return "redirect:/profile?success=user_deleted";
+    }
+
+    // Admin: Modifica utente (solo non-admin)
+    @PostMapping("/edit-user/{id}")
+    public String editUser(
+            @PathVariable UUID id,
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String displayName,
+            Principal principal) {
+        
+        if (principal == null) {
+            return "redirect:/auth/login";
+        }
+
+        UrzaUser currentUser = userService.findByUsername(principal.getName());
+        if (currentUser == null || !currentUser.isAdmin()) {
+            return "redirect:/profile?error=not_authorized";
+        }
+
+        // Trova l'utente da modificare
+        UrzaUser userToEdit = userService.findById(id);
+        if (userToEdit == null) {
+            return "redirect:/profile?error=user_not_found";
+        }
+
+        // Impedisci di modificare admin
+        if (userToEdit.isAdmin()) {
+            return "redirect:/profile?error=cannot_edit_admin";
+        }
+
+        boolean success = userService.updateUserByAdmin(id, username, email, displayName);
+        if (!success) {
+            return "redirect:/profile?error=update_failed";
+        }
+
+        return "redirect:/profile?success=user_updated";
     }
 
     @GetMapping("/delete")
