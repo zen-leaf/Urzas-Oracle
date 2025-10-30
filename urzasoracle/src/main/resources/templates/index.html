@@ -1,413 +1,337 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head :: head('Home - Urza\'s Oracle')}"></head>
 
-  <body class="bg-dark text-light">
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+<head th:replace="~{fragments/head :: head('Home - Urza\'s Oracle')}"></head>
 
-    <!-- TAPPEZZERIA DI CARTE - SCORRIMENTO DIAGONALE INFINITO -->
-    <div class="cards-full-background" id="cardsMosaicFull">
-      <!-- Carte dal database usando Thymeleaf -->
-      <th:block th:each="card : ${topCards}">
-        <div
-          class="mosaic-card-full"
-          th:if="${card.images != null and card.images.get('png') != null}"
-          th:style="'background-image: url(' + ${card.images.get('png')} + ');'"
-        ></div>
-      </th:block>
-    </div>
+<body class="bg-dark text-light">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <!-- Overlay scuro per leggibilità contenuto -->
-    <div class="content-overlay"></div>
+  <div class="cards-full-background" id="cardsMosaicFull">
+    <th:block th:each="card : ${topCards}">
+      <div class="mosaic-card-full" th:if="${card.images != null and card.images.get('png') != null}"
+        th:style="'background-image: url(' + ${card.images.get('png')} + ');'"></div>
+    </th:block>
+  </div>
+  <div class="content-overlay" style="display:flex;"></div>
 
-    <main class="container-fluid py-5">
-      <!-- Hero Section - TESTO GRANDE -->
-      <header class="text-center mb-5">
-        <h1
-          class="display-1 fw-bold text-warning mb-4"
-          style="
+  <!-- Overlay scuro per leggibilità contenuto -->
+
+  <main class="container-fluid py-5">
+    <!-- Hero Section - TESTO GRANDE -->
+    <header class="text-center mb-5">
+      <h1 class="display-1 fw-bold text-warning mb-4" style="
             text-shadow: 0 0 30px rgba(255, 193, 7, 0.6);
-            font-size: 4rem;
+            font-size: 5.5rem;
             letter-spacing: 3px;
-          "
-        >
-          Urza's Oracle
-        </h1>
-        <p
-          class="lead text-secondary mb-4"
-          style="font-size: 1.8rem; font-weight: 500"
-        >
-          Il portale definitivo per i fan di
-          <span class="text-warning fw-bold" style="font-size: 2rem"
-            >Magic: The Gathering</span
-          >
-        </p>
-        <div class="d-flex gap-4 justify-content-center flex-wrap">
-          <a
-            href="/cards"
-            class="btn btn-warning btn-lg fw-bold shadow px-5 py-3"
-            style="font-size: 1.2rem"
-          >
-            Scopri le Carte
-          </a>
-          <a
-            href="/search"
-            class="btn btn-outline-warning btn-lg fw-bold px-5 py-3"
-            style="font-size: 1.2rem"
-          >
-            Ricerca Avanzata
-          </a>
-        </div>
-      </header>
+          ">
+        Urza's Oracle
+      </h1>
+      <p class="lead mb-4" style="font-size: 2.3rem; font-weight: 500; color: #ffffff">
+        Il portale definitivo per i fan di
+        <span class="text-warning fw-bold" style="font-size: 2.5rem">Magic: The Gathering</span>
+      </p>
+      <div class="d-flex gap-4 justify-content-center flex-wrap">
+        <a href="/cards" class="btn btn-warning btn-lg fw-bold shadow px-5 py-3" style="font-size: 1.4rem">
+          Scopri le Carte
+        </a>
+        <a href="/search" class="btn btn-outline-warning btn-lg fw-bold px-5 py-3" style="font-size: 1.4rem">
+          Ricerca Avanzata
+        </a>
+      </div>
+    </header>
 
-      <!-- Descrizione -->
-      <section class="container mb-5">
-        <div class="row justify-content-center">
-          <div class="col-lg-8 text-center">
-            <h2 class="text-warning mb-4 fw-bold" style="font-size: 2.5rem">
-              Benvenuto nel tuo TCG Finder
-            </h2>
-            <p
-              class="text-secondary fs-5"
-              style="font-size: 1.3rem; line-height: 1.8"
-            >
-              Trova le carte più rare, crea una tua collezione personale o
-              esplora deck creativi.
-              <span class="text-warning fw-bold">Urza's Oracle</span> è qui per
-              aiutarti a esplorare il mondo di Magic: The Gathering come mai
-              prima d'ora.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Cards Features -->
-      <section class="container mb-5">
-        <div class="row g-4 justify-content-center">
-          <!-- Card 1: Ricerca Avanzata -->
-          <div class="col-12 col-sm-6 col-md-4">
-            <div class="card bg-dark border-warning h-100 shadow-lg card-hover">
-              <div class="card-body text-center p-4">
-                <div class="mb-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="48"
-                    height="48"
-                    fill="#ffc107"
-                    class="bi bi-search"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                    />
-                  </svg>
-                </div>
-                <h5 class="card-title text-warning fw-bold mb-3">
-                  Ricerca Avanzata
-                </h5>
-                <p class="card-text text-secondary mb-4">
-                  Filtra le carte per set, colore, rarità e molto altro.
-                </p>
-                <a
-                  href="/cards"
-                  class="btn btn-outline-warning btn-sm fw-bold px-4"
-                >
-                  Cerca ora
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 2: Collezione Personale -->
-          <div class="col-12 col-sm-6 col-md-4">
-            <div class="card bg-dark border-warning h-100 shadow-lg card-hover">
-              <div class="card-body text-center p-4">
-                <div class="mb-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="48"
-                    height="48"
-                    fill="#ffc107"
-                    class="bi bi-collection"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13z"
-                    />
-                  </svg>
-                </div>
-                <h5 class="card-title text-warning fw-bold mb-3">
-                  Collezione Personale
-                </h5>
-                <p class="card-text text-secondary mb-4">
-                  Gestisci e mostra la tua collezione di carte preferite.
-                </p>
-                <a
-                  href="/collection"
-                  class="btn btn-outline-warning btn-sm fw-bold px-4"
-                >
-                  Vai alla collezione
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 3: Cerca Mazzi -->
-          <div class="col-12 col-sm-6 col-md-4">
-            <div class="card bg-dark border-warning h-100 shadow-lg card-hover">
-              <div class="card-body text-center p-4">
-                <div class="mb-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="48"
-                    height="48"
-                    fill="#ffc107"
-                    class="bi bi-stack"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"
-                    />
-                    <path
-                      d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"
-                    />
-                  </svg>
-                </div>
-                <h5 class="card-title text-warning fw-bold mb-3">
-                  Cerca Mazzi
-                </h5>
-                <p class="card-text text-secondary mb-4">
-                  Consulta e scopri i mazzi condivisi da altri giocatori.
-                </p>
-                <a
-                  href="/decks"
-                  class="btn btn-outline-warning btn-sm fw-bold px-4"
-                >
-                  Esplora
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Call to Action -->
-      <section class="container text-center my-5">
-        <div
-          class="p-5 bg-dark border border-warning rounded shadow-lg"
-          style="
-            background: linear-gradient(
-              135deg,
-              rgba(26, 16, 51, 0.8) 0%,
-              rgba(11, 15, 26, 0.9) 100%
-            );
-          "
-        >
-          <h3 class="text-warning fw-bold mb-3" style="font-size: 2rem">
-            Inizia la tua avventura ora
-          </h3>
-          <p class="text-secondary mb-4 fs-5" style="font-size: 1.3rem">
-            Esplora migliaia di carte, crea mazzi competitivi e connettiti con
-            la community globale di Magic.
+    <!-- Descrizione -->
+    <section class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2 class="text-warning mb-4 fw-bold" style="font-size: 3.2rem">
+            Benvenuto nel tuo TCG Finder
+          </h2>
+          <p style="
+                font-size: 1.6rem;
+                line-height: 1.8;
+                color: #ffffff;
+                font-weight: 600;
+              ">
+            Trova le carte più rare, crea una tua collezione personale o
+            esplora deck creativi.
+            <span class="text-warning fw-bold">Urza's Oracle</span> è qui per
+            aiutarti a esplorare il mondo di Magic: The Gathering come mai
+            prima d'ora.
           </p>
-          <a
-            href="/cards"
-            class="btn btn-warning btn-lg fw-bold shadow px-5 py-3"
-            style="font-size: 1.2rem"
-          >
-            Inizia Ora
-          </a>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <!-- Include FOOTER fragment -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <!-- Cards Features -->
+    <section class="container mb-5">
+      <div class="row g-4 justify-content-center">
+        <!-- Card 1: Ricerca Avanzata -->
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card bg-dark border-warning h-100 shadow-lg card-hover">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#ffc107" class="bi bi-search"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+              </div>
+              <h5 class="card-title text-warning fw-bold mb-3" style="font-size: 1.5rem">
+                Ricerca Avanzata
+              </h5>
+              <p class="card-text" style="
+                    color: #ffffff;
+                    margin-bottom: 1rem;
+                    font-weight: 600;
+                    font-size: 1.15rem;
+                  ">
+                Filtra le carte per set, colore, rarità e molto altro.
+              </p>
+              <a href="/cards" class="btn btn-outline-warning btn-sm fw-bold px-4" style="font-size: 1.1rem">
+                Cerca ora
+              </a>
+            </div>
+          </div>
+        </div>
 
-    <style>
-      /* DISABILITA SCROLL - HOME PAGE SOLO CARTE */
-      html {
-        overflow: hidden;
-        height: 100vh;
-        max-height: 100vh;
-      }
+        <!-- Card 2: Collezione Personale -->
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card bg-dark border-warning h-100 shadow-lg card-hover">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#ffc107" class="bi bi-collection"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13z" />
+                </svg>
+              </div>
+              <h5 class="card-title text-warning fw-bold mb-3" style="font-size: 1.5rem">
+                Collezione Personale
+              </h5>
+              <p class="card-text" style="
+                    color: #ffffff;
+                    margin-bottom: 1rem;
+                    font-weight: 600;
+                    font-size: 1.15rem;
+                  ">
+                Gestisci e mostra la tua collezione di carte preferite.
+              </p>
+              <a href="/collection" class="btn btn-outline-warning btn-sm fw-bold px-4" style="font-size: 1.1rem">
+                Vai alla collezione
+              </a>
+            </div>
+          </div>
+        </div>
 
-      body {
-        background: linear-gradient(
-          180deg,
+        <!-- Card 3: Cerca Mazzi -->
+        <div class="col-12 col-sm-6 col-md-4">
+          <div class="card bg-dark border-warning h-100 shadow-lg card-hover">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#ffc107" class="bi bi-stack"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z" />
+                  <path
+                    d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z" />
+                </svg>
+              </div>
+              <h5 class="card-title text-warning fw-bold mb-3" style="font-size: 1.5rem">
+                Cerca Mazzi
+              </h5>
+              <p class="card-text" style="
+                    color: #ffffff;
+                    margin-bottom: 1rem;
+                    font-weight: 600;
+                    font-size: 1.15rem;
+                  ">
+                Consulta e scopri i mazzi condivisi da altri giocatori.
+              </p>
+              <a href="/decks" class="btn btn-outline-warning btn-sm fw-bold px-4" style="font-size: 1.1rem">
+                Esplora
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    body {
+      background: linear-gradient(180deg,
           #0b0f1a 0%,
           #1a1033 50%,
-          #0b0f1a 100%
-        );
-        font-family: "Roboto", sans-serif;
-        min-height: 100vh;
-        height: 100vh;
-        max-height: 100vh;
-        position: relative;
-        overflow: hidden;
-        overflow-x: hidden;
+          #0b0f1a 100%);
+      font-family: "Roboto", sans-serif;
+      min-height: 100vh;
+      height: 100vh;
+      max-height: 100vh;
+      position: relative;
+
+    }
+
+    /* NAVBAR e FOOTER NON vengono coperte */
+    nav {
+      position: relative;
+      z-index: 100;
+    }
+
+    footer {
+      position: relative;
+      z-index: 100;
+    }
+
+    /* ANIMAZIONE DIAGONALE INFINITA - RALLENTATA */
+    @keyframes scrollCardsDiagonal {
+      0% {
+        transform: translateX(0) translateY(0);
       }
 
-      /* NAVBAR e FOOTER NON vengono coperte */
-      nav {
-        position: relative;
-        z-index: 100;
+      100% {
+        transform: translateX(-66.666%) translateY(-66.666%);
       }
+    }
 
-      footer {
-        position: relative;
-        z-index: 100;
-      }
+    /* TAPPEZZERIA DI CARTE - SCORRIMENTO DIAGONALE INFINITO - FIXED */
+    .cards-full-background {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      width: 300%;
+      height: 300%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 4px;
+      padding: 10px;
+      animation: scrollCardsDiagonal 300s linear infinite;
+      will-change: transform;
+    }
 
-      /* ANIMAZIONE DIAGONALE INFINITA - RALLENTATA */
-      @keyframes scrollCardsDiagonal {
-        0% {
-          transform: translateX(0) translateY(0);
-        }
-        100% {
-          transform: translateX(-66.666%) translateY(-66.666%);
-        }
-      }
+    /* Carte tappezzeria - responsive */
+    .mosaic-card-full {
+      width: 160px;
+      height: 230px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #1a1a2e;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 193, 7, 0.15);
+      opacity: 0.7;
+    }
 
-      /* TAPPEZZERIA DI CARTE - SCORRIMENTO DIAGONALE INFINITO - FIXED */
-      .cards-full-background {
-        position: fixed;
-        top: 70px;
-        left: 0;
-        width: 300%;
-        height: 300%;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        gap: 4px;
-        padding: 10px;
-        animation: scrollCardsDiagonal 300s linear infinite;
-        will-change: transform;
-      }
-
-      /* Carte tappezzeria - responsive */
+    @media (max-width: 1024px) {
       .mosaic-card-full {
-        width: 160px;
-        height: 230px;
-        flex-shrink: 0;
-        border-radius: 6px;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-color: #1a1a2e;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 193, 7, 0.15);
-        opacity: 0.7;
+        width: 140px;
+        height: 200px;
       }
+    }
 
-      @media (max-width: 1024px) {
-        .mosaic-card-full {
-          width: 140px;
-          height: 200px;
-        }
+    @media (max-width: 768px) {
+      .mosaic-card-full {
+        width: 120px;
+        height: 170px;
       }
+    }
 
-      @media (max-width: 768px) {
-        .mosaic-card-full {
-          width: 120px;
-          height: 170px;
-        }
+    @media (max-width: 480px) {
+      .mosaic-card-full {
+        width: 100px;
+        height: 140px;
       }
+    }
 
-      @media (max-width: 480px) {
-        .mosaic-card-full {
-          width: 100px;
-          height: 140px;
-        }
-      }
-
-      /* Overlay scuro - SOLO SOPRA LE CARTE, NON SU NAV/FOOTER */
-      .content-overlay {
-        position: fixed;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 70px);
-        background: radial-gradient(
-          ellipse at center,
+    /* Overlay scuro - SOLO SOPRA LE CARTE, NON SU NAV/FOOTER */
+    .content-overlay {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center,
           rgba(11, 15, 26, 0.3) 0%,
           rgba(11, 15, 26, 0.6) 50%,
-          rgba(11, 15, 26, 0.8) 100%
-        );
-        pointer-events: none;
-        z-index: 1;
+          rgba(11, 15, 26, 0.8) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      background: transparent;
+    }
+
+    .card-hover {
+      transition: all 0.3s ease-in-out;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: #ffc107 !important;
+      box-shadow: 0 0 30px rgba(255, 193, 7, 0.4);
+    }
+
+    .btn-warning {
+      transition: all 0.3s ease;
+    }
+
+    .btn-warning:hover {
+      background-color: #ffce3d;
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+    }
+
+    .btn-outline-warning:hover {
+      background-color: #ffc107;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+    }
+
+    .card {
+      border-radius: 0.5rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      letter-spacing: 1px;
+    }
+  </style>
+
+  <script>
+    // Replica le carte per riempire il 300% width e height
+    document.addEventListener("DOMContentLoaded", function () {
+      const container = document.getElementById("cardsMosaicFull");
+      const originalCards = Array.from(
+        container.querySelectorAll(".mosaic-card-full")
+      );
+
+      console.log("Carte originali:", originalCards.length);
+
+      // Duplica 5 volte per riempire il 300%
+      for (let i = 0; i < 5; i++) {
+        originalCards.forEach((card) => {
+          const clone = card.cloneNode(true);
+          container.appendChild(clone);
+        });
       }
 
-      main {
-        position: relative;
-        z-index: 2;
-        background: transparent;
-      }
+      console.log(
+        "Carte totali:",
+        container.querySelectorAll(".mosaic-card-full").length
+      );
+    });
+  </script>
+</body>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
-      .card-hover {
-        transition: all 0.3s ease-in-out;
-      }
-
-      .card-hover:hover {
-        transform: translateY(-10px) scale(1.02);
-        border-color: #ffc107 !important;
-        box-shadow: 0 0 30px rgba(255, 193, 7, 0.4);
-      }
-
-      .btn-warning {
-        transition: all 0.3s ease;
-      }
-
-      .btn-warning:hover {
-        background-color: #ffce3d;
-        transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
-      }
-
-      .btn-outline-warning:hover {
-        background-color: #ffc107;
-        color: #000;
-        transform: scale(1.05);
-        box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
-      }
-
-      .card {
-        border-radius: 0.5rem;
-      }
-
-      h1,
-      h2,
-      h3 {
-        letter-spacing: 1px;
-      }
-    </style>
-
-    <script>
-      // Replica le carte per riempire il 300% width e height
-      document.addEventListener("DOMContentLoaded", function () {
-        const container = document.getElementById("cardsMosaicFull");
-        const originalCards = Array.from(
-          container.querySelectorAll(".mosaic-card-full")
-        );
-
-        console.log("Carte originali:", originalCards.length);
-
-        // Duplica 5 volte per riempire il 300%
-        for (let i = 0; i < 5; i++) {
-          originalCards.forEach((card) => {
-            const clone = card.cloneNode(true);
-            container.appendChild(clone);
-          });
-        }
-
-        console.log(
-          "Carte totali:",
-          container.querySelectorAll(".mosaic-card-full").length
-        );
-      });
-    </script>
-  </body>
 </html>

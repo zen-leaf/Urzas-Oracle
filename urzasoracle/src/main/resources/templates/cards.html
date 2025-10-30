@@ -44,51 +44,53 @@
       <div class="row g-4 justify-content-center" th:if="${not #lists.isEmpty(lista)}">
         <th:block th:each="card : ${lista}">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-            <div class="card mtg-card bg-dark border-secondary h-100 shadow-sm card-hover">
-              
-              <!-- Frame immagine carta con proporzioni Scryfall -->
-              <div class="mtg-card-frame">
-                <!-- TUTTI i dati della carta invisibili ma ricercabili sopra l'immagine -->
-                <div class="card-data-overlay">
-                  <!-- Nome -->
-                  <div th:text="${card.name}"></div>
-                  
-                  <!-- Tipo -->
-                  <div th:text="${card.typeline}"></div>
-                  
-                  <!-- Set -->
-                  <div th:if="${card.expansionSet != null}" th:text="${card.expansionSet.name}"></div>
-                  
-                  <!-- Artisti -->
-                  <div th:if="${card.artistRef != null and !#lists.isEmpty(card.artistRef)}">
-                    <span th:each="artist, iter : ${card.artistRef}">
-                      <span th:text="${artist.artist_name}"></span><span th:if="${!iter.last}">, </span>
-                    </span>
-                  </div>
-                  
-                  <!-- Colori -->
-                  <div th:if="${card.colorIdentity != null and !#lists.isEmpty(card.colorIdentity)}">
-                    <span th:each="c, stat : ${card.colorIdentity}">
-                      <span th:text="${c}"></span><span th:if="${not stat.last}">, </span>
-                    </span>
-                  </div>
-                  
-                  <!-- Legalità -->
-                  <div th:if="${card.legalities != null}" th:text="${card.legalities.get('standard')}"></div>
-                </div>
+            <!-- LINK A CARDINFO - AGGIUNGI QUESTO -->
+            <a th:href="@{/cards/{id}(id=${card.id})}" class="text-decoration-none card-link-wrapper">
+              <div class="card mtg-card bg-dark border-secondary h-100 shadow-sm card-hover">
                 
-                <img th:if="${card.images != null and card.images.get('png') != null}" 
-                     th:src="${card.images.get('png')}"
-                     th:alt="${card.name}" 
-                     class="mtg-card-img" 
-                     loading="lazy">
-              </div>
+                <!-- Frame immagine carta con proporzioni Scryfall -->
+                <div class="mtg-card-frame">
+                  <!-- TUTTI i dati della carta invisibili ma ricercabili sopra l'immagine -->
+                  <div class="card-data-overlay">
+                    <!-- Nome -->
+                    <div th:text="${card.name}"></div>
+                    
+                    <!-- Tipo -->
+                    <div th:text="${card.typeline}"></div>
+                    
+                    <!-- Set -->
+                    <div th:if="${card.expansionSet != null}" th:text="${card.expansionSet.name}"></div>
+                    
+                    <!-- Artisti -->
+                   
+                        <span th:text="${#strings.listJoin(card.artistNames, ', ')}"></span>
+                      </span>
 
-              <div class="card-body p-3">
-                <!-- Tutto il contenuto del card-body è COMPLETAMENTE NASCOSTO - i dati sono sopra nella carta invisibile -->
-                <!-- Questo mantiene lo spazio del body ma niente è visibile -->
+                    
+                    <!-- Colori -->
+                    <div th:if="${card.colorIdentity != null and !#lists.isEmpty(card.colorIdentity)}">
+                      <span th:each="c, stat : ${card.colorIdentity}">
+                        <span th:text="${c}"></span><span th:if="${not stat.last}">, </span>
+                      </span>
+                    </div>
+                    
+                    <!-- Legalità -->
+                    <div th:if="${card.legalities != null}" th:text="${card.legalities.get('standard')}"></div>
+                  </div>
+                  
+                  <img th:if="${card.images != null and card.images.get('normal') != null}" 
+                       th:src="${card.images.get('normal')}"
+                       th:alt="${card.name}" 
+                       class="mtg-card-img" 
+                       loading="lazy">
+                </div>
+
+                <div class="card-body p-3">
+                  <!-- Tutto il contenuto del card-body è COMPLETAMENTE NASCOSTO - i dati sono sopra nella carta invisibile -->
+                  <!-- Questo mantiene lo spazio del body ma niente è visibile -->
+                </div>
               </div>
-            </div>
+            </a>
           </div>
         </th:block>
       </div>
@@ -172,6 +174,13 @@
       height: 100%;
       object-fit: contain;
       image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* Link wrapper senza decorazione */
+    .card-link-wrapper {
+      display: block;
+      text-decoration: none !important;
+      color: inherit;
     }
 
     /* Hover con glow magico potenziato */

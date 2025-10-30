@@ -1,76 +1,81 @@
-<nav
-  th:fragment="navbar"
-  class="navbar navbar-expand-lg navbar-dark bg-black px-3"
->
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-black px-3" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <div class="container-fluid">
-    <img
-      th:src="@{/img/bd06e812-ef30-4d3e-aeb2-eba19fcd74e6.png}"
-      alt="Logo"
-      height="60"
-      class="me-2"
-    />
-    <a class="navbar-brand fw-bold text-warning" href="/">Urza’s Oracle</a>
+    <img th:src="@{/img/bd06e812-ef30-4d3e-aeb2-eba19fcd74e6.png}" alt="Logo" height="60" class="me-2" />
+    <a class="navbar-brand fw-bold text-warning" href="/">Urza's Oracle</a>
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item mx-3">
-          <a
-            class="nav-link"
-            href="/"
-            th:classappend="${active}=='home' ? ' active'"
-            >Home</a
-          >
+          <a class="nav-link" href="/" th:classappend="${active}=='home' ? ' active'">Home</a>
         </li>
         <li class="nav-item mx-3">
-          <a
-            class="nav-link"
-            href="/cards"
-            th:classappend="${active}=='cards' ? ' active'"
-            >Carte</a
-          >
+          <a class="nav-link" href="/cards" th:classappend="${active}=='cards' ? ' active'">Carte</a>
         </li>
         <li class="nav-item mx-3">
-          <a
-            class="nav-link"
-            href="/about"
-            th:classappend="${active}=='about' ? ' active'"
-            >Chi Siamo</a
-          >
+          <a class="nav-link" href="/about" th:classappend="${active}=='about' ? ' active'">Chi Siamo</a>
         </li>
-        <li class="nav-item mx-3">
-          <a
-            class="nav-link"
-            href="/contact"
-            th:classappend="${active}=='contact' ? ' active'"
-            >Contatti</a
-          >
+
+        <!-- Mostra solo se NON autenticato -->
+        <li class="nav-item mx-3" sec:authorize="!isAuthenticated()">
+          <a class="nav-link" href="/auth/login" th:classappend="${active}=='login' ? ' active'">Login</a>
         </li>
-        <li class="nav-item mx-3">
-          <a
-            class="nav-link"
-            href="/login"
-            th:classappend="${active}=='login' ? ' active'"
-            >Login</a
-          >
+
+        <!-- Mostra solo se autenticato -->
+        <li class="nav-item dropdown mx-3" sec:authorize="isAuthenticated()">
+          <a class="nav-link dropdown-toggle text-warning fw-bold" href="#" id="userDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-person-circle me-1" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+              <path fill-rule="evenodd"
+                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+            </svg>
+            <span th:text="${#authorization.getAuthentication().principal.getDisplayName()}">Username</span>
+            <span class="badge bg-warning text-dark ms-2" sec:authentication="principal.authorities[0].authority"
+              th:text="${#strings.replace(#authorization.authentication.authorities[0].authority, 'ROLE_', '')}">ROLE</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end bg-dark border-warning" aria-labelledby="userDropdown">
+            <li>
+              <a class="dropdown-item text-light" href="/profile">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-person-circle me-2" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                  <path fill-rule="evenodd"
+                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                </svg>
+                Profilo
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider border-warning" />
+            </li>
+            <li>
+              <form th:action="@{/auth/logout}" method="post" class="d-inline">
+                <button type="submit" class="dropdown-item text-danger">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-box-arrow-right me-2" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
+                    <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                  </svg>
+                  Logout
+                </button>
+              </form>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
   </div>
 
   <style>
-    /* Base */
     .nav-link {
       position: relative;
       color: #fcd34d;
@@ -79,7 +84,6 @@
       transition: color 0.3s ease;
     }
 
-    /* Animazione linea sottolineata */
     .nav-link::after {
       content: "";
       position: absolute;
@@ -92,24 +96,48 @@
       transition: width 0.4s ease;
     }
 
-    /* Hover: linea si estende */
     .nav-link:hover::after {
       width: 100%;
       box-shadow: 0 0 8px #ffe600, 0 0 15px #ff9800;
     }
 
-    /* Active: linea fissa e luminosa */
     .nav-link.active::after {
       width: 100%;
       box-shadow: 0 0 10px #ffe600, 0 0 20px #ff9800;
     }
 
     .nav-link:hover {
-      color: #fff176; /* leggero cambio colore */
+      color: #fff176;
     }
 
     .navbar {
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
     }
+
+    .dropdown-menu {
+      background-color: #1a1a1a !important;
+    }
+
+    .dropdown-item {
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+      background-color: #ffc107 !important;
+      color: #000 !important;
+    }
+
+    .dropdown-item.text-danger:hover {
+      background-color: #dc3545 !important;
+      color: #fff !important;
+    }
+
+    button.dropdown-item {
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: none;
+    }
   </style>
+
 </nav>

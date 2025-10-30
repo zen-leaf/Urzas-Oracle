@@ -48,10 +48,9 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         }
 
         if (fromEntity.getCard_faces() == null) {
-            fromEntity.setCard_faces(new HashSet<>());
+            fromEntity.setCard_faces(new ArrayList<>());
         }
 
-        // EXPANSIONSETSERVICE.findById
         System.out.println("Card from expansion:" + fromEntity.getExpansion().getName());
 
         try {
@@ -78,12 +77,16 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
 
+    // NUOVO: Prendi una singola carta per ID (UUID)
+    public CardDTO getCardById(UUID id) {
+        return getCONVERTER().fromEToD(getREPOSITORY().findById(id).orElse(null));
+    }
+
     public List<Card> generateAllCardsFromJSON() {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-           
-             cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
             List<Card> cardList = new ArrayList<>();
             Long myTimer = System.nanoTime();
             System.out.println("start");
@@ -94,10 +97,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     });
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
-                    // myCard.getCard_faces().forEach(face -> System.out.println(face));
                     System.out.println(e.toString());
                     cardList.add(myCard);
-                    // System.out.println(myCard.getName());
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
                     System.out.println("Error generating card!!! " + e1.getMessage());
                 }
@@ -107,9 +108,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
             return cardList;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             return null;
-
         }
     }
 
@@ -143,12 +142,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
 
             return uniqueFaces;
-        } catch (
-
-        IOException e) {
-            // TODO Auto-generated catch block
+        } catch (IOException e) {
             return null;
-
         }
     }
 

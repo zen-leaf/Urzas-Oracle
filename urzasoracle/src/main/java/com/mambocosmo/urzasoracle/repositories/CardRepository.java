@@ -17,7 +17,10 @@ public interface CardRepository extends JpaRepository<Card, UUID> {
 
     List<Card> findByName(String name);
 
+    
     Page<Card> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
+
+   // Page<Card> findByNameOrFlavor_nameOrPrinted_nameOrFlavor_textContainingIgnoreCase(String namePart, Pageable pageable);
 
     List<Card> findByNameContainingIgnoreCase(String namePart);
 }

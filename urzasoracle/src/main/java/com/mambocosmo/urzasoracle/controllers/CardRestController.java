@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.ResponseErrorHandler;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
@@ -84,8 +82,8 @@ public class CardRestController {
 
     @GetMapping("/byname")
     public ResponseEntity<Page<CardDTO>> getByName(@RequestParam String name,
-            @RequestParam(defaultValue = "0") Integer size,
-            @RequestParam(defaultValue = "10") Integer page) {
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
         return ResponseEntity.ok(CARDSERVICE.getByNamePaged(name, page, size));
     }
 
