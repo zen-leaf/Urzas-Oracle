@@ -69,32 +69,33 @@ public class CardCollectionController {
       getCARDCOLLECTIONSERVICE().save(map);
       return "redirect:/allCardCollection";
    }
-   
-   // CREATE DUMMY USER -> CREATE DUMMY DECK -> MODIFY DUMMY DECK -> TEST USER-DECK CASCADE DELETION
+
+   // CREATE DUMMY USER -> CREATE DUMMY DECK -> MODIFY DUMMY DECK -> TEST USER-DECK
+   // CASCADE DELETION
    // api/CardCollectionController/create-deckTEST
    @GetMapping("/create-deckTEST")
    public String createDeckTest() {
-      // System.out.println("test print" + getUSERSERVICE().getByUsername("dummy_user2").getId().toString());
-      Map<String,String> testMap = new HashMap<>();
+      // System.out.println("test print" +
+      // getUSERSERVICE().getByUsername("dummy_user2").getId().toString());
+      Map<String, String> testMap = new HashMap<>();
       testMap.put("name", "deck_dummyello?");
       testMap.put("description", "the worst deck ever");
 
-
       return "saved:" + getCARDCOLLECTIONSERVICE().save(testMap) +
-         "\nquello " + getUSERSERVICE().getByUsername("dummy_user2").getId().toString();
+            "\nquello " + getUSERSERVICE().findByUsername("dummy_user2").getId().toString();
       // return "redirect:/allCardCollection";
    }
-   
+
    // api/CardCollectionController/create-userTEST
    @GetMapping("/create-userTEST")
    public String createUserTest() {
-      Map<String,String> testMap = new HashMap<>();
+      Map<String, String> testMap = new HashMap<>();
       testMap.put("username", "dummy_user2");
       testMap.put("password", "clear");
       testMap.put("email", "asd@asd.it");
 
       return "saved:" + getUSERSERVICE().save(testMap) +
-         "";
+            "";
       // return "redirect:/allCardCollection";
    }
 

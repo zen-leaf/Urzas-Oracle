@@ -1,7 +1,7 @@
 <head th:fragment="head(pageTitle)">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title th:text="${pageTitle} ?: 'Urza’s Oracle'">Urza’s Oracle</title>
+  <title th:text="${pageTitle} ?: 'Urza\'s Oracle'">Urza's Oracle</title>
 
   <!-- Bootstrap CSS -->
   <link
@@ -13,4 +13,32 @@
 
   <!-- Favicon opzionale -->
   <link rel="icon" href="/favicon.ico" />
+
+  <!-- ✅ AGGIUNGI IL TUO FONT -->
+  <style>
+    @font-face {
+      font-family: "MioFont"; /* Cambia con il nome del tuo font */
+      src: url("/fonts/MatrixB.ttf") format("ttf"),
+        url("/fonts/MatrixB.ttf") format("ttf"),
+        url("/fonts/MatrixB.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* Applica il font a tutto il sito */
+    * {
+      font-family: "MioFont", sans-serif;
+    }
+
+    /* Opzionale: caratteri speciali per titoli */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "MioFont", serif;
+      letter-spacing: 1px;
+    }
+  </style>
 </head>
