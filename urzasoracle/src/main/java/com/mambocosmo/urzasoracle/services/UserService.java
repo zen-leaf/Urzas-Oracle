@@ -49,7 +49,7 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
         user.setDisplayName(userData.get("displayName")); // Default displayName = username
-        user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        user.setAuthorities(List.of("ROLE_USER"));
         user.setRegisterDate(LocalDate.now());
 
         getUserRepository().save(user);
@@ -70,7 +70,7 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
         user.setDisplayName(userData.get("displayName"));
-        user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        user.setAuthorities(List.of("ROLE_ADMIN"));
         user.setRegisterDate(LocalDate.now());
 
         getUserRepository().save(user);
