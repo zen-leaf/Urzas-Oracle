@@ -7,34 +7,29 @@
   <body class="bg-dark text-light">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <!-- Sezione Registrazione -->
     <section
       class="container d-flex flex-column align-items-center justify-content-center py-5"
       style="min-height: 90vh"
     >
-      <div class="mb-5 text-center">
-        <h1
-          class="display-5 fw-bold text-warning mb-2"
-          style="text-shadow: 0 0 20px rgba(255, 193, 7, 0.5)"
-        >
-          Unisciti a Urza's Oracle
-        </h1>
-        <p class="lead text-secondary">
-          Crea il tuo account e inizia a giocare
-        </p>
-      </div>
-
       <div
         class="card bg-dark text-light border-warning shadow-lg p-5"
         style="width: 100%; max-width: 500px"
       >
+        <div class="mb-4 text-center">
+          <h1 class="display-5 fw-bold text-warning mb-3">
+            Unisciti a Urza's Oracle
+          </h1>
+          <p class="lead text-white fs-4 mb-0">
+            Crea il tuo account e inizia a giocare
+          </p>
+        </div>
+
         <form
           th:action="@{/auth/register}"
           method="post"
           class="needs-validation"
           novalidate
         >
-          <!-- Username -->
           <div class="mb-4">
             <label for="username" class="form-label text-warning fw-bold mb-2">
               <svg
@@ -64,7 +59,28 @@
               Username deve contenere almeno 3 caratteri.
             </div>
           </div>
-           Display Name
+
+          <div class="mb-4">
+            <label
+              for="displayName"
+              class="form-label text-warning fw-bold mb-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="#ffc107"
+                class="bi bi-person-badge"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"
+                />
+                <path
+                  d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"
+                />
+              </svg>
+              Display Name
             </label>
             <input
               type="text"
@@ -80,7 +96,6 @@
             </div>
           </div>
 
-          <!-- Email -->
           <div class="mb-4">
             <label for="email" class="form-label text-warning fw-bold mb-2">
               <svg
@@ -110,7 +125,6 @@
             </div>
           </div>
 
-          <!-- Password -->
           <div class="mb-4">
             <label for="password" class="form-label text-warning fw-bold mb-2">
               <svg
@@ -141,7 +155,6 @@
             </div>
           </div>
 
-          <!-- Conferma Password -->
           <div class="mb-4">
             <label
               for="confirmPassword"
@@ -173,45 +186,42 @@
               minlength="6"
               required
             />
-            <!-- Is Admin -->
-            <br />
-            <div class="mb-4">
-              <label for="isAdmin" class="form-label text-warning fw-bold mb-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="#ffc107"
-                  class="bi bi-shield-lock"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M5.5 9a.5.5 0 0 1 .5.5v1.5h1V9.5a.5.5 0 0 1 1 0V11h1V9.5a.5.5 0 0 1 1 0V11h.5a.5.5 0 0 1 .5.5v1A5.53 5.53 0 0 1 8 16a5.53 5.53 0 0 1-4-1.5v-1a.5.5 0 0 1 .5-.5h.5V9.5a.5.5 0 0 1 1 0V11h1V9.5a.5.5 0 0 1 .5-.5z"
-                  />
-                </svg>
-                Is Admin
-              </label>
-              <select
-                id="isAdmin"
-                name="isAdmin"
-                class="form-select bg-dark text-warning border-warning form-select-lg"
-                required
-              >
-                <option value="" disabled selected>Seleziona...</option>
-                <option value="true">Sì</option>
-                <option value="false">No</option>
-              </select>
-              <div class="invalid-feedback text-warning">
-                Seleziona se l'utente è admin.
-              </div>
-            </div>
-
             <div class="invalid-feedback text-warning">
               Le password non corrispondono.
             </div>
           </div>
 
-          <!-- Bottone Registrati -->
+          <div class="mb-4">
+            <label for="isAdmin" class="form-label text-warning fw-bold mb-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="#ffc107"
+                class="bi bi-shield-lock"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M5.5 9a.5.5 0 0 1 .5.5v1.5h1V9.5a.5.5 0 0 1 1 0V11h1V9.5a.5.5 0 0 1 1 0V11h.5a.5.5 0 0 1 .5.5v1A5.53 5.53 0 0 1 8 16a5.53 5.53 0 0 1-4-1.5v-1a.5.5 0 0 1 .5-.5h.5V9.5a.5.5 0 0 1 .5-.5z"
+                />
+              </svg>
+              Is Admin
+            </label>
+            <select
+              id="isAdmin"
+              name="isAdmin"
+              class="form-select bg-dark text-warning border-warning form-select-lg"
+              required
+            >
+              <option value="" disabled selected>Seleziona...</option>
+              <option value="true">Sì</option>
+              <option value="false">No</option>
+            </select>
+            <div class="invalid-feedback text-warning">
+              Seleziona se l'utente è admin.
+            </div>
+          </div>
+
           <button
             type="submit"
             class="btn btn-warning btn-lg w-100 fw-bold mb-4 shadow"
@@ -219,7 +229,6 @@
             Registrati
           </button>
 
-          <!-- Link Login -->
           <div class="text-center border-top border-secondary pt-4">
             <p class="text-secondary mb-0">Hai già un account?</p>
             <a
@@ -256,11 +265,13 @@
         box-shadow: 0 0 30px rgba(255, 193, 7, 0.3) !important;
       }
 
-      .form-control {
+      .form-control,
+      .form-select {
         transition: all 0.3s ease;
       }
 
-      .form-control:focus {
+      .form-control:focus,
+      .form-select:focus {
         background-color: #1a1a1a;
         color: #ffc107;
         border-color: #ffc107;
