@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
-import com.mambocosmo.urzasoracle.services.UserService;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
-    private UserService userService;
+    private UrzaUserService userService;
 
     @GetMapping
     public String profilePage(Model model, Principal principal) {

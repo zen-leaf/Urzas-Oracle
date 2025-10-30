@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.services.CardCollectionService;
-import com.mambocosmo.urzasoracle.services.UserService;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
 
@@ -25,7 +25,7 @@ import lombok.Data;
 @RequestMapping("api/CardCollectionController")
 public class CardCollectionController {
    private final CardCollectionService CARDCOLLECTIONSERVICE;
-   private final UserService USERSERVICE;
+   private final UrzaUserService USERSERVICE;
 
    @GetMapping("/allCardCollection")
    public ResponseEntity<List<CardCollectionDTO>> getAllCardCollection() {
@@ -75,22 +75,21 @@ public class CardCollectionController {
    // api/CardCollectionController/create-deckTEST
    @GetMapping("/create-deckTEST")
    public String createDeckTest() {
-      // System.out.println("test print" +
-      // getUSERSERVICE().getByUsername("dummy_user2").getId().toString());
-      Map<String, String> testMap = new HashMap<>();
-      testMap.put("name", "deck_dummyello?");
+      // System.out.println("test print" + getUSERSERVICE().getByUsername("dummy_user2").getId().toString());
+      Map<String,String> testMap = new HashMap<>();
+      testMap.put("name", "deck_dummy");
       testMap.put("description", "the worst deck ever");
 
       return "saved:" + getCARDCOLLECTIONSERVICE().save(testMap) +
-            "\nquello " + getUSERSERVICE().findByUsername("dummy_user2").getId().toString();
+         "\nquello " + getUSERSERVICE().findByUsername("dummy_user").getId().toString();
       // return "redirect:/allCardCollection";
    }
 
    // api/CardCollectionController/create-userTEST
    @GetMapping("/create-userTEST")
    public String createUserTest() {
-      Map<String, String> testMap = new HashMap<>();
-      testMap.put("username", "dummy_user2");
+      Map<String,String> testMap = new HashMap<>();
+      testMap.put("username", "dummy_user");
       testMap.put("password", "clear");
       testMap.put("email", "asd@asd.it");
 

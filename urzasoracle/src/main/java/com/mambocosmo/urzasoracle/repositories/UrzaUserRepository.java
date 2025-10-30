@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
 
 @Repository
-public interface UserRepository extends JpaRepository<UrzaUser, UUID> {
+public interface UrzaUserRepository extends JpaRepository<UrzaUser, UUID> {
 
     UrzaUser findByUsernameAndPassword(String username, String password);
 

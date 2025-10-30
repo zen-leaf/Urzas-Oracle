@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.mambocosmo.urzasoracle.services.CardService;
-import com.mambocosmo.urzasoracle.services.UserService;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import lombok.Data;
 public class AppController {
 
     private final CardService cardService;
-    private final UserService userService;
+    private final UrzaUserService userService;
 
     @GetMapping("/")
     public String home(Model model) {
