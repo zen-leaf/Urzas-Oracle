@@ -153,5 +153,11 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
+    
+    public List<Card> getAllCardEntities() {
+        List<Card> page = getREPOSITORY().findAll();
+
+        return page;
+    }
 
 }

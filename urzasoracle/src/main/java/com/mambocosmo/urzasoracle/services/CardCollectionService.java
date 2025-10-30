@@ -42,31 +42,13 @@ public class CardCollectionService
     @Override
     public boolean save(CardCollection fromEntity){
         try{
-            if(fromEntity.getId() != null){
-                UUID id = fromEntity.getId();
-                CardCollection existing = getREPOSITORY().findById(id).orElse(null);
-                if(existing == null){
-                    getREPOSITORY().save(fromEntity);
-                }
-                // } else {
-                //     // ??
-                //     // existing.setOwner(fromEntity.getOwner());
-                //     // existing.setName(fromEntity.getName());
-                //     // existing.setDescription(fromEntity.getDescription());
-                //     // existing.setMainDeckFormat(fromEntity.getMainDeckFormat());
-                //     // existing.setLegalIn(fromEntity.getLegalIn());
-                //     // existing.setCardList(fromEntity.getCardList());
-                //     getREPOSITORY().save(existing);
-                // }
-            } else {
-                getREPOSITORY().save(fromEntity);
-            }
-            return true;
+            getREPOSITORY().save(fromEntity);
         } catch(Exception ex){
             ex.printStackTrace();
             System.out.println("Error saving CardCollection!");
             return false;
         }
+        return true;
     }
 
     // public boolean mapContentCheck(Map<String,String> toCheck){
