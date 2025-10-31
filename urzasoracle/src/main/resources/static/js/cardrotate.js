@@ -1,19 +1,20 @@
 const card = document.getElementById('dragCard');
 
 
-let isDragging = false;
+let isDragging = true;
 let startX, startY;
 let rotationX = 0;
 let rotationY = 0;
 let rotationZ = 0;
 let isSideways = false;
 let isClicking = false;
-let velocityX = 0;
+let velocityX = 20;
 let velocityY = 0;
 let momentumID = 0;
 const DRAG_THRESHOLD = 5;
 const friction = 0.95;
 const snapSpeed = 0.1;
+momentumID = requestAnimationFrame(applyMomentum);
 
 
 const sensitivity = 1;
@@ -147,8 +148,7 @@ function resetRotation() {
 card.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mousemove', handleMouseMove);
 window.addEventListener('mouseup', handleMouseUp);
-resetBtn.addEventListener('click', resetRotation);
 
-card.addEventListener('touchstart', handleMouseDown);
+card.addEventListener('touchstart', handleMouseDown, { passive: true });
 window.addEventListener('touchmove', handleMouseMove);
 window.addEventListener('touchend', handleMouseUp);

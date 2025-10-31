@@ -11,9 +11,9 @@ function reformatText() {
             return wrapperIcon;
         })
         e.innerHTML = editedText;
-
+        e.classList.remove("replaceCandidate");
     });
-    // replaceCandidates.forEach(e => console.log("nooo"));
+
 
 }
 document.addEventListener('DOMContentLoaded', () => { reformatText() })
