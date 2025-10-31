@@ -1,37 +1,55 @@
 package com.mambocosmo.urzasoracle.entities;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
 @Data
+@Table(name = "users")
 @EqualsAndHashCode(callSuper = true)
 public class UrzaUser extends GenericEntity implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @UuidGenerator
     private UUID id;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
 
-    List<? extends GrantedAuthority> authorities;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = ""))
+    List<String> authorities;
 
+    @Column(unique = true)
     private String email;
 
     private String displayName;
@@ -39,7 +57,23 @@ public class UrzaUser extends GenericEntity implements UserDetails {
     private LocalDate registerDate;
 
     @Override
+    public List<? extends GrantedAuthority> getAuthorities() {
+
+        return authorities.stream().map(e -> new SimpleGrantedAuthority(e)).toList();
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> in) {
+        this.authorities = in.stream().map(e -> e.getAuthority()).toList();
+    }
+
+    public void setAuthorities(List<String> in) {
+        this.authorities = in;
+
+    }
+
+    @Override
     public String getPassword() {
+
         return this.password;
     }
 
@@ -66,7 +100,7 @@ public class UrzaUser extends GenericEntity implements UserDetails {
     // AGGIUNGI QUESTO METODO
     public boolean isAdmin() {
         return authorities != null && authorities.stream()
-            .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+                .anyMatch(auth -> "ROLE_ADMIN".equals(auth));
     }
 
     @ToString.Exclude

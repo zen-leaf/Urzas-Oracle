@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.mambocosmo.urzasoracle.services.UserService;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
     
     @Autowired
-    private UserService userService;
+    private UrzaUserService userService;
 
     @GetMapping("/login")
     public String loginPage(@RequestParam(required = false) String error, Model model) {

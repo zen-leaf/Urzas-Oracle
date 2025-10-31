@@ -36,13 +36,13 @@ public class CardRestController {
 
     @GetMapping("/saveAll")
     public String saveAll() {
-        List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
         System.out.println("Saving cards with their relationships");
-        myCards.forEach(e -> {
-            getCARDSERVICE().save(e);
-            System.out.println(e.getCard_faces());
-            System.out.println("Saved card: " + e.getName());
-        });
+        List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
+        // myCards.forEach(e -> {
+        //     getCARDSERVICE().save(e);
+        //     // System.out.println(e.getCard_faces());
+        // });
+        // System.out.println("Saved card: " + e.getName());
         // Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
         // return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique
         // faces found and "+myCards.size()+" cards saved.";

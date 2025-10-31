@@ -5,17 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.mambocosmo.urzasoracle.DTO.UserDTO;
-import com.mambocosmo.urzasoracle.converters.UserConverter;
+import com.mambocosmo.urzasoracle.DTO.UrzaUserDTO;
+import com.mambocosmo.urzasoracle.converters.UrzaUserConverter;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
-import com.mambocosmo.urzasoracle.repositories.UserRepository;
+import com.mambocosmo.urzasoracle.repositories.UrzaUserRepository;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,10 +22,12 @@ import lombok.EqualsAndHashCode;
 @Service
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter, UserRepository>
+
+public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaUserConverter, UrzaUserRepository>
         implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UrzaUserRepository URZAUSEREPOSITORY;
+
     private final PasswordEncoder passwordEncoder;
 
     public UrzaUser construct(Map<String, String> fromData) {
@@ -34,53 +35,53 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
     }
 
     public boolean registerUser(Map<String, String> userData) {
-        if (getUserRepository().findByUsername(userData.get("username")) != null) {
+        if (getURZAUSEREPOSITORY().findByUsername(userData.get("username")) != null) {
             return false;
         }
-        if (getUserRepository().findByEmail(userData.get("email")) != null) {
+        if (getURZAUSEREPOSITORY().findByEmail(userData.get("email")) != null) {
             return false;
         }
 
         UrzaUser user = new UrzaUser();
-        user.setId(UUID.randomUUID());
+        // user.setId(UUID.randomUUID());
         user.setUsername(userData.get("username"));
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
-        user.setDisplayName(userData.get("displayName"));
-        user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        user.setDisplayName(userData.get("displayName")); // Default displayName = username
+        user.setAuthorities(List.of("ROLE_USER"));
         user.setRegisterDate(LocalDate.now());
 
-        getUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public boolean registerAdmin(Map<String, String> userData) {
-        if (getUserRepository().findByUsername(userData.get("username")) != null) {
+        if (getURZAUSEREPOSITORY().findByUsername(userData.get("username")) != null) {
             return false;
         }
-        if (getUserRepository().findByEmail(userData.get("email")) != null) {
+        if (getURZAUSEREPOSITORY().findByEmail(userData.get("email")) != null) {
             return false;
         }
 
         UrzaUser user = new UrzaUser();
-        user.setId(UUID.randomUUID());
+        // user.setId(UUID.randomUUID());
         user.setUsername(userData.get("username"));
         user.setPassword(getPasswordEncoder().encode(userData.get("password")));
         user.setEmail(userData.get("email"));
         user.setDisplayName(userData.get("displayName"));
-        user.setAuthorities(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        user.setAuthorities(List.of("ROLE_ADMIN"));
         user.setRegisterDate(LocalDate.now());
 
-        getUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public UrzaUser findByUsername(String username) {
-        return getUserRepository().findByUsername(username);
+        return getURZAUSEREPOSITORY().findByUsername(username);
     }
 
     public boolean updateUser(String username, Map<String, String> userData) {
-        UrzaUser user = getUserRepository().findByUsername(username);
+        UrzaUser user = getURZAUSEREPOSITORY().findByUsername(username);
         if (user == null) {
             return false;
         }
@@ -92,12 +93,12 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
             user.setDisplayName(userData.get("displayName"));
         }
 
-        getUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public boolean changePassword(String username, String currentPassword, String newPassword) {
-        UrzaUser user = getUserRepository().findByUsername(username);
+        UrzaUser user = getURZAUSEREPOSITORY().findByUsername(username);
         if (user == null) {
             return false;
         }
@@ -107,46 +108,46 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         }
 
         user.setPassword(getPasswordEncoder().encode(newPassword));
-        getUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 
     public boolean deleteUser(String username) {
-        UrzaUser user = getUserRepository().findByUsername(username);
+        UrzaUser user = getURZAUSEREPOSITORY().findByUsername(username);
         if (user == null) {
             return false;
         }
-        getUserRepository().delete(user);
+        getURZAUSEREPOSITORY().delete(user);
         return true;
     }
 
     // METODI PER ADMIN
     public List<UrzaUser> findAllUsers() {
-        return getUserRepository().findAll();
+        return getURZAUSEREPOSITORY().findAll();
     }
 
     public void deleteUserById(UUID id) {
-        getUserRepository().deleteById(id);
+        getURZAUSEREPOSITORY().deleteById(id);
     }
 
     public UrzaUser findById(UUID id) {
-        return getUserRepository().findById(id).orElse(null);
+        return getURZAUSEREPOSITORY().findById(id).orElse(null);
     }
 
     public boolean updateUserByAdmin(UUID userId, String username, String email, String displayName) {
-        UrzaUser user = getUserRepository().findById(userId).orElse(null);
+        UrzaUser user = getURZAUSEREPOSITORY().findById(userId).orElse(null);
         if (user == null || user.isAdmin()) {
             return false;
         }
 
         // Verifica se username è già usato da un altro utente
-        UrzaUser existingUser = getUserRepository().findByUsername(username);
+        UrzaUser existingUser = getURZAUSEREPOSITORY().findByUsername(username);
         if (existingUser != null && !existingUser.getId().equals(userId)) {
             return false;
         }
 
         // Verifica se email è già usata da un altro utente
-        UrzaUser existingEmail = getUserRepository().findByEmail(email);
+        UrzaUser existingEmail = getURZAUSEREPOSITORY().findByEmail(email);
         if (existingEmail != null && !existingEmail.getId().equals(userId)) {
             return false;
         }
@@ -154,7 +155,7 @@ public class UserService extends GenericService<UrzaUser, UserDTO, UserConverter
         user.setUsername(username);
         user.setEmail(email);
         user.setDisplayName(displayName);
-        getUserRepository().save(user);
+        getURZAUSEREPOSITORY().save(user);
         return true;
     }
 

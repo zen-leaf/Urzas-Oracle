@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.mambocosmo.urzasoracle.services.CardService;
-import com.mambocosmo.urzasoracle.services.UserService;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 public class AppController {
 
     private final CardService cardService;
-    private final UserService userService;
+    private final UrzaUserService userService;
 
     @GetMapping("/")
     public String home(Model model) {
 
         // Carica le prime 150 carte per il mosaico della home
-        var topCards = cardService.getAllPaged(0, 150).getContent();
+        var topCards = cardService.getRandomPaged(150).getContent();
         model.addAttribute("topCards", topCards);
         model.addAttribute("active", "home");
         return "index"; // index.html

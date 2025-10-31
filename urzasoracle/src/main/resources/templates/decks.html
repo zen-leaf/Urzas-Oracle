@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/head :: head('I Miei Mazzi')}">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  </head>
+  <body
+    class="bg-dark text-light"
+    style="margin: 0; padding: 0; overflow-x: hidden"
+  >
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main style="padding: 30px 50px; min-height: calc(100vh - 80px)">
+      <header class="mb-5">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="display-4 fw-bold text-warning mb-2">⚔️ I Miei Mazzi</h1>
+            <p class="fs-6 text-secondary">
+              Gestisci i tuoi deck di Magic: The Gathering
+            </p>
+          </div>
+          <button
+            class="btn btn-lg btn-warning fw-bold px-4"
+            data-bs-toggle="modal"
+            data-bs-target="#createDeckModal"
+          >
+            + Nuovo Mazzo
+          </button>
+        </div>
+      </header>
+
+      <div
+        th:if="${decks == null or #lists.isEmpty(decks)}"
+        class="alert alert-warning text-center py-5 mt-5"
+      >
+        <h2>📭 Nessun mazzo creato</h2>
+        <p class="fs-6 text-secondary mb-3">
+          Inizia creando il tuo primo deck!
+        </p>
+        <button
+          class="btn btn-lg btn-warning"
+          data-bs-toggle="modal"
+          data-bs-target="#createDeckModal"
+        >
+          Crea Mazzo
+        </button>
+      </div>
+
+      <div
+        class="row g-4"
+        th:if="${not #lists.isEmpty(decks)}"
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 20px;
+        "
+      >
+        <th:block th:each="deck : ${decks}">
+          <div
+            class="deck-card"
+            style="
+              background: linear-gradient(135deg, #1a1a1a 0%, #2a1a3a 100%);
+              border: 2px solid #ffc107;
+              border-radius: 12px;
+              padding: 20px;
+              transition: all 0.3s ease;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <!-- Background Effect -->
+            <div
+              style="
+                position: absolute;
+                top: -50%;
+                right: -50%;
+                width: 200px;
+                height: 200px;
+                background: radial-gradient(
+                  circle,
+                  rgba(255, 193, 7, 0.1) 0%,
+                  transparent 70%
+                );
+                border-radius: 50%;
+                pointer-events: none;
+              "
+            ></div>
+
+            <div style="position: relative; z-index: 1">
+              <h3 class="text-warning mb-3 fw-bold" th:text="${deck.name}"></h3>
+
+              <p
+                class="text-secondary mb-3 fs-7"
+                th:text="${#strings.abbreviate(deck.description, 80)}"
+              ></p>
+
+              <div class="mb-4">
+                <div class="d-flex gap-2 mb-2">
+                  <span class="badge bg-warning text-dark px-3 py-2 fs-7">
+                    <strong>📋 Formato:</strong>
+                  </span>
+                  <span
+                    class="badge bg-info text-dark px-3 py-2 fs-7"
+                    th:text="${deck.mainDeckFormat}"
+                  ></span>
+                </div>
+                <small class="text-muted d-block"
+                  >👤 di <span th:text="${deck.owner}"></span
+                ></small>
+              </div>
+
+              <div class="d-flex gap-2" style="margin-top: auto">
+                <a
+                  th:href="@{/decks/{id}(id=${deck.id})}"
+                  class="btn btn-sm btn-warning flex-grow-1 fw-bold"
+                  style="flex: 1"
+                >
+                  👁️ Apri
+                </a>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  onclick="deleteDeckBtn(event)"
+                  th:data-deck-id="${deck.id}"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </div>
+    </main>
+
+    <div class="modal fade" id="createDeckModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark border-warning">
+          <div class="modal-header border-warning">
+            <h5 class="modal-title text-warning">⚔️ Crea Nuovo Mazzo</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <form id="createDeckForm">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label text-warning fw-bold"
+                  >Nome Mazzo</label
+                >
+                <input
+                  type="text"
+                  class="form-control bg-dark text-warning border-warning"
+                  id="deckName"
+                  placeholder="Es: Rakdos Control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-warning fw-bold"
+                  >Descrizione</label
+                >
+                <textarea
+                  class="form-control bg-dark text-warning border-warning"
+                  id="deckDesc"
+                  placeholder="Descrivi il tuo deck..."
+                  rows="3"
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-warning fw-bold">Formato</label>
+                <select
+                  class="form-select bg-dark text-warning border-warning"
+                  id="deckFormat"
+                >
+                  <option value="standard">Standard</option>
+                  <option value="pioneer">Pioneer</option>
+                  <option value="modern">Modern</option>
+                  <option value="legacy">Legacy</option>
+                  <option value="vintage">Vintage</option>
+                  <option value="commander" selected>Commander</option>
+                  <option value="oathbreaker">Oathbreaker</option>
+                  <option value="alchemy">Alchemy</option>
+                  <option value="historic">Historic</option>
+                  <option value="brawl">Brawl</option>
+                  <option value="timeless">Timeless</option>
+                  <option value="pauper">Pauper</option>
+                  <option value="penny">Penny</option>
+                  <option value="free">Libero</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer border-warning">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Annulla
+              </button>
+              <button type="submit" class="btn btn-warning fw-bold">
+                Crea
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <style>
+      body {
+        background: linear-gradient(
+          180deg,
+          #0b0f1a 0%,
+          #1a1033 50%,
+          #0b0f1a 100%
+        );
+      }
+      .deck-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(255, 193, 7, 0.3);
+        border-color: #ffce3d;
+      }
+      .form-control:focus,
+      .form-select:focus {
+        background-color: #1a1a1a !important;
+        color: #ffc107 !important;
+        border-color: #ffc107 !important;
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+      }
+      .fs-7 {
+        font-size: 0.85rem;
+      }
+      .badge {
+        font-weight: 500;
+      }
+    </style>
+
+    <script th:inline="javascript">
+      const csrfToken = /*[[${_csrf.token}]]*/ "";
+      const csrfHeader = /*[[${_csrf.headerName}]]*/ "X-CSRF-TOKEN";
+
+      document
+        .getElementById("createDeckForm")
+        ?.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const name = document.getElementById("deckName").value;
+          const desc = document.getElementById("deckDesc").value;
+          const format = document.getElementById("deckFormat").value;
+
+          const url =
+            "/decks/create?name=" +
+            encodeURIComponent(name) +
+            "&description=" +
+            encodeURIComponent(desc) +
+            "&mainDeckFormat=" +
+            encodeURIComponent(format);
+
+          try {
+            const res = await fetch(url, {
+              method: "POST",
+              headers: { [csrfHeader]: csrfToken },
+            });
+
+            if (res.ok) {
+              alert("✅ Mazzo creato!");
+              location.reload();
+            } else {
+              alert("❌ Errore: " + res.status);
+            }
+          } catch (e) {
+            alert("❌ Errore: " + e.message);
+          }
+        });
+
+      function deleteDeckBtn(e) {
+        e.preventDefault();
+        if (!confirm("Sei sicuro di voler eliminare questo mazzo?")) return;
+        const deckId = e.target.closest("button").getAttribute("data-deck-id");
+
+        fetch("/decks/" + deckId, {
+          method: "DELETE",
+          headers: { [csrfHeader]: csrfToken },
+        }).then((r) =>
+          r.ok ? location.reload() : alert("Errore eliminazione")
+        );
+      }
+    </script>
+  </body>
+</html>

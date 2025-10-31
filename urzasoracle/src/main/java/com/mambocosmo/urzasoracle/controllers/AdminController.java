@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
-import com.mambocosmo.urzasoracle.services.UserService;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
     
     @Autowired
-    private UserService userService;
+    private UrzaUserService userService;
 
     @GetMapping("/users")
     public String listUsers(Model model, Principal principal) {

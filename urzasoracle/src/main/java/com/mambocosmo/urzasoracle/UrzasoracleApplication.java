@@ -1,22 +1,7 @@
 package com.mambocosmo.urzasoracle;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import com.mambocosmo.urzasoracle.services.CardService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mambocosmo.urzasoracle.controllers.ArtistController;
-import com.mambocosmo.urzasoracle.entities.Card;
-import com.mambocosmo.urzasoracle.misc.Utils.Util;
 
 @SpringBootApplication
 public class UrzasoracleApplication {
