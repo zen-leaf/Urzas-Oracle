@@ -1,6 +1,9 @@
 package com.mambocosmo.urzasoracle.DTO;
 
+import java.util.Map;
 import java.util.UUID;
+
+import javax.smartcardio.Card;
 
 import com.mambocosmo.urzasoracle.misc.enums.Format;
 
@@ -11,8 +14,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class CardCollectionDTO implements GenericDTO {
     private UUID id;
-    private String owner;
+    private UrzaUserDTO owner;
     private String name;
     private String description;
-    private Format mainDeckFormat;
+    private String mainDeckFormat;
+    private Map<String,String> legalIn;
+    private Map<CardDTO,String> cardInDeck;
 }

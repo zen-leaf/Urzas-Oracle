@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO> {
 
+    private final CardCollectionConverter CARDCOLLECTIONCONVERTER;
+
     @Override
     public UrzaUser fromDToE(UrzaUserDTO dto) {
         UrzaUser u = new UrzaUser();
@@ -20,7 +22,9 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         u.setDisplayName(dto.getDisplayName());
         u.setAuthorities(dto.getAuthorities());
         u.setRegisterDate(dto.getRegistrerDate());
-        u.setUserDecks(dto.getUserDecks());
+        dto.getUserDecks().forEach(entry -> {
+            u.getUserDecks().add(getCARDCOLLECTIONCONVERTER().fromDToE(entry));
+        });;
         
         return u;
     }
@@ -34,7 +38,9 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         dto.setDisplayName(e.getDisplayName());
         dto.setAuthorities(e.getAuthorities());
         dto.setRegistrerDate(e.getRegisterDate());
-        dto.setUserDecks(e.getUserDecks());
+        e.getUserDecks().forEach(entry -> {
+            dto.getUserDecks().add(getCARDCOLLECTIONCONVERTER().fromEToD(entry));
+        });;
         
         return dto;
     }
