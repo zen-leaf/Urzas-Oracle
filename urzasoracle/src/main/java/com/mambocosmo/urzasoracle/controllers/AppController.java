@@ -20,7 +20,7 @@ public class AppController {
     public String home(Model model) {
 
         // Carica le prime 150 carte per il mosaico della home
-        var topCards = cardService.getAllPaged(0, 150).getContent();
+        var topCards = cardService.getRandomPaged(150).getContent();
         model.addAttribute("topCards", topCards);
         model.addAttribute("active", "home");
         return "index"; // index.html

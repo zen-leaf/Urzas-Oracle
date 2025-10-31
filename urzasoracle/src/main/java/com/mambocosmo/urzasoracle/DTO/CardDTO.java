@@ -14,7 +14,7 @@ public class CardDTO implements GenericDTO {
     private String manaCost;
     private String typeline;
     private Map<String, String> images;
-    private List<CardFaceDTO> backFace;
+    private CardFaceDTO backFace;
     private String rarity;
     private String flavorText;
     private String oracleText;

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
+import com.mambocosmo.urzasoracle.DTO.CardFaceDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
 
 import lombok.Data;
@@ -36,6 +37,10 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         dto.setTypeline(e.getType_line());
         dto.setImages(e.getImage_uris().isEmpty() ? e.getCard_faces().get(1).getImage_uris() : e.getImage_uris());
         dto.setCardFaces(e.getCard_faces().stream().map(e1 -> getCARDFACECONVERTER().fromEToD(e1)).toList());
+
+        CardFaceDTO defaultBack = e.getCard_faces().size() == 0 ? new CardFaceDTO("blank") : null;
+
+        dto.setBackFace(dto.getCardFaces().size() > 0 ? dto.getCardFaces().get(0) : defaultBack);
         dto.setFlavorText(e.getFlavor_text());
         dto.setOracleText(e.getOracle_text());
         dto.setColorIdentity(e.getColor_identity().stream().map(entry -> entry.toString()).toList());
