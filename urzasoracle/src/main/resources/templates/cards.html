@@ -18,7 +18,7 @@
       <form th:action="@{/cards}" method="get" class="mx-auto" style="max-width:700px;">
         <div class="input-group input-group-lg shadow">
           <input type="text" name="q" class="form-control bg-dark text-warning border-warning"
-            placeholder="Cerca per nome..." th:value="${query}">
+            placeholder="Cerca per nome..." th:value="${lastQuery}">
           <button class="btn btn-warning fw-bold" type="submit">Cerca</button>
           <th:block th:if="${query != ''}">
             <a th:href="@{/cards}" class="btn btn-outline-warning">Reset</a>
