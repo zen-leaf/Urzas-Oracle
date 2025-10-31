@@ -20,32 +20,31 @@ import lombok.EqualsAndHashCode;
 
 @Service
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 public class CardCollectionService
         extends GenericService<CardCollection, CardCollectionDTO, CardCollectionConverter, CardCollectionRepository> {
 
     @Override
     public CardCollection construct(Map<String, String> fromData) {
         CardCollection cc = new CardCollection();
-        try{
+        try {
             cc = getCONTEXT().getBean(CardCollection.class, fromData);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Error generating CardCollection from map!");
             e.printStackTrace();
         }
         return cc;
     }
 
-    public List<CardCollection> getByName(String name){
+    public List<CardCollection> getByName(String name) {
         return getREPOSITORY().findByName(name);
     }
 
     @Override
-    public boolean save(CardCollection fromEntity){
-        try{
+    public boolean save(CardCollection fromEntity) {
+        try {
             getREPOSITORY().save(fromEntity);
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("Error saving CardCollection!");
             return false;
@@ -53,12 +52,19 @@ public class CardCollectionService
         return true;
     }
 
-    // ========== NUOVI METODI PER DECK ==========
+    public Integer getTotalCardsByDeckId(UUID deckId) {
+        CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
+        if (deck == null) return 0;
+
+        return deck.getCardList().stream()
+                .mapToInt(card -> Integer.parseInt(card.getQuantity()))
+                .sum();
+    }
 
     public List<CardInDeckDTO> getCardsByDeck(UUID deckId) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
         if (deck == null) return List.of();
-        
+
         return deck.getCardList().stream()
                 .map(entity -> {
                     CardInDeckDTO dto = new CardInDeckDTO();

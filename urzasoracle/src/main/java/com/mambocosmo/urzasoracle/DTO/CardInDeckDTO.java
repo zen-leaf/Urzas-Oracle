@@ -1,7 +1,6 @@
 package com.mambocosmo.urzasoracle.DTO;
 
 import java.util.UUID;
-
 import lombok.Data;
 
 @Data
