@@ -1,5 +1,6 @@
 package com.mambocosmo.urzasoracle.DTO;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.mambocosmo.urzasoracle.misc.enums.Format;
@@ -15,4 +16,6 @@ public class CardCollectionDTO implements GenericDTO {
     private String name;
     private String description;
     private Format mainDeckFormat;
+    private Integer totalCards;
+    private List<CardInDeckDTO> previewCards;
 }
