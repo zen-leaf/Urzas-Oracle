@@ -52,67 +52,51 @@
         </div>
       </div>
       <!-- Informazioni sulla carta -->
+
       <div class="col-lg-9">
-        <!-- Nome e Tipo -->
-        <div class="mb-3">
-          <h1 class="fw-bold text-warning mb-2" style="
+
+        <div class="row p-3">
+          <!-- Nome e Tipo -->
+          <div class="col-3 mb-3">
+            <h1 class="fw-bold text-warning mb-2" style="
                 font-size: 2.2rem;
                 text-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
-                font-family: 'Georgia', serif;
+                /* font-family: 'Georgia', serif; */
               " th:text="${card.name}"></h1>
-          <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}"></p>
-        </div>
-        <hr class="border-warning mb-4" style="opacity: 0.3" />
-
-        <!-- Mana Cost come testo -->
-        <div class="mb-4" th:if="${card.manaCost != null and card.manaCost != ''}">
-          <small class="text-secondary d-block mb-2">MANA COST</small>
-          <p class="text-warning fw-bold replaceCandidate" style="font-size: 1.1rem" th:text="${card.manaCost}"></p>
-        </div>
-
-        <!-- Dati set, rarità, numero -->
-        <div class="row g-3 mb-4">
-          <div class="col-12">
-            <small class="text-secondary">SET</small>
-            <p class="text-light mb-0 fs-5" th:text="${card.expansionSet != null} ? ${card.expansionSet.name} : 'N/A'">
-            </p>
+            <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}"></p>
           </div>
-          <div class="col-6">
-            <small class="text-secondary">RARITY</small>
-            <p class="text-light mb-0 fs-5" th:text="${card.rarity} ?: 'N/A'"></p>
-          </div>
-          <div class="col-6">
-            <small class="text-secondary">COLLECTOR NUMBER</small>
-            <p class="text-light mb-0 fs-5" th:text="${card.collectorNumber} ?: 'N/A'"></p>
-          </div>
-        </div>
-        <hr class="border-warning mb-4" style="opacity: 0.3" />
+          <!-- <hr class="border-warning mb-4" style="opacity: 0.3" /> -->
+          <div class="col-8 mb-3">
+            <div class="row g-3 mb-4" style="background-color: #444; box-shadow: 0 4px 8px rgba(0,0,0,0.3) ; border-radius: 0.5rem ; color: white; margin-top: 0; padding: auto;" >
+              <!-- Mana Cost come testo -->
+              <div class="col-3" th:if="${card.manaCost != null and card.manaCost != ''}">
+                <small class="text-secondary">MANA COST</small>
+                <p class="text-light mb-0 fs-5 replaceCandidate" style="font-size: 1.1rem" th:text="${card.manaCost}">
+                </p>
+              </div>
 
-        <!-- Legalità e formati -->
-        <div class="mb-4" th:if="${card.legalities != null and !#maps.isEmpty(card.legalities)}">
-          <small class="text-secondary d-block mb-3">LEGALITY</small>
-          <div style="
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-              ">
-            <!-- Esempio per STANDARD -->
-            <div class="legality-item" th:with="status=${card.legalities.get('STANDARD')}">
-              <span class="text-light">Standard</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+              <!-- Dati set, rarità, numero -->
+              <div class="col-3">
+                <small class="text-secondary">SET</small>
+                <p class="text-light mb-0 fs-5">
+                  <img width="30px" height="30px" th:src="${card.expansionSet.icon_svg_uri}"></img>
+                </p>
+              </div>
+              <div class="col-3">
+                <small class="text-secondary">RARITY</small>
+                <p class="text-light mb-0 fs-5" th:text="${card.rarity} ?: 'N/A'"></p>
+              </div>
+              <div class="col-3">
+                <small class="text-secondary">COLLECTOR NUMBER</small>
+                <p class="text-light mb-0 fs-5" th:text="${card.collectorNumber} ?: 'N/A'"></p>
+              </div>
             </div>
-            <!-- altri formati -->
-            <div class="legality-item" th:with="status=${card.legalities.get('PIONEER')}">
-              <span class="text-light">Pioneer</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-            <!-- aggiungi altri formati come necessario -->
           </div>
+
         </div>
         <hr class="border-warning mb-4" style="opacity: 0.3" />
-
+        
+        
         <!-- Oracle Text -->
         <div class="mb-4" th:if="${card.oracleText != null and card.oracleText != ''}">
           <small class="text-secondary d-block mb-2">ORACLE TEXT</small>
@@ -120,32 +104,117 @@
                 white-space: pre-wrap;
                 line-height: 1.6;
                 font-size: 0.95rem;
-              " th:text="${card.oracleText}"></p>
-        </div>
-
-        <!-- Flavor Text -->
-        <div class="mb-4" th:if="${card.flavorText != null and card.flavorText != ''}">
-          <small class="text-secondary d-block mb-2">FLAVOR TEXT</small>
-          <p class="text-secondary fst-italic" style="
+                " th:text="${card.oracleText}"></p>
+      </div>
+      
+      <!-- Flavor Text -->
+      <div class="mb-4" th:if="${card.flavorText != null and card.flavorText != ''}">
+        <small class="text-secondary d-block mb-2">FLAVOR TEXT</small>
+        <p class="text-secondary fst-italic" style="
                 white-space: pre-wrap;
                 line-height: 1.6;
                 border-left: 3px solid rgba(255, 193, 7, 0.2);
                 padding-left: 1rem;
                 font-size: 0.95rem;
-              " th:text="${card.flavorText}"></p>
-        </div>
+                " th:text="${card.flavorText}"></p>
+      </div>
+      
+      <!-- Artista -->
+      
+      <small class="text-secondary d-block mb-2">ILLUSTRATED BY</small>
+      <p class="text-light" style="font-size: 0.95rem" th:text="${#strings.listJoin(card.artistNames, ', ')}"></p>
+      
+      <!-- Legalità e formati -->
+      <div class="mb-4" th:if="${card.legalities != null and !#maps.isEmpty(card.legalities)}">
+        <small class="text-secondary d-block mb-3">LEGALITY</small>
+        <div style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.75rem;
+                ">
+          <!-- Esempio per STANDARD -->
+          <div class="legality-item" th:with="status=${card.legalities.get('standard')}">
+            <span class="text-light">Standard</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          <!-- altri formati -->
+          <div class="legality-item" th:with="status=${card.legalities.get('pioneer')}">
+            <span class="text-light">Pioneer</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          <!-- aggiungi altri formati come necessario -->
+          <div class="legality-item" th:with="status=${card.legalities.get('modern')}">
+            <span class="text-light">Modern</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
 
-        <!-- Artista -->
+          <div class="legality-item" th:with="status=${card.legalities.get('legacy')}">
+            <span class="text-light">Legacy</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
 
-        <small class="text-secondary d-block mb-2">ILLUSTRATED BY</small>
-        <p class="text-light" style="font-size: 0.95rem" th:text="${#strings.listJoin(card.artistNames, ', ')}"></p>
-
-        <!-- Bottone Torna -->
-        <div class="mt-5">
-          <a href="/cards" class="btn btn-outline-warning fw-bold">&larr; Back to Cards</a>
+          <div class="legality-item" th:with="status=${card.legalities.get('vintage')}">
+            <span class="text-light">Vintage</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          
+          <div class="legality-item" th:with="status=${card.legalities.get('commander')}">
+            <span class="text-light">Commander</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          
+          <div class="legality-item" th:with="status=${card.legalities.get('alchemy')}">
+            <span class="text-light">Alchemy</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          
+          <div class="legality-item" th:with="status=${card.legalities.get('historic')}">
+            <span class="text-light">Historic</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          
+          <div class="legality-item" th:with="status=${card.legalities.get('timeless')}">
+            <span class="text-light">Timeless</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          
+          <div class="legality-item" th:with="status=${card.legalities.get('pauper')}">
+            <span class="text-light">Pauper</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          
+          <div class="legality-item" th:with="status=${card.legalities.get('penny')}">
+            <span class="text-light">Penny</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
+          
+          <div class="legality-item" th:with="status=${card.legalities.get('premodern')}">
+            <span class="text-light">Pre Modern</span>
+            <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
+            <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
+          </div>
         </div>
       </div>
+      <hr class="border-warning mb-4" style="opacity: 0.3" />
+      
+      <!-- Bottone Torna -->
+      <div class="mt-5">
+        <a href="/cards" class="btn btn-outline-warning fw-bold">&larr; Back to Cards</a>
+      </div>
     </div>
+    </div>
+  </div>
   </main>
 
   <div th:replace="~{fragments/footer :: footer}"></div>
@@ -159,7 +228,7 @@
           rgba(255, 193, 7, 0.08),
           transparent 60%),
         linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%);
-      font-family: "Roboto", sans-serif;
+      /* font-family: "Roboto", sans-serif; */
       min-height: 100vh;
     }
 
@@ -188,7 +257,7 @@
     }
 
     .badge-legal {
-      background: #28a745;
+      background: #28a746af;
       color: white;
       padding: 0.3rem 0.6rem;
       border-radius: 3px;
@@ -207,6 +276,19 @@
 
     hr {
       opacity: 0.2;
+    }
+
+    .card-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+    }
+
+    .badge-legal,
+    .badge-not-legal {
+      width: 40%;
+      text-align: center;
     }
   </style>
   <script src="/js/cardrotate.js" defer></script>
