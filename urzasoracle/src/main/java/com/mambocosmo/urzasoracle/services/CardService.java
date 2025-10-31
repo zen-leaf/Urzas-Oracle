@@ -3,7 +3,6 @@ package com.mambocosmo.urzasoracle.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -40,7 +39,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     @Override
     public boolean save(Card fromEntity) {
         if (fromEntity.getArtistRef() == null) {
-            fromEntity.setArtistRef(new HashSet<>());
+            fromEntity.setArtistRef(new ArrayList<>());
         }
         if (fromEntity.getAll_parts() == null) {
             fromEntity.setAll_parts(new ArrayList<>());
@@ -50,7 +49,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             fromEntity.setCard_faces(new ArrayList<>());
         }
 
-        System.out.println("Card from expansion:" + fromEntity.getExpansion().getName());
+        // System.out.println("Card from expansion:" +
+        // fromEntity.getExpansion().getName());
 
         try {
             getREPOSITORY().save(fromEntity);
@@ -85,19 +85,26 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/uniques.json"));
             List<Card> cardList = new ArrayList<>();
+
             Long myTimer = System.nanoTime();
             System.out.println("start");
             cardData.forEach(e -> {
                 try {
-                    Card myCard = null;
+                    Card myCard = new Card();
                     myCard = mapper.treeToValue(e, new TypeReference<Card>() {
                     });
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
-                    System.out.println(e.toString());
-                    cardList.add(myCard);
+                    // System.out.println(e.toString());
+                    // cardList.add(myCard);
+                    // System.out.println(
+                    // myCard.getName() + " - " + myCard.getId() + " - \n" + "Artist:\n" +
+                    // myCard.getArtistRef());
+                    save(myCard);
+                    System.out.println("Saved card: " + myCard.getName());
+
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
                     System.out.println("Error generating card!!! " + e1.getMessage());
                 }
@@ -151,6 +158,13 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         Page<Card> page = getREPOSITORY().findAll(pageable);
 
         return page.map(card -> getCONVERTER().fromEToD(card));
+    }
+
+    public Page<CardDTO> getRandomPaged(int size) {
+        Pageable pageable = PageRequest.of(0, size);
+        Page<Card> temp = getREPOSITORY().findRandomSubSet(size, pageable);
+        return temp.map(card -> getCONVERTER().fromEToD(card));
+
     }
 
     public List<Card> getAllCardEntities() {
