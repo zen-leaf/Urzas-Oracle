@@ -19,6 +19,6 @@ public class UrzaUserDTO implements GenericDTO {
     private String email;
     private String displayName;
     List<? extends GrantedAuthority> authorities;
-    private LocalDate registrerDate;
+    private LocalDate registerDate;
     private Set<CardCollectionDTO> userDecks;
 }

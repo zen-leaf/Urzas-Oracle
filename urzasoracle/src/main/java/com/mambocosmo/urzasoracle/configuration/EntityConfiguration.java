@@ -1,6 +1,7 @@
 package com.mambocosmo.urzasoracle.configuration;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,8 +62,9 @@ public class EntityConfiguration {
         CardCollection cc = new CardCollection();
         cc.fromMap(fromData);
         // TODO placeholder per testing
-        UrzaUser u = getURZAUSERSERVICE().findByUsername("dummy_user");
-        cc.setOwner(u);
+        // if(fromData.containsKey("user_id"))
+        //     UrzaUser u = getURZAUSERSERVICE().findById(UUID.fromString(fromData.get("user_id")));
+        // cc.setOwner(u);
         return cc;
     }
 

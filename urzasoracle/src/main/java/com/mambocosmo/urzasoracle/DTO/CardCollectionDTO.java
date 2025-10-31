@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class CardCollectionDTO implements GenericDTO {
     private UUID id;
-    private UrzaUserDTO owner;
+    private String owner;
     private String name;
     private String description;
     private String mainDeckFormat;

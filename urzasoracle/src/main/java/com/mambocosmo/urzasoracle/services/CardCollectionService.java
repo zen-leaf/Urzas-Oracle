@@ -21,8 +21,9 @@ import lombok.EqualsAndHashCode;
 @Service
 @Data
 @EqualsAndHashCode(callSuper=true)
-public class CardCollectionService
-        extends GenericService<CardCollection, CardCollectionDTO, CardCollectionConverter, CardCollectionRepository> {
+public class CardCollectionService extends GenericService<CardCollection, CardCollectionDTO, CardCollectionConverter, CardCollectionRepository> {
+
+    private final UrzaUserService URZAUSERSERVICE;
 
     @Override
     public CardCollection construct(Map<String, String> fromData) {
@@ -44,6 +45,8 @@ public class CardCollectionService
     @Override
     public boolean save(CardCollection fromEntity){
         try{
+            String userNameFromDTO = fromEntity.getOwner().getUsername();
+            fromEntity.setOwner(getURZAUSERSERVICE().findByUsername(userNameFromDTO));
             getREPOSITORY().save(fromEntity);
         } catch(Exception ex){
             ex.printStackTrace();

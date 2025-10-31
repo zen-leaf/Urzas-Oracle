@@ -6,7 +6,9 @@ import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardDeckPK;
 import com.mambocosmo.urzasoracle.entities.CardInDeck;
+import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.misc.enums.Format;
+import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
 
@@ -14,25 +16,23 @@ import lombok.Data;
 @Service
 public class CardCollectionConverter implements GenericConverter<CardCollection, CardCollectionDTO> {
 
-    private final UrzaUserConverter URZAUSERCONVERTER;
     private final CardConverter CARDCONVERTER;
 
     @Override
     public CardCollection fromDToE(CardCollectionDTO dto) {
         CardCollection e = new CardCollection();
+        UrzaUser tempU = new UrzaUser();
+        tempU.setUsername(dto.getOwner());
+
         e.setId(dto.getId());
         if (dto.getOwner() != null) // is this necessary
-            e.setOwner(getURZAUSERCONVERTER().fromDToE(dto.getOwner()));
+            e.setOwner(tempU);
         e.setName(dto.getName());
         e.setDescription(dto.getDescription());
         e.setMainDeckFormat(Format.valueOf(dto.getMainDeckFormat()));
 
         dto.getCardInDeck().forEach((key,value) -> { // converting dto's Map<CardDTO,String(quantity)> to List<CardInDeck> 
-            CardInDeck tempCid = new CardInDeck();
-            tempCid.setId(
-                new CardDeckPK( e, getCARDCONVERTER().fromDToE(key))
-            );
-            tempCid.setQuantity(value);
+            CardInDeck tempCid = new CardInDeck(e, getCARDCONVERTER().fromDToE(key), value);
             e.getCardList().add(tempCid);
         });
         return e;
@@ -43,7 +43,7 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
         CardCollectionDTO dto = new CardCollectionDTO();
         dto.setId(e.getId());
         if (e.getOwner() != null) // ditto as above
-            dto.setOwner(getURZAUSERCONVERTER().fromEToD(e.getOwner()));
+            dto.setOwner(e.getOwner().getUsername());
         dto.setName(e.getName());
         dto.setDescription(e.getDescription());
         dto.setMainDeckFormat(e.getMainDeckFormat().toString());

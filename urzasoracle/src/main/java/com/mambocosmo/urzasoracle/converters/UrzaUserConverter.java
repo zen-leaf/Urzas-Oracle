@@ -21,7 +21,7 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         u.setEmail(dto.getEmail());
         u.setDisplayName(dto.getDisplayName());
         u.setAuthorities(dto.getAuthorities());
-        u.setRegisterDate(dto.getRegistrerDate());
+        u.setRegisterDate(dto.getRegisterDate());
         dto.getUserDecks().forEach(entry -> {
             u.getUserDecks().add(getCARDCOLLECTIONCONVERTER().fromDToE(entry));
         });;
@@ -37,7 +37,7 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         dto.setEmail(e.getEmail());
         dto.setDisplayName(e.getDisplayName());
         dto.setAuthorities(e.getAuthorities());
-        dto.setRegistrerDate(e.getRegisterDate());
+        dto.setRegisterDate(e.getRegisterDate());
         e.getUserDecks().forEach(entry -> {
             dto.getUserDecks().add(getCARDCOLLECTIONCONVERTER().fromEToD(entry));
         });;
