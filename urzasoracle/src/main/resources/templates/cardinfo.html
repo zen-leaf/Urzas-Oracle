@@ -133,81 +133,20 @@
           <small class="text-secondary d-block mb-3">LEGALITY</small>
           <div style="
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 0.75rem;
                 ">
-            <!-- Esempio per STANDARD -->
-            <div class="legality-item" th:with="status=${card.legalities.get('standard')}">
-              <span class="text-light">Standard</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-            <!-- altri formati -->
-            <div class="legality-item" th:with="status=${card.legalities.get('pioneer')}">
-              <span class="text-light">Pioneer</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-            <!-- aggiungi altri formati come necessario -->
-            <div class="legality-item" th:with="status=${card.legalities.get('modern')}">
-              <span class="text-light">Modern</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
+            <!-- th:with="status=${card.legalities.get('standard')}" -->
+            <th:block th:each="format : ${card.legalities}">
+              <div class="row px-2">
+                <span th:text="${#strings.capitalize(format.key)}" class="col-md-12 format-label">Standard</span>
+   
+                <span th:if="${format.value == 'legal'}" class="col-md-5 badge legal">LEGAL</span>
+                <span th:if="${format.value != 'legal'}" class="col-md-5 badge not-legal">NOT LEGAL</span>
+              </div>
 
-            <div class="legality-item" th:with="status=${card.legalities.get('legacy')}">
-              <span class="text-light">Legacy</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
+            </th:block>
 
-            <div class="legality-item" th:with="status=${card.legalities.get('vintage')}">
-              <span class="text-light">Vintage</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-
-            <div class="legality-item" th:with="status=${card.legalities.get('commander')}">
-              <span class="text-light">Commander</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-
-            <div class="legality-item" th:with="status=${card.legalities.get('alchemy')}">
-              <span class="text-light">Alchemy</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-
-            <div class="legality-item" th:with="status=${card.legalities.get('historic')}">
-              <span class="text-light">Historic</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-
-            <div class="legality-item" th:with="status=${card.legalities.get('timeless')}">
-              <span class="text-light">Timeless</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-
-            <div class="legality-item" th:with="status=${card.legalities.get('pauper')}">
-              <span class="text-light">Pauper</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-
-            <div class="legality-item" th:with="status=${card.legalities.get('penny')}">
-              <span class="text-light">Penny</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-
-            <div class="legality-item" th:with="status=${card.legalities.get('premodern')}">
-              <span class="text-light">Pre Modern</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
           </div>
         </div>
         <hr class="border-warning mb-4" style="opacity: 0.3" />
@@ -249,34 +188,6 @@
       transform: scale(1.05);
     }
 
-    .legality-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem;
-      background: rgba(26, 16, 51, 0.5);
-      border: 1px solid rgba(255, 193, 7, 0.1);
-      border-radius: 4px;
-      font-size: 0.9rem;
-    }
-
-    .badge-legal {
-      background: #28a746af;
-      color: white;
-      padding: 0.3rem 0.6rem;
-      border-radius: 3px;
-      font-weight: bold;
-      font-size: 0.75rem;
-    }
-
-    .badge-not-legal {
-      background: #444;
-      color: #888;
-      padding: 0.3rem 0.6rem;
-      border-radius: 3px;
-      font-weight: bold;
-      font-size: 0.75rem;
-    }
 
     hr {
       opacity: 0.2;

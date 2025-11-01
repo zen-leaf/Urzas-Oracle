@@ -1,10 +1,52 @@
 .cardinfoholder {
-    background: black;
+    background: linear-gradient(to right bottom, #141416 33%, #292941);
     /* border: 1px 0px 1px 0px dashed red; */
-    border-style:groove;
-    border-width: 0px 1px;
+    border-style: ridge;
+    border-width: 0px 3px;
     border-color: #ffc107;
     background-origin: padding-box;
+}
+
+.legality-item {
+    /* display: flex; */
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.3rem 0rem 0rem 0rem;
+    /* padding: 0.6rem; */
+    background: rgba(26, 16, 51, 0.5);
+    border: 1px solid rgba(255, 193, 7, 0.1);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.badge {
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.75rem;
+    width: 100%;
+}
+
+.badge.legal {
+    background: #28a746af;
+    color: white;
+}
+
+.badge.not-legal {
+    background: #444;
+    color: #888;
+
+}
+
+
+.format-label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #ffffff;
+
+
+
+    padding: 0 0px;
 }
 
 .card-symbol+.card-symbol {
