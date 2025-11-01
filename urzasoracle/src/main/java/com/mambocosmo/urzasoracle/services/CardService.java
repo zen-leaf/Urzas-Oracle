@@ -179,12 +179,17 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
     public Page<CardDTO> searchByQueryPaged(String q, int page, int size) {
         Specification<Card> spec = Specification.unrestricted();
+        if (!q.toLowerCase().contains("nonplayable:")) {
+            System.out.println("adding default artwork exclusion");
+            q += " nonplayable:exclude";
+            System.out.println(q);
+        }
 
         for (SearchCriteria query : SearchCriteria.StringToCriteria(q)) {
             QueryParser cardQ = new QueryParser(query);
             spec = spec.and(cardQ);
         }
-        Pageable pageable = PageRequest.of(0, size);
+        Pageable pageable = PageRequest.of(page, size);
         return getREPOSITORY().findAll(spec, pageable).map(e -> getCONVERTER().fromEToD(e));
 
     }
