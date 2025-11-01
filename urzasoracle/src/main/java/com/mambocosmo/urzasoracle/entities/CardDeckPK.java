@@ -15,7 +15,6 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class CardDeckPK implements Serializable {
 
     @EqualsAndHashCode.Exclude
