@@ -1,5 +1,7 @@
 package com.mambocosmo.urzasoracle.entities;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +43,7 @@ public class CardFace extends GenericEntity {
     // @EmbeddedId
     // private CardFacePK faceid;
 
-    private String name;
+    private String name = "";
 
     @ManyToOne
     @JoinColumn(name = "ofCard", referencedColumnName = "card_id")
@@ -49,36 +51,36 @@ public class CardFace extends GenericEntity {
     @EqualsAndHashCode.Exclude
     private Card faceOfCard;
 
-    private String mana_cost;
+    private String mana_cost = "";
 
-    private String type_line;
+    private String type_line = "";
 
     @Column(length = 2048)
-    private String oracle_text;
+    private String oracle_text = "";
 
     @ElementCollection
     @CollectionTable(name = "card_face_colors", joinColumns = @JoinColumn(name = "card_face_id"))
     @Column(name = "color")
-    private List<String> colors;
+    private List<String> colors = new ArrayList<>(); 
 
-    private String power;
+    private String power = "";
 
-    private String toughness;
+    private String toughness = "";
 
-    private String loyalty;
+    private String loyalty = "";
 
     @Column(length = 512)
-    private String flavor_text;
+    private String flavor_text = "";
 
-    private String artist;
+    private String artist = "";
 
     private UUID artist_id;
 
-    private String illustration_id;
+    private String illustration_id = "";
 
     @ElementCollection
     @CollectionTable(name = "card_face_images", joinColumns = @JoinColumn(name = "card_face_id", foreignKey = @ForeignKey(name = "fk_face_images")))
     @MapKeyColumn(name = "image_type")
     @Column(name = "image_uri", length = 500)
-    private Map<String, String> image_uris;
+    private Map<String, String> image_uris = new HashMap<>();
 }
