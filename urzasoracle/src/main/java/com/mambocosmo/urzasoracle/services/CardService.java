@@ -85,7 +85,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/uniques.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
             List<Card> cardList = new ArrayList<>();
 
             Long myTimer = System.nanoTime();
