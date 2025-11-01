@@ -10,9 +10,9 @@ import com.mambocosmo.urzasoracle.entities.Artist;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
-import com.mambocosmo.urzasoracle.entities.CardInDeck;
 import com.mambocosmo.urzasoracle.entities.CardPart;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
+import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
 import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
@@ -65,7 +65,7 @@ public class EntityConfiguration {
         cc.setOwner(u);
         return cc;
     }
-    
+
     @Bean
     @Scope("prototype")
     public UrzaUser urzaUser(Map<String, String> fromData) {
@@ -73,13 +73,21 @@ public class EntityConfiguration {
         u.fromMap(fromData);
         return u;
     }
-    
+
+    @Bean
+    @Scope("prototype")
+    public SearchCriteria searchCriteria() {
+        SearchCriteria sc = new SearchCriteria();
+
+        return sc;
+    }
+
     // @Bean
     // @Scope("prototype")
     // public CardInDeck cardInDeck(Map<String, String> fromData) {
-    //     CardInDeck u = new CardInDeck();
-    //     u.fromMap(fromData);
-    //     return u;
+    // CardInDeck u = new CardInDeck();
+    // u.fromMap(fromData);
+    // return u;
     // }
 
 }

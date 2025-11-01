@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.converters.CardConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.misc.Utils.QueryParser;
+import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
 import com.mambocosmo.urzasoracle.repositories.CardRepository;
 
 import lombok.Data;
@@ -171,6 +175,18 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         List<Card> page = getREPOSITORY().findAll();
 
         return page;
+    }
+
+    public Page<CardDTO> searchByQueryPaged(String q, int page, int size) {
+        Specification<Card> spec = Specification.unrestricted();
+
+        for (SearchCriteria query : SearchCriteria.StringToCriteria(q)) {
+            QueryParser cardQ = new QueryParser(query);
+            spec = spec.and(cardQ);
+        }
+        Pageable pageable = PageRequest.of(0, size);
+        return getREPOSITORY().findAll(spec, pageable).map(e -> getCONVERTER().fromEToD(e));
+
     }
 
 }
