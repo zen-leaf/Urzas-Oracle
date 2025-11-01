@@ -35,6 +35,7 @@
               <span
                 class="badge bg-info text-dark fs-6 px-3 py-2"
                 th:text="${deck.mainDeckFormat}"
+                id="deckFormatBadge"
               ></span>
             </div>
           </div>
@@ -120,7 +121,7 @@
       </div>
     </main>
 
-    <!-- PREVIEW HOVER CARTA -->
+    <!-- PREVIEW HOVER CARTA (SEGUE CURSORE) -->
     <div id="cardPreview" class="card-preview">
       <img id="cardPreviewImg" src="" alt="Card Preview" />
     </div>
@@ -150,7 +151,7 @@
       </div>
     </div>
 
-    <!-- MODAL: AGGIUNGI CARTE (CON PAGINAZIONE) -->
+    <!-- MODAL: AGGIUNGI CARTE (CON PAGINAZIONE + FILTRO LEGALITÀ) -->
     <div class="modal fade" id="addCardModal" tabindex="-1">
       <div class="modal-dialog modal-fullscreen">
         <div class="modal-content bg-dark">
@@ -182,7 +183,7 @@
             <div class="mx-auto" style="max-width: 1600px">
               <!-- FILTRI -->
               <div class="row g-3 mb-4">
-                <div class="col-md-4">
+                <div class="col-md-3">
                   <input
                     type="text"
                     class="form-control bg-secondary text-white border-warning"
@@ -190,7 +191,7 @@
                     placeholder="🔍 Cerca per nome..."
                   />
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <select
                     class="form-select bg-secondary text-white border-warning"
                     id="typeFilter"
@@ -205,7 +206,7 @@
                     <option value="Planeswalker">Planeswalker</option>
                   </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <select
                     class="form-select bg-secondary text-white border-warning"
                     id="colorFilter"
@@ -217,6 +218,16 @@
                     <option value="R">🔴 Rosso</option>
                     <option value="G">🟢 Verde</option>
                     <option value="C">◯ Incolore</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select
+                    class="form-select bg-secondary text-white border-warning"
+                    id="legalityFilter"
+                  >
+                    <option value="">Tutte le legalità</option>
+                    <option value="legal">✅ Solo legali</option>
+                    <option value="not_legal">❌ Solo non legali</option>
                   </select>
                 </div>
                 <div class="col-md-2">
@@ -379,7 +390,6 @@
           sans-serif;
       }
 
-      /* SCROLLBAR CUSTOM */
       .custom-scrollbar::-webkit-scrollbar {
         width: 10px;
       }
@@ -398,7 +408,6 @@
         box-shadow: 0 0 10px rgba(255, 193, 7, 0.7);
       }
 
-      /* LAYOUT MOXFIELD: GRID MULTICOLONNA */
       .deck-grid-container {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -463,26 +472,21 @@
         font-size: 14px;
       }
 
-      /* PREVIEW HOVER CARTA */
       .card-preview {
         position: fixed;
         z-index: 9999;
         pointer-events: none;
         display: none;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%);
       }
 
       .card-preview img {
-        width: 300px;
+        width: 280px;
         border-radius: 14px;
         box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9),
           0 0 30px rgba(255, 193, 7, 0.5);
         border: 3px solid rgba(255, 193, 7, 0.6);
       }
 
-      /* MENU CONTESTUALE */
       .context-menu {
         position: fixed;
         background: rgba(20, 20, 40, 0.98);
@@ -528,7 +532,6 @@
         color: #ff6b6b;
       }
 
-      /* MODAL CARD SELECTOR */
       .card-selector {
         position: relative;
         cursor: pointer;
@@ -598,18 +601,61 @@
       const csrfHeader = /*[[${_csrf.headerName}]]*/ "X-CSRF-TOKEN";
       const isOwner = /*[[${isOwner}]]*/ false;
       let currentTotalCards = parseInt(/*[[${totalCards}]]*/ 0);
+      const deckFormat = /*[[${deck.mainDeckFormat}]]*/ "standard";
 
       let allCards = [];
       let cardQuantities = new Map();
       let deckCards = /*[[${cards}]]*/ [];
       let contextCardId = null;
 
-      // PAGINAZIONE
       let currentPage = 1;
       let itemsPerPage = 50;
       let filteredCards = [];
 
-      // CATEGORIZZA LE CARTE
+      const FORMAT_RULES = {
+        standard: { name: "Standard", maxCopies: 4, basicLandException: true },
+        modern: { name: "Modern", maxCopies: 4, basicLandException: true },
+        commander: {
+          name: "Commander",
+          maxCopies: 1,
+          basicLandException: true,
+          requiresCommander: true,
+          deckSize: 100,
+        },
+        legacy: { name: "Legacy", maxCopies: 4, basicLandException: true },
+      };
+
+      const BASIC_LANDS = [
+        "Plains",
+        "Island",
+        "Swamp",
+        "Mountain",
+        "Forest",
+        "Snow-Covered Plains",
+        "Snow-Covered Island",
+        "Snow-Covered Swamp",
+        "Snow-Covered Mountain",
+        "Snow-Covered Forest",
+        "Wastes",
+      ];
+
+      function isBasicLand(cardName) {
+        return BASIC_LANDS.some((land) => cardName.includes(land));
+      }
+
+      function isLegalInFormat(card, format) {
+        if (!card.legalities) return false;
+        const formatKey = format.toUpperCase();
+        return card.legalities[formatKey] === "legal";
+      }
+
+      function getMaxCopies(card, format) {
+        if (isBasicLand(card.name)) return Infinity;
+        const rules =
+          FORMAT_RULES[format.toLowerCase()] || FORMAT_RULES.standard;
+        return rules.maxCopies;
+      }
+
       function categorizeCards(cards, sortBy = "name") {
         const categories = {
           Commander: [],
@@ -645,13 +691,10 @@
 
         Object.keys(categories).forEach((key) => {
           categories[key].sort((a, b) => {
-            if (sortBy === "name") {
-              return a.cardName.localeCompare(b.cardName);
-            } else if (sortBy === "quantity") {
+            if (sortBy === "name") return a.cardName.localeCompare(b.cardName);
+            if (sortBy === "quantity")
               return parseInt(b.quantity) - parseInt(a.quantity);
-            } else if (sortBy === "type") {
-              return a.typeline.localeCompare(b.typeline);
-            }
+            if (sortBy === "type") return a.typeline.localeCompare(b.typeline);
             return 0;
           });
         });
@@ -659,7 +702,6 @@
         return categories;
       }
 
-      // RENDER CATEGORIE (LAYOUT MOXFIELD)
       function renderCategories(sortBy = "name") {
         const categorized = categorizeCards(deckCards, sortBy);
         const container = document.getElementById("deckGridContainer");
@@ -685,7 +727,8 @@
                        onclick="viewCardInfo('${card.cardId}')"
                        oncontextmenu="openContextMenu(event, '${card.cardId}')"
                        onmouseenter="showCardPreview(event)"
-                       onmouseleave="hideCardPreview()">
+                       onmouseleave="hideCardPreview()"
+                       onmousemove="updatePreviewPosition(event)">
                     <span class="card-qty">${card.quantity}</span>
                     <span class="card-name">${card.cardName}</span>
                   </div>
@@ -708,7 +751,6 @@
         renderCategories(e.target.value);
       });
 
-      // PREVIEW CARTA
       function showCardPreview(e) {
         const row = e.currentTarget;
         const imgUrl = row.getAttribute("data-img");
@@ -719,6 +761,16 @@
 
         previewImg.src = imgUrl;
         preview.style.display = "block";
+        updatePreviewPosition(e);
+      }
+
+      function updatePreviewPosition(e) {
+        const preview = document.getElementById("cardPreview");
+        if (preview.style.display !== "block") return;
+
+        const offset = 20;
+        preview.style.left = e.pageX + offset + "px";
+        preview.style.top = e.pageY + offset + "px";
       }
 
       function hideCardPreview() {
@@ -729,7 +781,6 @@
         window.location.href = `/cards/${cardId}`;
       }
 
-      // MENU CONTESTUALE
       function openContextMenu(e, cardId) {
         e.preventDefault();
         contextCardId = cardId;
@@ -809,7 +860,6 @@
         if (res.ok) location.reload();
       }
 
-      // MODAL AGGIUNGI CARTE CON PAGINAZIONE
       document
         .getElementById("addCardModal")
         ?.addEventListener("show.bs.modal", function () {
@@ -834,12 +884,14 @@
           .value.toLowerCase();
         const type = document.getElementById("typeFilter").value;
         const color = document.getElementById("colorFilter").value;
+        const legality = document.getElementById("legalityFilter").value;
 
         filteredCards = allCards.filter((card) => {
           const matchSearch =
             !search || (card.name && card.name.toLowerCase().includes(search));
           const matchType =
             !type || (card.typeline && card.typeline.includes(type));
+
           let matchColor = true;
           if (color) {
             if (color === "C") {
@@ -850,7 +902,18 @@
               matchColor = cardColors.includes(color);
             }
           }
-          return matchSearch && matchType && matchColor;
+
+          let matchLegality = true;
+          if (legality) {
+            const isLegal = isLegalInFormat(card, deckFormat);
+            if (legality === "legal") {
+              matchLegality = isLegal;
+            } else if (legality === "not_legal") {
+              matchLegality = !isLegal;
+            }
+          }
+
+          return matchSearch && matchType && matchColor && matchLegality;
         });
 
         currentPage = 1;
@@ -896,12 +959,23 @@
           .map((card) => {
             const qty = cardQuantities.get(card.id) || 0;
             const img = card.images?.normal || "";
+            const isLegal = isLegalInFormat(card, deckFormat);
+
+            const legalityBadge = isLegal
+              ? '<span class="badge bg-success" style="position:absolute;top:4px;right:4px;font-size:10px;z-index:1;">✓</span>'
+              : '<span class="badge bg-danger" style="position:absolute;top:4px;right:4px;font-size:10px;z-index:1;">✗</span>';
+
+            const landBadge = isBasicLand(card.name)
+              ? '<span class="badge bg-info" style="position:absolute;top:4px;left:4px;font-size:9px;z-index:1;">∞</span>'
+              : "";
 
             return `
             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
               <div class="card-selector" 
                    onclick="clickCard('${card.id}')" 
                    oncontextmenu="rightClickCard(event, '${card.id}')">
+                ${legalityBadge}
+                ${landBadge}
                 ${
                   img
                     ? `<img src="${img}" loading="lazy" alt="${card.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">`
@@ -956,18 +1030,24 @@
       }
 
       function clickCard(id) {
+        const card = allCards.find((c) => c.id === id);
+        if (!card) return;
+
         const current = cardQuantities.get(id) || 0;
-        if (current >= 4) return;
+        const maxCopies = getMaxCopies(card, deckFormat);
 
-        const newQty = current + 1;
+        if (current >= maxCopies && maxCopies !== Infinity) {
+          alert(`⚠️ Massimo ${maxCopies} copie per carta`);
+          return;
+        }
+
         const newTotal = currentTotalCards + 1;
-
         if (newTotal > 100) {
           alert("⚠️ Massimo 100 carte nel deck");
           return;
         }
 
-        cardQuantities.set(id, newQty);
+        cardQuantities.set(id, current + 1);
         updateStatus();
         displayCards();
       }
@@ -1013,6 +1093,7 @@
         document.getElementById("searchInput").value = "";
         document.getElementById("typeFilter").value = "";
         document.getElementById("colorFilter").value = "";
+        document.getElementById("legalityFilter").value = "";
         applyFilters();
       }
 
@@ -1024,6 +1105,9 @@
         ?.addEventListener("change", applyFilters);
       document
         .getElementById("colorFilter")
+        ?.addEventListener("change", applyFilters);
+      document
+        .getElementById("legalityFilter")
         ?.addEventListener("change", applyFilters);
 
       document
