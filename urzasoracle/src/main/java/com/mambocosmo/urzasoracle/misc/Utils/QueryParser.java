@@ -1,8 +1,10 @@
 package com.mambocosmo.urzasoracle.misc.Utils;
 
+import org.hibernate.query.criteria.spi.CriteriaBuilderExtension;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.scheduling.config.CronTask;
 
 import com.mambocosmo.urzasoracle.entities.Card;
 
@@ -25,7 +27,19 @@ public class QueryParser implements Specification<Card> {
             @NonNull CriteriaBuilder criteriaBuilder) {
         if (CRITERIA.getLogic().equalsIgnoreCase(":")) {
             System.out.println("parsing equals");
+            if (CRITERIA.getKey().equals("nonplayable")) {
+                System.out.println("parsing nonplayable " + CRITERIA);
+                if (!CRITERIA.getValue().equals("include") || !CRITERIA.getValue().equals("true")) {
+                    return criteriaBuilder.notLike(criteriaBuilder.lower(root.get("layout")), "art_series");
+                }
+                return criteriaBuilder.notLike(criteriaBuilder.lower(root.get("layout")), "art_series");
+
+                // return criteriaBuilder.isNotEmpty(root.get("layout"));
+                // return criteriaBuilder.isNotNull(criteriaBuilder.lower(root.get("layout")));
+            }
+
             if (CRITERIA.getKey().equals("name") || CRITERIA.getKey().equals("oracle")) {
+
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get(CRITERIA.getKey())),
                         ("%" + CRITERIA.getValue() + "%"));
             }

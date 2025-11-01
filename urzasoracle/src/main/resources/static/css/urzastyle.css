@@ -1,3 +1,12 @@
+.cardinfoholder {
+    background: black;
+    /* border: 1px 0px 1px 0px dashed red; */
+    border-style:groove;
+    border-width: 0px 1px;
+    border-color: #ffc107;
+    background-origin: padding-box;
+}
+
 .card-symbol+.card-symbol {
     margin-left: 2px;
 }
