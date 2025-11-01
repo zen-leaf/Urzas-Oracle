@@ -1,5 +1,6 @@
 package com.mambocosmo.urzasoracle.entities;
 
+import java.sql.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class CardExpansionSet extends GenericEntity {
     @Column(name = "expansion_id")
     private UUID id;
 
+    @Column(unique = true)
     private String code;
 
     private String name;
@@ -37,7 +39,7 @@ public class CardExpansionSet extends GenericEntity {
 
     private String search_uri;
 
-    private String released_at;
+    private Date released_at;
 
     private SetType set_type;
 

@@ -1,5 +1,7 @@
 package com.mambocosmo.urzasoracle.converters;
 
+import java.sql.Date;
+
 import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.CardExpansionSetDTO;
@@ -10,8 +12,12 @@ public class CardExpansionSetConverter implements GenericConverter<CardExpansion
 
     @Override
     public CardExpansionSet fromDToE(CardExpansionSetDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fromDToE'");
+        CardExpansionSet ces = new CardExpansionSet();
+        ces.setCode(dto.getCode());
+        ces.setName(dto.getName());
+        ces.setReleased_at(Date.valueOf(dto.getRelease_date()));
+        ces.setIcon_svg_uri(dto.getIcon_svg_uri());
+        return ces;
     }
 
     @Override
@@ -19,7 +25,7 @@ public class CardExpansionSetConverter implements GenericConverter<CardExpansion
         CardExpansionSetDTO dto = new CardExpansionSetDTO();
         dto.setCode(e.getCode());
         dto.setName(e.getName());
-        dto.setRelease_date(e.getReleased_at());
+        dto.setRelease_date(String.valueOf(e.getReleased_at()));
         dto.setIcon_svg_uri(e.getIcon_svg_uri());
         return dto;
     }
