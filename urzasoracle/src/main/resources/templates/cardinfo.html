@@ -12,35 +12,18 @@
     <div class="row">
       <!-- Immagine Carta -->
 
-      <div class="col-sm-4 pt-4 ">
-        <div class="card-container">
-          <div id="dragCard" class="magic-card">
-            <div class="card-face card-front">
+      <div class="col-sm-4 pt-5 ">
+        <div class="card-container" style="    aspect-ratio:  0.714;">
+          <div id="dragCard" class="magic-card" sty>
+            <div class="card-face card-front" style="    aspect-ratio:  0.714;">
               <img th:if="${card.images != null and card.images['png'] != null}" th:src="${card.images['png']}"
-                th:alt="${card.name}" class="img-fluid shadow" style="
-              width: 100%;
-              aspect-ratio: 488/680;
-              object-fit: contain;
-              border: 2px solid rgba(255, 193, 7, 0.2);
-              background: rgba(26, 16, 51, 0.5);
-              border-radius:7%/5.0235% ;
-              background-repeat: no-repeat;
-            " />
+                th:alt="${card.name}" class=" shadow card-img" />
             </div>
 
             <div class="card-face card-back">
               <div class="card-back-imageflip">
                 <img th:if="${card.backFace != null and card.backFace.images['png'] != null}"
-                  th:src="${card.backFace.images['png']}" th:alt="${card.name}" class="img-fluid shadow" style="
-              width: 100%;
-              aspect-ratio: 488/680;
-              object-fit: contain;
-              border: 2px solid rgba(255, 193, 7, 0.2);
-              border-radius:7%/5.0235% ;
-              background-repeat: no-repeat;
-
-              background: rgba(26, 16, 51, 0.5);
-            " />
+                  th:src="${card.backFace.images['png']}" th:alt="${card.name}" class="img-fluid shadow card-img" />
               </div>
             </div>
           </div>
@@ -140,7 +123,7 @@
             <th:block th:each="format : ${card.legalities}">
               <div class="row px-2">
                 <span th:text="${#strings.capitalize(format.key)}" class="col-md-12 format-label">Standard</span>
-   
+
                 <span th:if="${format.value == 'legal'}" class="col-md-5 badge legal">LEGAL</span>
                 <span th:if="${format.value != 'legal'}" class="col-md-5 badge not-legal">NOT LEGAL</span>
               </div>
