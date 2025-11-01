@@ -8,14 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
@@ -36,8 +29,81 @@ public class DeckController {
     private final UrzaUserService urzaUserService;
     private final CardService cardService;
 
+    // ============ DECKS PUBBLICI ============
     @GetMapping
-    public String listDecks(Model model, Authentication authentication) {
+    public String listAllDecks(Model model, Authentication authentication) {
+        List<CardCollectionDTO> allDecks = cardCollectionService.getAllDecks();
+
+        for (CardCollectionDTO deck : allDecks) {
+            Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
+            deck.setTotalCards(cardCount != null ? cardCount : 0);
+
+            List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
+            List<CardInDeckDTO> preview = allCards.stream()
+                    .limit(4)
+                    .collect(Collectors.toList());
+            deck.setPreviewCards(preview);
+        }
+
+        model.addAttribute("decks", allDecks);
+        model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
+        model.addAttribute("active", "decks");
+        return "decks";
+    }
+
+    @GetMapping("/public/{id}")
+    public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication) {
+        CardCollectionDTO deck = cardCollectionService.getByID(id);
+
+        if (deck == null) {
+            return "redirect:/decks";
+        }
+
+        boolean isOwner = false;
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            isOwner = deck.getOwner() != null && deck.getOwner().equals(username);
+        }
+
+        List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
+        int totalCards = cards.stream()
+                .mapToInt(c -> Integer.parseInt(c.getQuantity()))
+                .sum();
+
+        model.addAttribute("deck", deck);
+        model.addAttribute("cards", cards);
+        model.addAttribute("totalCards", totalCards);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
+        model.addAttribute("active", "decks");
+
+        return "public-deck-detail";
+    }
+
+    @PostMapping("/public/{deckId}/clone")
+    @ResponseBody
+    public ResponseEntity<CardCollectionDTO> cloneDeck(
+            @PathVariable UUID deckId,
+            Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = authentication.getName();
+        UrzaUser user = urzaUserService.findByUsername(username);
+
+        CardCollectionDTO clonedDeck = cardCollectionService.cloneDeck(deckId, user.getId());
+        if (clonedDeck == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.ok(clonedDeck);
+    }
+
+    // ============ I MIEI MAZZI ============
+    @GetMapping("/mydecks")
+    public String listMyDecks(Model model, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
@@ -58,16 +124,16 @@ public class DeckController {
         }
 
         model.addAttribute("decks", userDecks);
-        model.addAttribute("active", "decks");
-        return "decks";
+        model.addAttribute("active", "mydecks");
+        return "mydecks";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/mydecks/{id}")
     public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication) {
         CardCollectionDTO deck = cardCollectionService.getByID(id);
 
         if (deck == null) {
-            return "redirect:/decks";
+            return "redirect:/decks/mydecks";
         }
 
         boolean isOwner = false;
@@ -76,27 +142,20 @@ public class DeckController {
             isOwner = deck.getOwner() != null && deck.getOwner().equals(username);
         }
 
+        if (!isOwner) {
+            return "redirect:/decks/mydecks";
+        }
+
         List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
         int totalCards = cards.stream()
                 .mapToInt(c -> Integer.parseInt(c.getQuantity()))
                 .sum();
 
-        Map<String, List<CardInDeckDTO>> categorizedCards = categorizeCards(cards);
-
         model.addAttribute("deck", deck);
         model.addAttribute("cards", cards);
         model.addAttribute("totalCards", totalCards);
         model.addAttribute("isOwner", isOwner);
-        model.addAttribute("active", "decks");
-
-        model.addAttribute("commanderCards", categorizedCards.get("Commander"));
-        model.addAttribute("planeswalkerCards", categorizedCards.get("Planeswalker"));
-        model.addAttribute("creatureCards", categorizedCards.get("Creature"));
-        model.addAttribute("instantCards", categorizedCards.get("Instant"));
-        model.addAttribute("sorceryCards", categorizedCards.get("Sorcery"));
-        model.addAttribute("artifactCards", categorizedCards.get("Artifact"));
-        model.addAttribute("enchantmentCards", categorizedCards.get("Enchantment"));
-        model.addAttribute("landCards", categorizedCards.get("Land"));
+        model.addAttribute("active", "mydecks");
 
         return "deck-detail";
     }
@@ -134,7 +193,7 @@ public class DeckController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/mydecks/{id}")
     @ResponseBody
     public ResponseEntity<CardCollectionDTO> updateDeck(
             @PathVariable UUID id,
@@ -160,7 +219,7 @@ public class DeckController {
         return ResponseEntity.ok(updatedDeck);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/mydecks/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteDeck(
             @PathVariable UUID id,
@@ -181,7 +240,7 @@ public class DeckController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{deckId}/cards/{cardId}")
+    @PostMapping("/mydecks/{deckId}/cards/{cardId}")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> addCardToDeck(
             @PathVariable UUID deckId,
@@ -207,7 +266,7 @@ public class DeckController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @DeleteMapping("/{deckId}/cards/{cardId}")
+    @DeleteMapping("/mydecks/{deckId}/cards/{cardId}")
     @ResponseBody
     public ResponseEntity<Void> removeCardFromDeck(
             @PathVariable UUID deckId,
@@ -232,7 +291,7 @@ public class DeckController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{deckId}/cards/{cardId}/increase")
+    @PutMapping("/mydecks/{deckId}/cards/{cardId}/increase")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> increaseCardQuantity(
             @PathVariable UUID deckId,
@@ -257,7 +316,7 @@ public class DeckController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/{deckId}/cards/{cardId}/decrease")
+    @PutMapping("/mydecks/{deckId}/cards/{cardId}/decrease")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> decreaseCardQuantity(
             @PathVariable UUID deckId,

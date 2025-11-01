@@ -3,6 +3,7 @@ package com.mambocosmo.urzasoracle.services;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -224,4 +225,38 @@ public class CardCollectionService
 
         return dto;
     }
+    // Aggiungi questi metodi al tuo CardCollectionService
+
+public List<CardCollectionDTO> getAllDecks() {
+    return getREPOSITORY().findAll().stream()
+            .map(getCONVERTER()::fromEToD)
+            .collect(Collectors.toList());
+}
+
+public CardCollectionDTO cloneDeck(UUID originalDeckId, UUID targetUserId) {
+    CardCollection originalDeck = getREPOSITORY().findById(originalDeckId).orElse(null);
+    if (originalDeck == null) return null;
+
+    UrzaUser targetUser = getCONTEXT().getBean(UrzaUserService.class).getEntityByID(targetUserId);
+    if (targetUser == null) return null;
+
+    CardCollection clonedDeck = new CardCollection();
+    clonedDeck.setName(originalDeck.getName() + " (copia)");
+    clonedDeck.setDescription(originalDeck.getDescription());
+    clonedDeck.setMainDeckFormat(originalDeck.getMainDeckFormat());
+    clonedDeck.setOwner(targetUser);
+
+    for (CardInDeck card : originalDeck.getCardList()) {
+        CardInDeck clonedCard = new CardInDeck(
+            clonedDeck,
+            card.getId().getCard(),
+            card.getQuantity()
+        );
+        clonedDeck.getCardList().add(clonedCard);
+    }
+
+    save(clonedDeck);
+    return getCONVERTER().fromEToD(clonedDeck);
+}
+
 }

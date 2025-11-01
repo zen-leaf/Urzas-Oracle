@@ -14,10 +14,10 @@
       <!-- HEADER MAZZO -->
       <header class="mb-4">
         <a
-          th:href="@{/decks}"
+          th:href="@{/decks/mydecks}"
           class="text-warning text-decoration-none mb-3 d-inline-block"
         >
-          <small>← Torna ai mazzi</small>
+          <small>← Torna ai miei mazzi</small>
         </a>
 
         <div class="row align-items-center mb-3">
@@ -816,7 +816,7 @@
         }
 
         const res = await fetch(
-          `/decks/${deckId}/cards/${contextCardId}/increase`,
+          `/decks/mydecks/${deckId}/cards/${contextCardId}/increase`,
           {
             method: "PUT",
             headers: { [csrfHeader]: csrfToken },
@@ -834,7 +834,7 @@
 
         if (currentQty > 1) {
           const res = await fetch(
-            `/decks/${deckId}/cards/${contextCardId}/decrease`,
+            `/decks/mydecks/${deckId}/cards/${contextCardId}/decrease`,
             {
               method: "PUT",
               headers: { [csrfHeader]: csrfToken },
@@ -852,10 +852,13 @@
 
         if (!confirm("⚠️ Rimuovere completamente?")) return;
 
-        const res = await fetch(`/decks/${deckId}/cards/${contextCardId}`, {
-          method: "DELETE",
-          headers: { [csrfHeader]: csrfToken },
-        });
+        const res = await fetch(
+          `/decks/mydecks/${deckId}/cards/${contextCardId}`,
+          {
+            method: "DELETE",
+            headers: { [csrfHeader]: csrfToken },
+          }
+        );
 
         if (res.ok) location.reload();
       }
@@ -1077,7 +1080,7 @@
         let saved = 0;
         for (const [id, qty] of cardQuantities) {
           const res = await fetch(
-            `/decks/${deckId}/cards/${id}?quantity=${qty}`,
+            `/decks/mydecks/${deckId}/cards/${id}?quantity=${qty}`,
             {
               method: "POST",
               headers: { [csrfHeader]: csrfToken },
@@ -1115,7 +1118,7 @@
         ?.addEventListener("submit", function (e) {
           e.preventDefault();
           fetch(
-            `/decks/${deckId}?name=${encodeURIComponent(
+            `/decks/mydecks/${deckId}?name=${encodeURIComponent(
               document.getElementById("deckName").value
             )}&description=${encodeURIComponent(
               document.getElementById("deckDesc").value
@@ -1128,10 +1131,10 @@
         });
 
       function deleteDeck() {
-        fetch(`/decks/${deckId}`, {
+        fetch(`/decks/mydecks/${deckId}`, {
           method: "DELETE",
           headers: { [csrfHeader]: csrfToken },
-        }).then((r) => r.ok && (window.location = "/decks"));
+        }).then((r) => r.ok && (window.location = "/decks/mydecks"));
       }
     </script>
   </body>
