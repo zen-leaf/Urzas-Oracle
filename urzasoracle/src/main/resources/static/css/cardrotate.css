@@ -39,19 +39,17 @@
     overflow: hidden;
     width: 100%;
     height: 100%;
-    /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
+
     backface-visibility: hidden;
-    /* Hides the backside of the face when flipped */
+
     -webkit-backface-visibility: hidden;
-    /* For Safari */
-    /* border: 5px solid gold; */
-    /* The iconic MTG gold border */
-    /* background-color: #333; */
+
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    /* padding: 10px; */
+
     box-sizing: border-box;
 }
 
