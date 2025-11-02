@@ -28,9 +28,9 @@
     height: 100%;
     aspect-ratio: 0.714;
     object-fit: contain;
-    border: 2px solid rgba(255, 193, 7, 0.2);
+    border: -2px solid rgba(255, 193, 7, 0.2);
     background: rgba(26, 16, 51, 0.5);
-    border-radius: 4.75% / 3.5%;
+    border-radius: 8%/5%;
     background-repeat: no-repeat;
 }
 
