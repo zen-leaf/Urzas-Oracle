@@ -67,7 +67,7 @@ public class DeckController {
 
         List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
         int totalCards = cards.stream()
-                .mapToInt(c -> Integer.parseInt(c.getQuantity()))
+                .mapToInt(c -> c.getQuantity())
                 .sum();
 
         model.addAttribute("deck", deck);
