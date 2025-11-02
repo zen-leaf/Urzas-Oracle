@@ -12,19 +12,18 @@
     <div class="row">
       <!-- Immagine Carta -->
 
-      <div class="col-sm-4 pt-5 ">
+      <div class="col-sm-4 py-5 ">
         <div class="card-container" style="    aspect-ratio:  0.714;">
           <div id="dragCard" class="magic-card" sty>
-            <div class="card-face card-front" style="    aspect-ratio:  0.714;">
+            <div class="card-face card-front">
               <img th:if="${card.images != null and card.images['png'] != null}" th:src="${card.images['png']}"
                 th:alt="${card.name}" class=" shadow card-img" />
             </div>
-
             <div class="card-face card-back">
-              <div class="card-back-imageflip">
-                <img th:if="${card.backFace != null and card.backFace.images['png'] != null}"
-                  th:src="${card.backFace.images['png']}" th:alt="${card.name}" class="img-fluid shadow card-img" />
-              </div>
+
+              <img th:if="${card.backFace != null and card.backFace.images['png'] != null}"
+                th:src="${card.backFace.images['png']}" th:alt="${card.name}" class="img-fluid shadow card-img" />
+
             </div>
           </div>
         </div>
@@ -38,7 +37,6 @@
         </div>
       </div>
       <!-- Informazioni sulla carta -->
-
       <div class="col-sm-7 p-4 cardinfoholder">
         <div class="row">
           <!-- Nome e Tipo -->

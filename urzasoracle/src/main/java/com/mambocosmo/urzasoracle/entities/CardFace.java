@@ -79,7 +79,7 @@ public class CardFace extends GenericEntity {
     private String illustration_id = "";
 
     @ElementCollection
-    @CollectionTable(name = "card_face_images", joinColumns = @JoinColumn(name = "card_face_id", foreignKey = @ForeignKey(name = "fk_face_images")))
+    @CollectionTable(name = "card_backface_images", joinColumns = @JoinColumn(name = "card_face_id", foreignKey = @ForeignKey(name = "fk_face_images")))
     @MapKeyColumn(name = "image_type")
     @Column(name = "image_uri", length = 500)
     private Map<String, String> image_uris = new HashMap<>();
