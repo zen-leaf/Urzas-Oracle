@@ -4,10 +4,15 @@ import org.springframework.stereotype.Component;
 import com.mambocosmo.urzasoracle.DTO.CardInDeckDTO;
 import com.mambocosmo.urzasoracle.entities.CardInDeck;
 
+import lombok.Data;
+
+@Data
 @Component
 public class CardInDeckConverter {
+
+    private CardConverter CARDCONVERTER;
     
-    public CardInDeckDTO toDTO(CardInDeck entity) {
+    public CardInDeckDTO fromEToD(CardInDeck entity) {
         if (entity == null) return null;
         
         CardInDeckDTO dto = new CardInDeckDTO();
@@ -15,7 +20,7 @@ public class CardInDeckConverter {
         dto.setCardName(entity.getId().getCard().getName());
         dto.setTypeline(entity.getId().getCard().getType_line());
         dto.setQuantity(entity.getQuantity());
-        
+        dto.setRefCard(getCARDCONVERTER().fromEToD(entity.getId().getCard()));
         String imageUrl = null;
         if (entity.getId().getCard().getImage_uris() != null) {
             imageUrl = entity.getId().getCard().getImage_uris().get("normal");
