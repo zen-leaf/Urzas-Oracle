@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.DTO.CardInDeckDTO;
+import com.mambocosmo.urzasoracle.DTO.DeckLegalityReportDTO;
 import com.mambocosmo.urzasoracle.converters.CardCollectionConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardInDeck;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
+import com.mambocosmo.urzasoracle.misc.enums.Format;
 import com.mambocosmo.urzasoracle.repositories.CardCollectionRepository;
 
 import lombok.Data;
@@ -54,16 +56,18 @@ public class CardCollectionService
 
     public Integer getTotalCardsByDeckId(UUID deckId) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return 0;
+        if (deck == null)
+            return 0;
 
         return deck.getCardList().stream()
-                .mapToInt(card -> Integer.parseInt(card.getQuantity()))
+                .mapToInt(card -> card.getQuantity())
                 .sum();
     }
 
     public List<CardInDeckDTO> getCardsByDeck(UUID deckId) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return List.of();
+        if (deck == null)
+            return List.of();
 
         return deck.getCardList().stream()
                 .map(entity -> {
@@ -82,7 +86,8 @@ public class CardCollectionService
 
     public CardCollectionDTO createDeck(UUID userId, String name, String description, String mainDeckFormat) {
         UrzaUser user = getCONTEXT().getBean(UrzaUserService.class).getEntityByID(userId);
-        if (user == null) return null;
+        if (user == null)
+            return null;
 
         CardCollection deck = new CardCollection();
         deck.setName(name);
@@ -96,10 +101,12 @@ public class CardCollectionService
 
     public CardCollectionDTO updateDeck(UUID deckId, UUID userId, String name, String description) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return null;
+        if (deck == null)
+            return null;
 
         deck.setName(name);
-        if (description != null) deck.setDescription(description);
+        if (description != null)
+            deck.setDescription(description);
         save(deck);
 
         return getCONVERTER().fromEToD(deck);
@@ -107,7 +114,8 @@ public class CardCollectionService
 
     public boolean deleteDeck(UUID deckId, UUID userId) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return false;
+        if (deck == null)
+            return false;
 
         delete(deckId);
         return true;
@@ -115,25 +123,30 @@ public class CardCollectionService
 
     public List<CardCollectionDTO> getDecksByUser(UUID userId) {
         UrzaUser user = getCONTEXT().getBean(UrzaUserService.class).getEntityByID(userId);
-        if (user == null) return List.of();
+        if (user == null)
+            return List.of();
 
         return user.getUserDecks().stream()
                 .map(getCONVERTER()::fromEToD)
                 .collect(java.util.stream.Collectors.toList());
     }
 
-    public CardInDeckDTO addCardToDeck(UUID deckId, UUID userId, UUID cardId, String quantity) {
+    public CardInDeckDTO addCardToDeck(UUID deckId, UUID userId, UUID cardId, Integer quantity) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return null;
+        if (deck == null)
+            return null;
 
         Card card = getCONTEXT().getBean(CardService.class).getREPOSITORY().findById(cardId).orElse(null);
-        if (card == null) return null;
+        if (card == null)
+            return null;
 
-        int qty = Integer.parseInt(quantity);
-        if (qty < 1 || qty > 4) return null;
+        int qty = quantity;
+        if (qty < 1 || qty > 4)
+            return null;
 
-        int total = deck.getCardList().stream().mapToInt(c -> Integer.parseInt(c.getQuantity())).sum();
-        if (total + qty > 100) return null;
+        int total = deck.getCardList().stream().mapToInt(c -> c.getQuantity()).sum();
+        if (total + qty > 100)
+            return null;
 
         CardInDeck cid = new CardInDeck(deck, card, quantity);
         deck.getCardList().add(cid);
@@ -153,14 +166,16 @@ public class CardCollectionService
 
     public boolean removeCardFromDeck(UUID deckId, UUID userId, UUID cardId) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return false;
+        if (deck == null)
+            return false;
 
         CardInDeck card = deck.getCardList().stream()
                 .filter(c -> c.getId().getCard().getId().equals(cardId))
                 .findFirst()
                 .orElse(null);
 
-        if (card == null) return false;
+        if (card == null)
+            return false;
 
         deck.getCardList().remove(card);
         save(deck);
@@ -169,18 +184,20 @@ public class CardCollectionService
 
     public CardInDeckDTO increaseCardQuantity(UUID deckId, UUID userId, UUID cardId) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return null;
+        if (deck == null)
+            return null;
 
         CardInDeck card = deck.getCardList().stream()
                 .filter(c -> c.getId().getCard().getId().equals(cardId))
                 .findFirst()
                 .orElse(null);
 
-        if (card == null) return null;
+        if (card == null)
+            return null;
 
-        int qty = Integer.parseInt(card.getQuantity());
+        int qty = card.getQuantity();
         if (qty < 4) {
-            card.setQuantity(String.valueOf(qty + 1));
+            card.setQuantity(qty + 1);
             save(deck);
         }
 
@@ -198,18 +215,20 @@ public class CardCollectionService
 
     public CardInDeckDTO decreaseCardQuantity(UUID deckId, UUID userId, UUID cardId) {
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null) return null;
+        if (deck == null)
+            return null;
 
         CardInDeck card = deck.getCardList().stream()
                 .filter(c -> c.getId().getCard().getId().equals(cardId))
                 .findFirst()
                 .orElse(null);
 
-        if (card == null) return null;
+        if (card == null)
+            return null;
 
-        int qty = Integer.parseInt(card.getQuantity());
+        int qty = card.getQuantity();
         if (qty > 1) {
-            card.setQuantity(String.valueOf(qty - 1));
+            card.setQuantity(qty - 1);
             save(deck);
         }
 
@@ -223,5 +242,35 @@ public class CardCollectionService
         }
 
         return dto;
+    }
+
+    public DeckLegalityReportDTO checkDecklegality(CardCollection e) {
+        Format dFormat = e.getMainDeckFormat();
+        DeckLegalityReportDTO report = new DeckLegalityReportDTO("LEGAL");
+        for (CardInDeck c : e.getCardList()) {
+            if (!c.getCard().getType_line().toLowerCase().contains("basic land")
+                    || (c.getQuantity() > 4)
+                    || (c.getQuantity() > 1
+                            && (dFormat.equals(Format.commander) || dFormat.equals(Format.oathbreaker)))) {
+                report = new DeckLegalityReportDTO("ILLEGAL", c.getCard().getName(),
+                        "One or more cards in the deck have more copies than allowed by the selected format.");
+            }
+            if (c.getCard().getLegalities().get(dFormat) != "legal") {
+                report = new DeckLegalityReportDTO(
+                        c.getCard().getLegalities().get(dFormat).toUpperCase().replaceAll("_", " "),
+                        c.getCard().getName(),
+                        "One or more cards in your deck are not legal in the selected format");
+            }
+
+            return report;
+
+        }
+        return report;
+    }
+
+    public DeckLegalityReportDTO checkDeckLegality(UUID deckid) {
+        CardCollection deck = getREPOSITORY().findById(deckid).orElse(null);
+
+        return checkDecklegality(deck);
     }
 }

@@ -8,6 +8,6 @@ public class CardInDeckDTO {
     private UUID cardId;
     private String cardName;
     private String typeline;
-    private String quantity;
+    private Integer quantity;
     private String imageUrl;
 }
