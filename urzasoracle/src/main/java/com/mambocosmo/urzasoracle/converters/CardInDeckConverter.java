@@ -10,7 +10,7 @@ import lombok.Data;
 @Component
 public class CardInDeckConverter {
 
-    private CardConverter CARDCONVERTER;
+    private final CardConverter CARDCONVERTER;
     
     public CardInDeckDTO fromEToD(CardInDeck entity) {
         if (entity == null) return null;
