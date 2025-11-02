@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head :: head('Catalogo Mazzi')}">
+  <head th:replace="~{fragments/head :: head('I Miei Mazzi')}">
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </head>
@@ -11,37 +11,30 @@
       <div class="wrapper">
         <div class="content">
           <div class="mb-5">
-            <h1 class="fw-bold mb-0" style="font-size: 2.5rem">
-              Catalogo Mazzi
-            </h1>
-            <a
-              th:if="${isLoggedIn}"
-              th:href="@{/decks/mydecks}"
+            <h1 class="fw-bold mb-0" style="font-size: 2.5rem">I Miei Mazzi</h1>
+            <button
               class="btn btn-warning fw-bold mt-3"
-              >I Miei Mazzi</a
+              data-bs-toggle="modal"
+              data-bs-target="#createDeckModal"
             >
-            <a
-              th:unless="${isLoggedIn}"
-              th:href="@{/login}"
-              class="btn btn-warning fw-bold mt-3"
-              >Accedi</a
-            >
+              ➕ Nuovo Mazzo
+            </button>
           </div>
 
           <!-- FILTRI -->
           <div class="row g-2 mb-4">
-            <div class="col-md-4">
+            <div class="col-md-5">
               <input
                 type="text"
                 class="form-control bg-secondary text-white border-warning"
-                id="searchCatalog"
-                placeholder="🔍 Cerca nome, autore..."
+                id="searchDeck"
+                placeholder="🔍 Cerca..."
               />
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <select
                 class="form-select bg-secondary text-white border-warning"
-                id="formatFilterCatalog"
+                id="formatFilter"
               >
                 <option value="">Tutti</option>
                 <option value="standard">Standard</option>
@@ -53,17 +46,16 @@
             <div class="col-md-2">
               <select
                 class="form-select bg-secondary text-white border-warning"
-                id="sortCatalog"
+                id="sortDeck"
               >
                 <option value="name">Nome</option>
-                <option value="author">Autore</option>
                 <option value="cards">Carte</option>
               </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
               <button
                 class="btn btn-outline-warning w-100 fw-bold"
-                onclick="resetFiltersCatalog()"
+                onclick="resetFilters()"
               >
                 Reset
               </button>
@@ -73,12 +65,12 @@
           <!-- GRID -->
           <div
             class="row g-3"
-            id="catalogContainer"
+            id="decksContainer"
             th:if="${not #lists.isEmpty(decks)}"
           >
             <div class="col-lg-3" th:each="deck : ${decks}">
               <a
-                th:href="@{/decks/public/{id}(id=${deck.id})}"
+                th:href="@{/decks/mydecks/{id}(id=${deck.id})}"
                 class="link-unstyled"
               >
                 <div class="card-deck">
@@ -104,7 +96,6 @@
                   </div>
                   <div class="info">
                     <h5 class="title" th:text="${deck.name}"></h5>
-                    <p class="author" th:text="${deck.owner}"></p>
                     <p class="desc" th:text="${deck.description}"></p>
                     <div class="stats">
                       <span
@@ -123,11 +114,74 @@
           </div>
 
           <div th:if="${#lists.isEmpty(decks)}" class="text-center py-5">
-            <p class="text-secondary">Nessun mazzo disponibile</p>
+            <p class="text-secondary">Nessun mazzo</p>
           </div>
         </div>
       </div>
     </main>
+
+    <!-- MODAL: CREA -->
+    <div class="modal fade" id="createDeckModal" tabindex="-1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content bg-dark border-warning">
+          <div class="modal-header border-warning">
+            <h5 class="modal-title text-warning fw-bold">Crea Mazzo</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <form id="createForm">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label text-warning fw-bold">Nome</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm bg-secondary text-white border-warning"
+                  id="newDeckName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-warning fw-bold"
+                  >Descrizione</label
+                >
+                <textarea
+                  class="form-control form-control-sm bg-secondary text-white border-warning"
+                  id="newDeckDesc"
+                  rows="2"
+                ></textarea>
+              </div>
+              <div class="mb-0">
+                <label class="form-label text-warning fw-bold">Formato</label>
+                <select
+                  class="form-select form-select-sm bg-secondary text-white border-warning"
+                  id="newDeckFormat"
+                >
+                  <option value="standard">Standard</option>
+                  <option value="modern">Modern</option>
+                  <option value="commander">Commander</option>
+                  <option value="legacy">Legacy</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer border-warning">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Annulla
+              </button>
+              <button type="submit" class="btn btn-warning fw-bold">
+                Crea
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <div th:replace="~{fragments/footer :: footer}"></div>
 
@@ -196,6 +250,8 @@
         position: relative;
         width: 100%;
         height: 100%;
+        display: flex;
+        align-items: center;
       }
 
       .cards img {
@@ -224,18 +280,11 @@
       .title {
         color: #ffc107;
         font-weight: 700;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         font-size: 1.05rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-
-      .author {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.75rem;
-        margin-bottom: 6px;
-        font-weight: 600;
       }
 
       .desc {
@@ -269,29 +318,28 @@
     </style>
 
     <script th:inline="javascript">
-      let allDecksFromCatalog = /*[[${decks}]]*/ [];
+      const csrfToken = /*[[${_csrf.token}]]*/ "";
+      const csrfHeader = /*[[${_csrf.headerName}]]*/ "X-CSRF-TOKEN";
+      let allDecks = /*[[${decks}]]*/ [];
 
       document
-        .getElementById("searchCatalog")
-        ?.addEventListener("input", filterCatalog);
+        .getElementById("searchDeck")
+        ?.addEventListener("input", filterDecks);
       document
-        .getElementById("formatFilterCatalog")
-        ?.addEventListener("change", filterCatalog);
+        .getElementById("formatFilter")
+        ?.addEventListener("change", filterDecks);
       document
-        .getElementById("sortCatalog")
-        ?.addEventListener("change", filterCatalog);
+        .getElementById("sortDeck")
+        ?.addEventListener("change", filterDecks);
 
-      function filterCatalog() {
+      function filterDecks() {
         const search =
-          document.getElementById("searchCatalog")?.value.toLowerCase() || "";
-        const format =
-          document.getElementById("formatFilterCatalog")?.value || "";
-        const sort = document.getElementById("sortCatalog")?.value || "name";
+          document.getElementById("searchDeck")?.value.toLowerCase() || "";
+        const format = document.getElementById("formatFilter")?.value || "";
+        const sort = document.getElementById("sortDeck")?.value || "name";
 
-        let filtered = allDecksFromCatalog.filter((deck) => {
-          const matchSearch =
-            deck.name.toLowerCase().includes(search) ||
-            deck.owner.toLowerCase().includes(search);
+        let filtered = allDecks.filter((deck) => {
+          const matchSearch = deck.name.toLowerCase().includes(search);
           const matchFormat =
             !format ||
             deck.mainDeckFormat.toLowerCase() === format.toLowerCase();
@@ -300,16 +348,16 @@
 
         if (sort === "name")
           filtered.sort((a, b) => a.name.localeCompare(b.name));
-        else if (sort === "author")
-          filtered.sort((a, b) => a.owner.localeCompare(b.owner));
         else if (sort === "cards")
           filtered.sort((a, b) => b.totalCards - a.totalCards);
 
-        renderCatalog(filtered);
+        renderDecks(filtered);
       }
 
-      function renderCatalog(decks) {
-        const container = document.getElementById("catalogContainer");
+      function renderDecks(decks) {
+        const container = document.getElementById("decksContainer");
+        if (!container) return;
+
         container.innerHTML = decks
           .map((deck) => {
             const cardsHtml = (deck.previewCards || [])
@@ -324,14 +372,13 @@
 
             return `
           <div class="col-lg-3">
-            <a href="/decks/public/${deck.id}" class="link-unstyled">
+            <a href="/decks/mydecks/${deck.id}" class="link-unstyled">
               <div class="card-deck">
                 <div class="preview">
                   <div class="cards">${cardsHtml}</div>
                 </div>
                 <div class="info">
                   <h5 class="title">${deck.name}</h5>
-                  <p class="author">${deck.owner}</p>
                   <p class="desc">${deck.description || ""}</p>
                   <div class="stats">
                     <span class="badge bg-warning text-dark">${
@@ -350,16 +397,35 @@
           .join("");
       }
 
-      function resetFiltersCatalog() {
-        document.getElementById("searchCatalog").value = "";
-        document.getElementById("formatFilterCatalog").value = "";
-        document.getElementById("sortCatalog").value = "name";
-        filterCatalog();
+      function resetFilters() {
+        document.getElementById("searchDeck").value = "";
+        document.getElementById("formatFilter").value = "";
+        document.getElementById("sortDeck").value = "name";
+        filterDecks();
       }
 
+      document
+        .getElementById("createForm")
+        ?.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const res = await fetch("/decks/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              [csrfHeader]: csrfToken,
+            },
+            body: new URLSearchParams({
+              name: document.getElementById("newDeckName").value,
+              description: document.getElementById("newDeckDesc").value,
+              mainDeckFormat: document.getElementById("newDeckFormat").value,
+            }),
+          });
+          if (res.ok) location.reload();
+        });
+
       window.addEventListener("load", () => {
-        allDecksFromCatalog = /*[[${decks}]]*/ [];
-        filterCatalog();
+        allDecks = /*[[${decks}]]*/ [];
+        filterDecks();
       });
     </script>
   </body>

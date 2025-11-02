@@ -144,7 +144,7 @@ public class CardCollectionController {
          // String.valueOf((Math.round(Math.random()*2))+1));
          // System.out.println("\ndentro card in deck : " + cid.toString());
          // cc.getCardList().add(cid);
-         cc.getCardList().add(new CardInDeck(cc, card, String.valueOf((Math.round(Math.random() * 2)) + 1)));
+         cc.getCardList().add(new CardInDeck(cc, card, Long.valueOf(Math.round(Math.random() * 2)).intValue() + 1));
          // System.out.println("\ncard list post add: " + cc.getCardList());
 
       }
@@ -161,9 +161,9 @@ public class CardCollectionController {
    // api/CardCollectionController/add-test-user-deck
    @GetMapping("/add-test-user-deck")
    public String addTestUserDeck() {
-      try{
+      try {
          // UrzaUser userCheck = getURZAUSERSERVICE().findByUsername("dummy_user");
-         if (getURZAUSERSERVICE().findByUsername("dummy_user") == null){
+         if (getURZAUSERSERVICE().findByUsername("dummy_user") == null) {
             Map<String, String> testMap = new HashMap<>();
             testMap.put("username", "dummy_user");
             testMap.put("displayName", "dummy_user_display");
@@ -172,15 +172,15 @@ public class CardCollectionController {
             getURZAUSERSERVICE().registerUser(testMap);
          }
 
-         // CardCollection deckCheck = getCARDCOLLECTIONSERVICE().getByName("deck_dummy").get(0);
-         if (getCARDCOLLECTIONSERVICE().getByName("deck_dummy").size() == 0){
+         // CardCollection deckCheck =
+         // getCARDCOLLECTIONSERVICE().getByName("deck_dummy").get(0);
+         if (getCARDCOLLECTIONSERVICE().getByName("deck_dummy").size() == 0) {
             createDeckTest();
          }
 
          fillTestDeck();
 
-      }
-      catch (Exception e){
+      } catch (Exception e) {
          e.printStackTrace();
          return "error during generation";
       }

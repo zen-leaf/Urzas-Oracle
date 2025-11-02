@@ -1,20 +1,37 @@
 .card-container {
     perspective: 1000px;
-    /* Establishes a 3D perspective for child elements */
-    margin-bottom: 30px;
+
+    max-height: 60vh;
+    max-width: 67%;
+
+
+    aspect-ratio: 0.714;
+    margin: auto;
 }
 
+
 .magic-card {
-    width: 250px;
-    height: 350px;
+    width: 100%;
+    height: 100%;
     position: relative;
-    /* Needed for absolute positioning of faces */
+
     transform-style: preserve-3d;
-    /* Crucial for 3D flipping */
+
     transition: transform 0.1s ease-out;
-    /* For smooth drag response */
+
     cursor: grab;
     user-select: none;
+}
+
+.card-img {
+
+    height: 100%;
+    aspect-ratio: 0.714;
+    object-fit: contain;
+    border: 2px solid rgba(255, 193, 7, 0.2);
+    background: rgba(26, 16, 51, 0.5);
+    border-radius: 7%/5.0235%;
+    background-repeat: no-repeat;
 }
 
 .card-face {
@@ -22,19 +39,17 @@
     overflow: hidden;
     width: 100%;
     height: 100%;
-    /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
+
     backface-visibility: hidden;
-    /* Hides the backside of the face when flipped */
+
     -webkit-backface-visibility: hidden;
-    /* For Safari */
-    /* border: 5px solid gold; */
-    /* The iconic MTG gold border */
-    /* background-color: #333; */
+
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    /* padding: 10px; */
+
     box-sizing: border-box;
 }
 

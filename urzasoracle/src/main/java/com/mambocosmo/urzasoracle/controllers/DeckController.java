@@ -29,8 +29,81 @@ public class DeckController {
     private final UrzaUserService urzaUserService;
     private final CardService cardService;
 
+    // ============ DECKS PUBBLICI ============
     @GetMapping
-    public String listDecks(Model model, Authentication authentication) {
+    public String listAllDecks(Model model, Authentication authentication) {
+        List<CardCollectionDTO> allDecks = cardCollectionService.getAllDecks();
+
+        for (CardCollectionDTO deck : allDecks) {
+            Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
+            deck.setTotalCards(cardCount != null ? cardCount : 0);
+
+            List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
+            List<CardInDeckDTO> preview = allCards.stream()
+                    .limit(4)
+                    .collect(Collectors.toList());
+            deck.setPreviewCards(preview);
+        }
+
+        model.addAttribute("decks", allDecks);
+        model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
+        model.addAttribute("active", "decks");
+        return "decks";
+    }
+
+    @GetMapping("/public/{id}")
+    public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication) {
+        CardCollectionDTO deck = cardCollectionService.getByID(id);
+
+        if (deck == null) {
+            return "redirect:/decks";
+        }
+
+        boolean isOwner = false;
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            isOwner = deck.getOwner() != null && deck.getOwner().equals(username);
+        }
+
+        List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
+        int totalCards = cards.stream()
+                .mapToInt(c -> c.getQuantity())
+                .sum();
+
+        model.addAttribute("deck", deck);
+        model.addAttribute("cards", cards);
+        model.addAttribute("totalCards", totalCards);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
+        model.addAttribute("active", "decks");
+
+        return "public-deck-detail";
+    }
+
+    @PostMapping("/public/{deckId}/clone")
+    @ResponseBody
+    public ResponseEntity<CardCollectionDTO> cloneDeck(
+            @PathVariable UUID deckId,
+            Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = authentication.getName();
+        UrzaUser user = urzaUserService.findByUsername(username);
+
+        CardCollectionDTO clonedDeck = cardCollectionService.cloneDeck(deckId, user.getId());
+        if (clonedDeck == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.ok(clonedDeck);
+    }
+
+    // ============ I MIEI MAZZI ============
+    @GetMapping("/mydecks")
+    public String listMyDecks(Model model, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
@@ -51,16 +124,16 @@ public class DeckController {
         }
 
         model.addAttribute("decks", userDecks);
-        model.addAttribute("active", "decks");
-        return "decks";
+        model.addAttribute("active", "mydecks");
+        return "mydecks";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/mydecks/{id}")
     public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication) {
         CardCollectionDTO deck = cardCollectionService.getByID(id);
 
         if (deck == null) {
-            return "redirect:/decks";
+            return "redirect:/decks/mydecks";
         }
 
         boolean isOwner = false;
@@ -69,27 +142,20 @@ public class DeckController {
             isOwner = deck.getOwner() != null && deck.getOwner().equals(username);
         }
 
+        if (!isOwner) {
+            return "redirect:/decks/mydecks";
+        }
+
         List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
         int totalCards = cards.stream()
-                .mapToInt(c -> Integer.parseInt(c.getQuantity()))
+                .mapToInt(c -> c.getQuantity())
                 .sum();
-
-        Map<String, List<CardInDeckDTO>> categorizedCards = categorizeCards(cards);
 
         model.addAttribute("deck", deck);
         model.addAttribute("cards", cards);
         model.addAttribute("totalCards", totalCards);
         model.addAttribute("isOwner", isOwner);
-        model.addAttribute("active", "decks");
-
-        model.addAttribute("commanderCards", categorizedCards.get("Commander"));
-        model.addAttribute("planeswalkerCards", categorizedCards.get("Planeswalker"));
-        model.addAttribute("creatureCards", categorizedCards.get("Creature"));
-        model.addAttribute("instantCards", categorizedCards.get("Instant"));
-        model.addAttribute("sorceryCards", categorizedCards.get("Sorcery"));
-        model.addAttribute("artifactCards", categorizedCards.get("Artifact"));
-        model.addAttribute("enchantmentCards", categorizedCards.get("Enchantment"));
-        model.addAttribute("landCards", categorizedCards.get("Land"));
+        model.addAttribute("active", "mydecks");
 
         return "deck-detail";
     }
@@ -117,8 +183,7 @@ public class DeckController {
 
         try {
             CardCollectionDTO newDeck = cardCollectionService.createDeck(
-                user.getId(), name, description, mainDeckFormat
-            );
+                    user.getId(), name, description, mainDeckFormat);
             return ResponseEntity.status(HttpStatus.CREATED).body(newDeck);
         } catch (Exception e) {
             System.err.println("❌ ERRORE: " + e.getMessage());
@@ -127,7 +192,7 @@ public class DeckController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/mydecks/{id}")
     @ResponseBody
     public ResponseEntity<CardCollectionDTO> updateDeck(
             @PathVariable UUID id,
@@ -143,8 +208,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardCollectionDTO updatedDeck = cardCollectionService.updateDeck(
-            id, user.getId(), name, description
-        );
+                id, user.getId(), name, description);
 
         if (updatedDeck == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -153,7 +217,7 @@ public class DeckController {
         return ResponseEntity.ok(updatedDeck);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/mydecks/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteDeck(
             @PathVariable UUID id,
@@ -174,12 +238,12 @@ public class DeckController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{deckId}/cards/{cardId}")
+    @PostMapping("/mydecks/{deckId}/cards/{cardId}")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> addCardToDeck(
             @PathVariable UUID deckId,
             @PathVariable UUID cardId,
-            @RequestParam(defaultValue = "1") String quantity,
+            @RequestParam(defaultValue = "1") Integer quantity,
             Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -190,8 +254,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardInDeckDTO result = cardCollectionService.addCardToDeck(
-            deckId, user.getId(), cardId, quantity
-        );
+                deckId, user.getId(), cardId, quantity);
 
         if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -200,7 +263,7 @@ public class DeckController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @DeleteMapping("/{deckId}/cards/{cardId}")
+    @DeleteMapping("/mydecks/{deckId}/cards/{cardId}")
     @ResponseBody
     public ResponseEntity<Void> removeCardFromDeck(
             @PathVariable UUID deckId,
@@ -215,8 +278,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         boolean removed = cardCollectionService.removeCardFromDeck(
-            deckId, user.getId(), cardId
-        );
+                deckId, user.getId(), cardId);
 
         if (!removed) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -225,7 +287,7 @@ public class DeckController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{deckId}/cards/{cardId}/increase")
+    @PutMapping("/mydecks/{deckId}/cards/{cardId}/increase")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> increaseCardQuantity(
             @PathVariable UUID deckId,
@@ -240,8 +302,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardInDeckDTO result = cardCollectionService.increaseCardQuantity(
-            deckId, user.getId(), cardId
-        );
+                deckId, user.getId(), cardId);
 
         if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -250,7 +311,7 @@ public class DeckController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/{deckId}/cards/{cardId}/decrease")
+    @PutMapping("/mydecks/{deckId}/cards/{cardId}/decrease")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> decreaseCardQuantity(
             @PathVariable UUID deckId,
@@ -265,8 +326,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardInDeckDTO result = cardCollectionService.decreaseCardQuantity(
-            deckId, user.getId(), cardId
-        );
+                deckId, user.getId(), cardId);
 
         if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

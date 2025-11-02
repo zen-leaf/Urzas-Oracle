@@ -7,6 +7,8 @@ function reformatText() {
         var originalText = e.innerHTML;
 
         var editedText = originalText.replace(/\{([^}]+)\}/g, (value, content) => {
+
+            content=content.replace("/","")
             var wrapperIcon = `<abbr class="card-symbol card-symbol-${content}">${value}</abbr>`;
             return wrapperIcon;
         })

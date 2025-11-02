@@ -2,6 +2,7 @@ package com.mambocosmo.urzasoracle.converters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.DTO.CardFaceDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.misc.enums.Format;
 
 import lombok.Data;
 
@@ -20,6 +22,9 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
     private final CardFaceConverter CARDFACECONVERTER;
     private final CardPartConverter CARDPARTCONVERTER;
     private final CardExpansionSetConverter CARDSETCONVERTER;
+    private final List<Format> relevantFormat = List.of(Format.standard, Format.pioneer, Format.modern, Format.legacy,
+            Format.vintage, Format.commander, Format.alchemy, Format.historic, Format.timeless, Format.pauper,
+            Format.penny, Format.premodern);
 
     @Override
     public Card fromDToE(CardDTO dto) {
@@ -38,9 +43,12 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         dto.setImages(e.getImage_uris().isEmpty() ? e.getCard_faces().get(1).getImage_uris() : e.getImage_uris());
         dto.setCardFaces(e.getCard_faces().stream().map(e1 -> getCARDFACECONVERTER().fromEToD(e1)).toList());
 
-        CardFaceDTO defaultBack = e.getCard_faces().size() == 0 ? new CardFaceDTO("blank") : null;
+        CardFaceDTO defaultBack = e.getCard_faces().size() == 0 || e.getCard_faces().get(0).getImage_uris().isEmpty()
+                ? new CardFaceDTO("blank")
+                : dto.getCardFaces().get(0);
 
-        dto.setBackFace(dto.getCardFaces().size() > 0 ? dto.getCardFaces().get(0) : defaultBack);
+        dto.setBackFace(defaultBack);
+        dto.setReleased_at(String.valueOf(e.getReleased_at()));
         dto.setFlavorText(e.getFlavor_text());
         dto.setOracleText(e.getOracle_text());
         dto.setColorIdentity(e.getColor_identity().stream().map(entry -> entry.toString()).toList());
@@ -48,7 +56,9 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         dto.setCollectorNumber(e.getCollector_number());
         Map<String, String> tempLegal = new HashMap<>();
         e.getLegalities().forEach((key, value) -> {
-            tempLegal.put(key.toString().toLowerCase(), value);
+            if (relevantFormat.contains(key)) {
+                tempLegal.put(key.toString().toLowerCase(), value);
+            }
         });
         dto.setLegalities(tempLegal);
         // System.out.println("ARTISTREFF " + e.getArtistRef());

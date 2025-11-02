@@ -44,50 +44,47 @@
       <div class="row g-4 justify-content-center" th:if="${not #lists.isEmpty(lista)}">
         <th:block th:each="card : ${lista}">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-           
+
             <a th:href="@{/cards/{id}(id=${card.id})}" class="text-decoration-none card-link-wrapper">
               <div class="card mtg-card bg-dark border-secondary h-100 shadow-sm card-hover">
-                
-              
+
+
                 <div class="mtg-card-frame">
-                  
+
                   <div class="card-data-overlay">
                     <!-- Nome -->
                     <div th:text="${card.name}"></div>
-                    
+
                     <!-- Tipo -->
                     <div th:text="${card.typeline}"></div>
-                    
+
                     <!-- Set -->
                     <div th:if="${card.expansionSet != null}" th:text="${card.expansionSet.name}"></div>
-                    
-                    <!-- Artisti -->
-                   
-                        <span th:text="${#strings.listJoin(card.artistNames, ', ')}"></span>
-                      </span>
 
-                    
+                    <!-- Artisti -->
+
+                    <span th:text="${#strings.listJoin(card.artistNames, ', ')}"></span>
+                    </span>
+
+
                     <!-- Colori -->
                     <div th:if="${card.colorIdentity != null and !#lists.isEmpty(card.colorIdentity)}">
                       <span th:each="c, stat : ${card.colorIdentity}">
                         <span th:text="${c}"></span><span th:if="${not stat.last}">, </span>
                       </span>
                     </div>
-                    
+
                     <!-- Legalità -->
                     <div th:if="${card.legalities != null}" th:text="${card.legalities.get('standard')}"></div>
                   </div>
-                  
-                  <img th:if="${card.images != null and card.images.get('normal') != null}" 
-                       th:src="${card.images.get('normal')}"
-                       th:alt="${card.name}" 
-                       class="mtg-card-img" 
-                       loading="lazy">
+
+                  <img th:if="${card.images != null and card.images.get('normal') != null}"
+                    th:src="${card.images.get('normal')}" th:alt="${card.name}" class="mtg-card-img" loading="lazy">
                 </div>
 
                 <div class="card-body p-3">
                   <!-- Tutto il contenuto del card-body è COMPLETAMENTE NASCOSTO - i dati sono sopra nella carta invisibile -->
-                 
+
                 </div>
               </div>
             </a>
@@ -100,13 +97,14 @@
       <ul class="pagination pagination-lg">
         <li class="page-item" th:classappend="${currentPage==0} ? 'disabled'">
           <a class="page-link bg-dark text-warning border-warning"
-            th:href="@{/cards(page=${totalPages - 1}, q=${query})}">&laquo;</a>
+            th:href="@{/cards(page=${currentPage - 1}, q=${query})}">&laquo;</a>
         </li>
+        
 
-        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-          th:classappend="${i == currentPage} ? 'active'">
-          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${i}, q=${query})}"
-            th:text="${i + 1}"></a>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, 8)}"
+          th:classappend="${i == currentPage} ? 'active'" th:if="${currentPage + i -4>0}">
+          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${currentPage + i -5}, q=${lastQuery})}"
+            th:text="${currentPage + i -4}"></a>
         </li>
 
         <li class="page-item" th:classappend="${currentPage ==totalPages} ? 'disabled'">
