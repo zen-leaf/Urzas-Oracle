@@ -48,7 +48,7 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
                 : dto.getCardFaces().get(0);
 
         dto.setBackFace(defaultBack);
-        dto.setReleased_at(String.valueOf(e.getReleased_at()));
+        dto.setReleased_at(String.valueOf(e.getReleased()));
         dto.setFlavorText(e.getFlavor_text());
         dto.setOracleText(e.getOracle_text());
         dto.setColorIdentity(e.getColor_identity().stream().map(entry -> entry.toString()).toList());
