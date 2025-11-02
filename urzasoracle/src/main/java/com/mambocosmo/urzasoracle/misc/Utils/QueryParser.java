@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.scheduling.config.CronTask;
 
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -42,6 +43,9 @@ public class QueryParser implements Specification<Card> {
 
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get(CRITERIA.getKey())),
                         ("%" + CRITERIA.getValue() + "%"));
+            }
+            if (CRITERIA.getKey().equals("set")) {
+                return criteriaBuilder.equal(root.get("expansion").get("code"), CRITERIA.getValue());
             }
             return criteriaBuilder.equal(root.get(CRITERIA.getKey()), CRITERIA.getValue());
         }
