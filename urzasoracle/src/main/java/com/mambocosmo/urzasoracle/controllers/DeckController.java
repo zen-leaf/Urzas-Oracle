@@ -78,7 +78,7 @@ public class DeckController {
 
         List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
         int totalCards = cards.stream()
-                .mapToInt(c -> Integer.parseInt(c.getQuantity()))
+                .mapToInt(c -> c.getQuantity())
                 .sum();
 
         Map<String, List<CardInDeckDTO>> categorizedCards = categorizeCards(cards);
@@ -124,8 +124,7 @@ public class DeckController {
 
         try {
             CardCollectionDTO newDeck = cardCollectionService.createDeck(
-                user.getId(), name, description, mainDeckFormat
-            );
+                    user.getId(), name, description, mainDeckFormat);
             return ResponseEntity.status(HttpStatus.CREATED).body(newDeck);
         } catch (Exception e) {
             System.err.println("❌ ERRORE: " + e.getMessage());
@@ -150,8 +149,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardCollectionDTO updatedDeck = cardCollectionService.updateDeck(
-            id, user.getId(), name, description
-        );
+                id, user.getId(), name, description);
 
         if (updatedDeck == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -186,7 +184,7 @@ public class DeckController {
     public ResponseEntity<CardInDeckDTO> addCardToDeck(
             @PathVariable UUID deckId,
             @PathVariable UUID cardId,
-            @RequestParam(defaultValue = "1") String quantity,
+            @RequestParam(defaultValue = "1") Integer quantity,
             Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -197,8 +195,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardInDeckDTO result = cardCollectionService.addCardToDeck(
-            deckId, user.getId(), cardId, quantity
-        );
+                deckId, user.getId(), cardId, quantity);
 
         if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -222,8 +219,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         boolean removed = cardCollectionService.removeCardFromDeck(
-            deckId, user.getId(), cardId
-        );
+                deckId, user.getId(), cardId);
 
         if (!removed) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -247,8 +243,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardInDeckDTO result = cardCollectionService.increaseCardQuantity(
-            deckId, user.getId(), cardId
-        );
+                deckId, user.getId(), cardId);
 
         if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -272,8 +267,7 @@ public class DeckController {
         UrzaUser user = urzaUserService.findByUsername(username);
 
         CardInDeckDTO result = cardCollectionService.decreaseCardQuantity(
-            deckId, user.getId(), cardId
-        );
+                deckId, user.getId(), cardId);
 
         if (result == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
