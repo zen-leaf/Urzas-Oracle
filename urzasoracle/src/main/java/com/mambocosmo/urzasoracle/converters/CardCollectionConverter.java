@@ -31,8 +31,12 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
         cc.setName(e.getName());
         cc.setDescription(e.getDescription());
         cc.setMainDeckFormat(e.getMainDeckFormat());
-        cc.setPreviewimg(e.getPreview().getImage_uris().get("art_crop"));
-        cc.setCommander(getCARDCONVERTER().fromEToD(e.getCommander()));
+        if (e.getPreview() != null) {
+            cc.setPreviewimg(e.getPreview().getImage_uris().get("art_crop"));
+        }
+        if (e.getCommander() != null) {
+            cc.setCommander(getCARDCONVERTER().fromEToD(e.getCommander()));
+        }
         return cc;
     }
 }
