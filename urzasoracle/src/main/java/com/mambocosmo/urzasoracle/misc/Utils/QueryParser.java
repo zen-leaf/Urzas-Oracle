@@ -1,13 +1,10 @@
 package com.mambocosmo.urzasoracle.misc.Utils;
 
-import org.hibernate.query.criteria.spi.CriteriaBuilderExtension;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.scheduling.config.CronTask;
 
 import com.mambocosmo.urzasoracle.entities.Card;
-import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

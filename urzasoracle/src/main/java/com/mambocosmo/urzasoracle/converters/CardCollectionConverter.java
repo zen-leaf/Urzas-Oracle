@@ -5,8 +5,13 @@ import org.springframework.stereotype.Service;
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 
+import lombok.Data;
+
 @Service
+@Data
 public class CardCollectionConverter implements GenericConverter<CardCollection, CardCollectionDTO> {
+
+    private final CardConverter CARDCONVERTER;
 
     @Override
     public CardCollection fromDToE(CardCollectionDTO dto) {
@@ -26,6 +31,8 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
         cc.setName(e.getName());
         cc.setDescription(e.getDescription());
         cc.setMainDeckFormat(e.getMainDeckFormat());
+        cc.setPreviewimg(e.getPreview().getImage_uris().get("art_crop"));
+        cc.setCommander(getCARDCONVERTER().fromEToD(e.getCommander()));
         return cc;
     }
 }
