@@ -5,9 +5,35 @@
     padding-left: 12px;
     border-left: 2px solid #ffc1071e;
 }
-.cardTop{
+
+.cardTop {
     padding-top: 8px;
 }
+
+.cardcolumns {
+    column-count: 3;
+    column-gap: 1.5rem;
+}
+
+@media (max-width: 1400px) {
+    .cardcolumns {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 1000px) {
+    .cardcolumns {
+        column-count: 1;
+    }
+}
+
+.categoryincolumn {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+
 .card-row {
     display: flex;
     align-items: center;
@@ -17,7 +43,7 @@
     border-top: 2px solid #ffc10710;
     transition: all 0.2s;
     cursor: pointer;
-    gap: 12px;
+    gap: 4px;
 }
 
 .card-row:hover {
@@ -67,7 +93,7 @@
     background: #00000098;
     border-width: 0px 0px 1px 0px;
     border-color: #ffc107;
-    border-style: dashed;
+    border-style: solid;
 }
 
 .deckholder {

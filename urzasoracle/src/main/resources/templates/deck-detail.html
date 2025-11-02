@@ -13,7 +13,7 @@
     <div class="row ">
       <div class="col-12 pt-3 pb-2 deckinfo">
 
-        <div class="row ps-5">
+        <div class="row px-2">
           <div class="col-md-10">
             <h1 class="deck-title d-inline" th:text="${deck.name}"></h1>
             <p th:if="${isOwner}" class="fw-bold d-inline" data-bs-toggle="modal" data-bs-target="#editDeckModal">
@@ -43,7 +43,7 @@
 
       <!-- Immagine Carta -->
 
-      <div class="col-sm-3 py-5 ">
+      <div class="col-sm-5 col-md-5 col-lg-3 py-5 d-none d-md-block">
         <div class="card-container" style="    aspect-ratio:  0.714;">
           <div id="dragCard" class="magic-card" sty>
             <div class="card-face card-front">
@@ -67,7 +67,7 @@
           <span>No Image</span>
         </div>
       </div>
-      <div class="col-sm-8 py-3 deckholder">
+      <div class="col-md-8 col-lg-8 py-3 deckholder">
         <!-- LAYOUT MOXFIELD: COLONNE MULTIPLE -->
         <div class="mb-3 d-flex justify-content-between align-items-center">
           <h5 class="text-white mb-0">Decklist</h5>
@@ -94,9 +94,11 @@
           </button>
         </div>
 
+
         <!-- LAYOUT MOXFIELD: GRID MULTICOLONNA -->
-        <div th:if="${not #lists.isEmpty(cards)}" class="deck-grid-container" id="deckGridContainer">
+        <div th:if="${not #lists.isEmpty(cards)}" class="cardcolumns" id="deckGridContainer">
           <!-- Categorie renderizzate con JS -->
+
         </div>
       </div>
   </main>
@@ -313,7 +315,7 @@
     }
 
 
-    
+
     .card-preview {
       position: fixed;
       z-index: 9999;
@@ -556,7 +558,7 @@
         if (cards.length === 0) return;
 
         html += `
-            <div class="category-column">
+            <div class="category-column categoryincolumn">
               <div class="category-header">
                 <h6>${categoryName} (${cards.length})</h6>
               </div>
