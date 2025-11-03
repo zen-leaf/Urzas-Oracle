@@ -12,40 +12,42 @@
       <!-- Immagine Carta -->
 
       <div class="col-sm-5 col-xl-4 row py-5 ">
-        <div class="col-12">
-          <div class="card-container" style="    aspect-ratio:  0.714;">
-            <div id="dragCard" class="magic-card" sty>
-              <div class="card-face card-front">
-                <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}"
-                  th:alt="${card.name}" class=" shadow card-img" />
+        <div class="col-12 ">
+          <div class="sticky-top" style="top: 2rem;">
+            <div class="card-container" style="    aspect-ratio:  0.714;">
+              <div id="dragCard" class="magic-card" sty>
+                <div class="card-face card-front">
+                  <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}"
+                    th:alt="${card.name}" class=" shadow card-img" />
+                </div>
+                <div class="card-face card-back">
+
+                  <img th:if="${card.backFace != null and card.backFace.images['large'] != null}"
+                    th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
+
+                </div>
               </div>
-              <div class="card-face card-back">
-
-              <img th:if="${card.backFace != null and card.backFace.images['large'] != null}"
-                th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
-
             </div>
-          </div>
-        </div>
-        <div th:if="${card.images == null or card.images['large'] == null}"
-          class="w-100  d-flex align-items-center justify-content-center text-secondary" style="
+            <div th:if="${card.images == null or card.images['large'] == null}"
+              class="w-100  d-flex align-items-center justify-content-center text-secondary" style="
               aspect-ratio: 488/680;
               background: rgba(108, 117, 125, 0.2);
               border: 2px dashed rgba(255, 193, 7, 0.2);
             ">
-            <span>No Image</span>
-          </div>
-          <div class="row justify-content-center pt-5">
-            <div class="col-12 d-flex justify-content-center">
-              <small class="text-secondary" style="font-size:0.6rem;">Drag or tap the card to rotate it</small>
+              <span>No Image</span>
             </div>
-            <div class="col-md-12 col-lg-4">
-              <a class="btn btn-outline-warning fw-bold" style="width: 100%;" onclick="resetRotation()">Reset
-                rotation</a>
-            </div>
-            <div class="col-md-12 col-lg-4">
-              <a class="btn btn-outline-warning fw-bold " style="width: 100%;" onclick="flipCard()">Flip
-                card</a>
+            <div class="row justify-content-center pt-5">
+              <div class="col-12 d-flex justify-content-center">
+                <small class="text-secondary" style="font-size:0.6rem;">Drag or tap the card to rotate it</small>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <a class="btn btn-outline-warning fw-bold" style="width: 100%;" onclick="resetRotation()">Reset
+                  rotation</a>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <a class="btn btn-outline-warning fw-bold " style="width: 100%;" onclick="flipCard()">Flip
+                  card</a>
+              </div>
             </div>
           </div>
         </div>
@@ -209,11 +211,13 @@
       align-items: center;
       justify-content: center;
     }
+
     .badge-legal,
     .badge-not-legal {
       width: 40%;
       text-align: center;
     }
+
     /* Commenti */
     .comments-section {
       background: rgba(50, 50, 60, 0.29);
@@ -259,6 +263,6 @@
       document.getElementById('addCommentBox').style.display = 'none';
     }
   </script>
-  </body>
+</body>
 
 </html>
