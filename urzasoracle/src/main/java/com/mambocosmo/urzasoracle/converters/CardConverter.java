@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.DTO.CardFaceDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardFace;
 import com.mambocosmo.urzasoracle.misc.enums.Format;
 
 import lombok.Data;
@@ -38,7 +39,16 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         CardDTO dto = new CardDTO();
         dto.setId(e.getId());
         dto.setName(e.getName());
-        dto.setManaCost(e.getMana_cost());
+        String actualmana = (e.getMana_cost().equals("") ? "" : e.getMana_cost()) + " ";
+
+        if (e.getMana_cost() == null || e.getMana_cost().equals("")) {
+            for (CardFace cf : e.getCard_faces()) {
+                actualmana += (cf.getMana_cost().equals("") ? "{0}" : e.getMana_cost()) + " ";
+            }
+        }
+        // System.out.println(actualmana);
+        actualmana = actualmana.strip().replace(" ", " // ");
+        dto.setManaCost(actualmana);
         dto.setTypeline(e.getType_line());
         dto.setImages(e.getImage_uris().isEmpty() ? e.getCard_faces().get(1).getImage_uris() : e.getImage_uris());
         dto.setCardFaces(e.getCard_faces().stream().map(e1 -> getCARDFACECONVERTER().fromEToD(e1)).toList());
