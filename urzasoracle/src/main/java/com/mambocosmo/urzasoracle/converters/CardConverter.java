@@ -39,15 +39,17 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         CardDTO dto = new CardDTO();
         dto.setId(e.getId());
         dto.setName(e.getName());
-        String actualmana = (e.getMana_cost().equals("") ? "" : e.getMana_cost()) + " ";
-
+        String actualmana = e.getMana_cost();
+        System.out.println(actualmana);
         if (e.getMana_cost() == null || e.getMana_cost().equals("")) {
             for (CardFace cf : e.getCard_faces()) {
-                actualmana += (cf.getMana_cost().equals("") ? "{0}" : e.getMana_cost()) + " ";
+                actualmana = (cf.getMana_cost().equals("") ? "" : cf.getMana_cost()) + " " + actualmana;
+                System.out.println(actualmana);
             }
         }
+        actualmana = (actualmana.equals("") ? "{0}" : actualmana);
         // System.out.println(actualmana);
-        actualmana = actualmana.strip().replace(" ", " // ");
+        actualmana = actualmana.strip().replace("} {", "} // {");
         dto.setManaCost(actualmana);
         dto.setTypeline(e.getType_line());
         dto.setImages(e.getImage_uris().isEmpty() ? e.getCard_faces().get(1).getImage_uris() : e.getImage_uris());
