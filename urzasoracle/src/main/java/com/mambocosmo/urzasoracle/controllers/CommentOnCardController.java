@@ -1,5 +1,6 @@
 package com.mambocosmo.urzasoracle.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,7 @@ public class CommentOnCardController {
             @RequestParam UUID currentCardId,
             // @RequestParam(required = false, defaultValue = "standard") String mainDeckFormat,
             Authentication authentication) {
-
+        System.out.println("sto stampando: " + authentication);
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -119,6 +120,17 @@ public class CommentOnCardController {
         }
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/comments-refresh")
+    @ResponseBody
+    public List<CommentOnCardDTO> refreshComments(@RequestParam UUID cardId) {
+
+        System.out.println("DENTRO COMMENTS REFRESG");
+
+        List<CommentOnCardDTO> cardComments = getCOMMENTONCARDSERVICE().getCommentsByCard(cardId);
+
+        return cardComments;
     }
 
 }

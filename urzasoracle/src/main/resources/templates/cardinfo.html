@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head('Card info - Urza\'s Oracle')}"></head>
+<head th:replace="~{fragments/head :: head('Card info - Urza\'s Oracle')}">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
+
 
 <body class="bg-dark text-light">
   <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -60,21 +63,18 @@
           <!-- Nome e Tipo -->
           <div class="col-lg-12">
             <div class="float-end"
-              style="min-width:15rem;background-color: #4e435370; box-shadow: 0 4px 8px rgba(0,0,0,0.3) ; border-radius: 0.5rem; border:1px solid rgba(214, 228, 20, 0.267); color: white; margin-top: 0; padding: auto;">
+              style="background-color: #4e435370; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border-radius: 0.5rem; border:1px solid rgba(214, 228, 20, 0.267); color: white; margin-top: 0; padding: auto;">
               <div class="row px-3 py-1">
                 <!-- Mana Cost come testo -->
                 <div class="col-7">
                   <small class="text-secondary">COST</small>
                   <p class="text-light mb-0 fs-5 replaceCandidate" style="font-size: 1.1rem"
-                    th:text="${card.manaCost}==''?'{0}':${card.manaCost}">
-                  </p>
+                    th:text="${card.manaCost} == '' ? '{0}' : ${card.manaCost}"></p>
                 </div>
                 <!-- Dati set, rarità, numero -->
-                <a class="col-5 px-2" th:href="@{/cards(q='set:'+${card.expansionSet.code})}"
+                <a class="col-5 px-2" th:href="@{/cards(q='set:' + ${card.expansionSet.code})}"
                   style="display: flex; justify-content: center; align-items: center;">
-                  <!-- <small class="text-secondary">SET</small> -->
-                  <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;"></img>
-
+                  <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;">
                 </a>
               </div>
             </div>
@@ -82,8 +82,7 @@
                 font-size: 2.2rem;
                 text-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
               " th:text="${card.name}"></h1>
-            <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}">
-            </p>
+            <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}"></p>
           </div>
         </div>
         <hr class="border-warning mb-4" style="opacity: 0.3" />
@@ -137,32 +136,12 @@
         <div class="mt-5">
           <a href="/cards" class="btn btn-outline-warning fw-bold">&larr; Back to Cards</a>
         </div>
+
         <!-- Sezione Commenti -->
         <div class="comments-section mt-5">
           <h4 class="text-light mb-3">Comments</h4>
           <div class="comments-list" id="commentsList" style="max-height: 350px; overflow-y: auto;">
-            <!-- Esempio commenti statici -->
-            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
-              <span class="fw-bold text-info">systemlayers</span>
-              <small class="text-secondary ms-2">24 Oct 22:30</small>
-              <p class="mb-1 text-light">Great record, definitely a bit underrated here I feel.</p>
-            </div>
-            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
-              <span class="fw-bold text-info">Apathy1Exhaustion</span>
-              <small class="text-secondary ms-2">01 Nov 13:24</small>
-              <p class="mb-1 text-light">Ashes in the Fall is so sick</p>
-            </div>
-            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
-              <span class="fw-bold text-info">Smally2401</span>
-              <small class="text-secondary ms-2">02 Nov 21:52</small>
-              <p class="mb-1 text-light">happy bday !!</p>
-            </div>
-            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
-              <span class="fw-bold text-info">TheDavidLol</span>
-              <small class="text-secondary ms-2">02 Nov 21:57</small>
-              <p class="mb-1 text-light">FUCK ICE [15]<br>Also happy 26th!! Will sadly never stop being relevant.</p>
-            </div>
-            <!-- ...altri commenti... -->
+            <!-- Commenti caricati dinamicamente -->
           </div>
           <!-- Bottone per aggiungere commento -->
           <div class="text-center mt-4">
@@ -192,7 +171,7 @@
     }
 
     small {
-      font-size: 0.75rem;
+      font-size: 0.75rem !important;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       font-weight: 600;
@@ -240,30 +219,79 @@
       resize: vertical;
     }
   </style>
-  <script src="/js/cardrotate.js" defer></script>
-  <script>
+
+  <script th:inline="javascript">
+
+    const cardId = /*[[${card.id}]]*/'';
+    // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    // const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    const csrfToken = /*[[${_csrf.token}]]*/ '';
+    const csrfHeader = /*[[${_csrf.headerName}]]*/ 'X-CSRF-TOKEN';
+
     function toggleAddComment() {
-      var box = document.getElementById('addCommentBox');
+      let box = document.getElementById('addCommentBox');
       box.style.display = (box.style.display === 'none') ? 'block' : 'none';
     }
-    function addComment() {
-      var input = document.getElementById('commentInput');
-      var text = input.value.trim();
-      if (text === '') return;
-      var now = new Date();
-      var commentHtml = `
-        <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
-          <span class="fw-bold text-info">You</span>
-          <small class="text-secondary ms-2">${now.toLocaleString()}</small>
-          <p class="mb-1 text-light"></p>
-        </div>`;
-      var temp = document.createElement('div');
-      temp.innerHTML = commentHtml;
-      temp.querySelector('p').innerText = text;
-      document.getElementById('commentsList').appendChild(temp.firstChild);
-      input.value = '';
-      document.getElementById('addCommentBox').style.display = 'none';
+
+    async function loadComments() {
+      try {
+        let res = await fetch('/api/CommentController/comments-refresh?cardId=' + cardId);
+        if (res.ok) {
+          let comments = await res.json();
+          let list = document.getElementById('commentsList');
+          list.innerHTML = '';
+          comments.forEach(c => {
+            let div = document.createElement('div');
+            div.className = 'comment mb-2 p-2 bg-secondary bg-opacity-10 rounded';
+            div.innerHTML = '<span class="fw-bold text-info">' + c.userName + '</span>' +
+              '<small class="text-secondary ms-2">' + c.timeOfComment.toLocaleString() + '</small>' +
+              '<p class="mb-1 text-light">' + c.comment + '</p>';
+            list.appendChild(div);
+          });
+        } else {
+          console.error('Error loading comments: ' + res.status);
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
+
+    async function addComment() {
+      let input = document.getElementById('commentInput');
+      let text = input.value.trim();
+      if (!text) return;
+      try {
+        let res = await fetch('/api/CommentController/add-comment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            [csrfHeader]: csrfToken,
+          },
+          body: new URLSearchParams({
+            commentText: text,
+            currentCardId: cardId
+          })
+        });
+        if (res.status === 401) {
+          window.location.href = '/login';
+          return;
+        }
+        if (res.ok) {
+          input.value = '';
+          document.getElementById('addCommentBox').style.display = 'none';
+          loadComments();
+        } else {
+          alert('Errore nell\'invio del commento');
+          console.log(res);
+        }
+      } catch (e) {
+        alert('Errore di rete');
+        console.error(e);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadComments);
+
   </script>
 </body>
 
