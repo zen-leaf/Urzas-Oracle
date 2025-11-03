@@ -127,22 +127,22 @@ public class DeckController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-
+        
         String username = authentication.getName();
         UrzaUser user = urzaUserService.findByUsername(username);
         List<CardCollectionDTO> userDecks = cardCollectionService.getDecksByUser(user.getId());
-
+        
         for (CardCollectionDTO deck : userDecks) {
             Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
             deck.setTotalCards(cardCount != null ? cardCount : 0);
-
+            
             List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
             List<CardInDeckDTO> preview = allCards.stream()
-                    .limit(4)
-                    .collect(Collectors.toList());
+            .limit(4)
+            .collect(Collectors.toList());
             deck.setPreviewCards(preview);
         }
-
+        
         model.addAttribute("decks", userDecks);
         model.addAttribute("active", "mydecks");
         model.addAttribute("isLoggedIn", true);
@@ -179,6 +179,32 @@ public class DeckController {
 
         return userDecks;
     }
+    
+    
+    @GetMapping("/mydecksrefresh")
+    @ResponseBody
+    public List<CardCollectionDTO> listMyDecksJSON(Authentication authentication) {
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return new ArrayList<CardCollectionDTO>();
+    }
+
+    String username = authentication.getName();
+    UrzaUser user = urzaUserService.findByUsername(username);
+    List<CardCollectionDTO> userDecks = cardCollectionService.getDecksByUser(user.getId());
+
+    for (CardCollectionDTO deck : userDecks) {
+        Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
+        deck.setTotalCards(cardCount != null ? cardCount : 0);
+
+        List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
+        List<CardInDeckDTO> preview = allCards.stream()
+                .limit(4)
+                .collect(Collectors.toList());
+        deck.setPreviewCards(preview);
+    }
+
+    return userDecks; 
+}
 
     @GetMapping("/mydecks/{id}")
     public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication, HttpServletRequest request) {
