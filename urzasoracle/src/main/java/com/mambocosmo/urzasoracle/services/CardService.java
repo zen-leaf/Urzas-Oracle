@@ -79,7 +79,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return out;
     }
 
-    //TODO IMPORTANT THIS METHOD IS HERE ONLY FOR COMMENT TESTING, CREATE COMMENT DTO AND USE THAT
+    // TODO IMPORTANT THIS METHOD IS HERE ONLY FOR COMMENT TESTING, CREATE COMMENT
+    // DTO AND USE THAT
     public List<Card> getByNameEntity(String name) {
         List<Card> out = getREPOSITORY().findByNameContainingIgnoreCase(name).stream().map(e -> {
             return e;
@@ -87,7 +88,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return out;
     }
 
-    public Card getByIdEntity (UUID id){
+    public Card getByIdEntity(UUID id) {
         return getREPOSITORY().findById(id).orElse(null);
     }
 
@@ -201,9 +202,9 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     public Page<CardDTO> searchByQueryPaged(String q, int page, int size) {
         Specification<Card> spec = Specification.unrestricted();
         if (!q.toLowerCase().contains("nonplayable:")) {
-            System.out.println("adding default artwork exclusion");
+            // System.out.println("adding default artwork exclusion");
             q += " nonplayable:exclude";
-            System.out.println(q);
+            // System.out.println(q);
         }
 
         for (SearchCriteria query : SearchCriteria.StringToCriteria(q)) {
