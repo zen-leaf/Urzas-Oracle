@@ -35,6 +35,12 @@
             ">
           <span>No Image</span>
         </div>
+        <div th:each="comment : ${comments}">
+          SEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+          <p th:text="${comment.user.username}">
+          <p th:text="${comment.comment}">
+          <p th:text="${comment.timeOfComment}">
+        </div>
       </div>
       <!-- Informazioni sulla carta -->
       <div class="col-sm-7 p-4 cardinfoholder">
