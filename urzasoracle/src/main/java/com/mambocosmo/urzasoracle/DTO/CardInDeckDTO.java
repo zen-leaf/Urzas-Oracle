@@ -11,4 +11,5 @@ public class CardInDeckDTO {
     private String typeline;
     private Integer quantity;
     private String imageUrl;
+    private String backImageUrl;
 }

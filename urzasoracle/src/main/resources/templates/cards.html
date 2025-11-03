@@ -102,9 +102,9 @@
         
 
         <li class="page-item" th:each="i : ${#numbers.sequence(0, 8)}"
-          th:classappend="${i == currentPage} ? 'active'" th:if="${currentPage + i -4>0}">
-          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${currentPage + i -5}, q=${lastQuery})}"
-            th:text="${currentPage + i -4}"></a>
+          th:classappend="${i== 4} ? 'active'" th:if="${currentPage+i-4>=0}">
+          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${currentPage + i -4}, q=${lastQuery})}"
+            th:text="${currentPage + i -3}"></a>
         </li>
 
         <li class="page-item" th:classappend="${currentPage ==totalPages} ? 'disabled'">

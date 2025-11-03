@@ -24,9 +24,9 @@ public class QueryParser implements Specification<Card> {
     public Predicate toPredicate(@NonNull Root<Card> root, @Nullable CriteriaQuery<?> query,
             @NonNull CriteriaBuilder criteriaBuilder) {
         if (CRITERIA.getLogic().equalsIgnoreCase(":")) {
-            System.out.println("parsing equals");
+            // System.out.println("parsing equals");
             if (CRITERIA.getKey().equals("nonplayable")) {
-                System.out.println("parsing nonplayable " + CRITERIA);
+                // System.out.println("parsing nonplayable " + CRITERIA);
                 if (!CRITERIA.getValue().equals("include") || !CRITERIA.getValue().equals("true")) {
                     return criteriaBuilder.notLike(criteriaBuilder.lower(root.get("layout")), "art_series");
                 }
@@ -47,8 +47,8 @@ public class QueryParser implements Specification<Card> {
             return criteriaBuilder.equal(root.get(CRITERIA.getKey()), CRITERIA.getValue());
         }
         if (CRITERIA.getLogic().equalsIgnoreCase(">")) {
-            System.out.println("parsing " + root.get(CRITERIA.getKey()) + " greater than "
-                    + CRITERIA.getParsedValue());
+            // System.out.println("parsing " + root.get(CRITERIA.getKey()) + " greater than "
+            //         + CRITERIA.getParsedValue());
             return criteriaBuilder.greaterThan(root.get(CRITERIA.getKey()).as(Double.class), CRITERIA.getParsedValue());
         }
         if (CRITERIA.getLogic().equalsIgnoreCase("<")) {
