@@ -124,7 +124,9 @@ public class CommentOnCardController {
 
     @GetMapping("/comments-refresh")
     @ResponseBody
-    public List<CommentOnCardDTO> refreshComments(@RequestParam UUID cardId, Authentication authentication) {
+    public List<CommentOnCardDTO> refreshComments(@RequestParam UUID cardId) {
+
+        System.out.println("DENTRO COMMENTS REFRESG");
 
         List<CommentOnCardDTO> cardComments = getCOMMENTONCARDSERVICE().getCommentsByCard(cardId);
 

@@ -17,15 +17,17 @@
         <div class="card-container" style="aspect-ratio:0.714;">
           <div id="dragCard" class="magic-card">
             <div class="card-face card-front">
-              <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}" th:alt="${card.name}" class="shadow card-img" />
+              <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}"
+                th:alt="${card.name}" class="shadow card-img" />
             </div>
             <div class="card-face card-back">
-              <img th:if="${card.backFace != null and card.backFace.images['large'] != null}" th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
+              <img th:if="${card.backFace != null and card.backFace.images['large'] != null}"
+                th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
             </div>
           </div>
         </div>
-        <div th:if="${card.images == null or card.images['large'] == null}" class="w-100 d-flex align-items-center justify-content-center text-secondary"
-          style="
+        <div th:if="${card.images == null or card.images['large'] == null}"
+          class="w-100 d-flex align-items-center justify-content-center text-secondary" style="
             aspect-ratio: 488/680;
             background: rgba(108, 117, 125, 0.2);
             border: 2px dashed rgba(255, 193, 7, 0.2);
@@ -49,7 +51,8 @@
                     th:text="${card.manaCost} == '' ? '{0}' : ${card.manaCost}"></p>
                 </div>
                 <!-- Dati set, rarità, numero -->
-                <a class="col-5 px-2" th:href="@{/cards(q='set:' + ${card.expansionSet.code})}" style="display: flex; justify-content: center; align-items: center;">
+                <a class="col-5 px-2" th:href="@{/cards(q='set:' + ${card.expansionSet.code})}"
+                  style="display: flex; justify-content: center; align-items: center;">
                   <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;">
                 </a>
               </div>
@@ -121,7 +124,8 @@
           </div>
           <!-- Bottone per aggiungere commento -->
           <div class="text-center mt-4">
-            <button class="btn btn-outline-warning" id="showAddCommentBtn" type="button" onclick="toggleAddComment()">Add comment</button>
+            <button class="btn btn-outline-warning" id="showAddCommentBtn" type="button"
+              onclick="toggleAddComment()">Add comment</button>
           </div>
           <!-- Form di aggiunta commento -->
           <div class="add-comment mt-3" id="addCommentBox" style="display:none;">
@@ -167,6 +171,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .badge-legal,
     .badge-not-legal {
       width: 40%;
@@ -181,9 +186,11 @@
       padding: 1.5rem 1rem;
       margin-top: 2.5rem;
     }
+
     .comments-list .comment {
       border-left: 3px solid rgba(255, 193, 7, 0.13);
     }
+
     #addCommentBox textarea {
       background-color: #181a20;
       color: #fff;
@@ -193,10 +200,12 @@
   </style>
 
   <script th:inline="javascript">
-    /*<![CDATA[*/
+
     const cardId = /*[[${card.id}]]*/'';
-    const csrfToken = /*[[${csrfToken}]]*/ "";
-    const csrfHeader = /*[[${csrfHeader}]]*/ "X-CSRF-TOKEN";
+    // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    // const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    const csrfToken = /*[[${_csrf.token}]]*/ '';
+    const csrfHeader = /*[[${_csrf.headerName}]]*/ 'X-CSRF-TOKEN';
 
     function toggleAddComment() {
       let box = document.getElementById('addCommentBox');
@@ -214,7 +223,7 @@
             let div = document.createElement('div');
             div.className = 'comment mb-2 p-2 bg-secondary bg-opacity-10 rounded';
             div.innerHTML = '<span class="fw-bold text-info">' + c.userName + '</span>' +
-              '<small class="text-secondary ms-2">' + new Date(c.createdAt).toLocaleString() + '</small>' +
+              '<small class="text-secondary ms-2">' + c.timeOfComment.toLocaleString() + '</small>' +
               '<p class="mb-1 text-light">' + c.comment + '</p>';
             list.appendChild(div);
           });
@@ -259,8 +268,9 @@
         console.error(e);
       }
     }
+
     document.addEventListener('DOMContentLoaded', loadComments);
-    /*]]>*/
+
   </script>
 </body>
 
