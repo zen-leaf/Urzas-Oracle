@@ -665,7 +665,7 @@
       }
 
       const res = await fetch(
-        `/decks/mydecks/${deckId}/cards/${contextCardId}/increase`,
+        `/decks/public/${deckId}/cards/${contextCardId}/increase`,
         {
           method: "PUT",
           headers: { [csrfHeader]: csrfToken },
@@ -683,7 +683,7 @@
 
       if (currentQty > 1) {
         const res = await fetch(
-          `/decks/mydecks/${deckId}/cards/${contextCardId}/decrease`,
+          `/decks/public/${deckId}/cards/${contextCardId}/decrease`,
           {
             method: "PUT",
             headers: { [csrfHeader]: csrfToken },
@@ -702,7 +702,7 @@
       if (!confirm("⚠️ Rimuovere completamente?")) return;
 
       const res = await fetch(
-        `/decks/mydecks/${deckId}/cards/${contextCardId}`,
+        `/decks/public/${deckId}/cards/${contextCardId}`,
         {
           method: "DELETE",
           headers: { [csrfHeader]: csrfToken },
@@ -927,7 +927,7 @@
       let saved = 0;
       for (const [id, qty] of cardQuantities) {
         const res = await fetch(
-          `/decks/mydecks/${deckId}/cards/${id}?quantity=${qty}`,
+          `/decks/public/${deckId}/cards/${id}?quantity=${qty}`,
           {
             method: "POST",
             headers: { [csrfHeader]: csrfToken },
@@ -965,7 +965,7 @@
       ?.addEventListener("submit", function (e) {
         e.preventDefault();
         fetch(
-          `/decks/mydecks/${deckId}?name=${encodeURIComponent(
+          `/decks/public/${deckId}?name=${encodeURIComponent(
             document.getElementById("deckName").value
           )}&description=${encodeURIComponent(
             document.getElementById("deckDesc").value
@@ -978,7 +978,7 @@
       });
 
     function deleteDeck() {
-      fetch(`/decks/mydecks/${deckId}`, {
+      fetch(`/decks/public/${deckId}`, {
         method: "DELETE",
         headers: { [csrfHeader]: csrfToken },
       }).then((r) => r.ok && (window.location = "/decks/mydecks"));

@@ -61,7 +61,8 @@
             </div>
           </div>
           <div class="row ">
-            <th:block th:each="deck : ${decks}">
+            <div id="catalogContainer"></div>
+            <!-- <th:block th:each="deck : ${decks}">
               <div class="col-sm-3 pt-3 px-2">
                 <a th:href="@{'/decks/public/'+${deck.id}}" class="link-unstyled">
                   <div class="card-deck"
@@ -75,7 +76,7 @@
                   </div>
                 </a>
               </div>
-            </th:block>
+            </th:block> -->
           </div>
         </div>
       </div>
@@ -256,17 +257,18 @@
 
           return `
           <div class="col-sm-3 pt-3 px-2">
-            <a href="/decks/public/${deck.id}" class="link-unstyled">
-              <div class="card-deck">
-                <div class="info" th:style="'background-image:url(' + @{deck.previewimg} + '); background-repeat: no-repeat, repeat; background-size: cover;'">
-                  <h5 class="title">${deck.name}</h5>
-                  <p class="author">by ${deck.owner}, for ${deck.mainDeckFormat}</p>
-              
-                  <p class="desc">${deck.description || ""}</p>
-                </div>
+                <a th:href="@{'/decks/public/'+${deck.id}}" class="link-unstyled">
+                  <div class="card-deck"
+                    style="background-image:linear-gradient(rgba(0, 0, 0, 0.8)),url(https://cards.scryfall.io/art_crop/front/b/8/b8dd4693-424d-4d6e-86cf-24401a23d6b1.jpg?1721425770); background-repeat: no-repeat, repeat; background-size: cover;background-origin: border-box;">
+                    <div class="info">
+                      <h5 class="title">${deck.name}</h5>
+                      <p class="author">by ${deck.owner}, for ${deck.mainDeckFormat}</p>
+
+                      <p  class="desc">${deck.description}</p>
+                    </div>
+                  </div>
+                </a>
               </div>
-            </a>
-          </div>
         `;
         })
         .join("");

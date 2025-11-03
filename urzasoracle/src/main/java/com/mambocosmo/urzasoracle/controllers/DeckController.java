@@ -80,7 +80,7 @@ public class DeckController {
                 cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
                         : getCardService().getAll().get(0));
 
-        return "public-deck-detail";
+        return "deck-detail";
     }
 
     @PostMapping("/public/{deckId}/clone")
@@ -136,7 +136,7 @@ public class DeckController {
         CardCollectionDTO deck = cardCollectionService.getByID(id);
 
         if (deck == null) {
-            return "redirect:/decks/mydecks";
+            return "redirect:/decks/decks";
         }
 
         boolean isOwner = false;
@@ -146,7 +146,7 @@ public class DeckController {
         }
 
         if (!isOwner) {
-            return "redirect:/decks/mydecks";
+            return "redirect:/decks/decks";
         }
 
         List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);

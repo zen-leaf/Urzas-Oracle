@@ -1,5 +1,6 @@
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-black px-3" style="border-width: 0px 0px 1px 0px; border-color: #ffc107; border-style: solid;"
-  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-black px-3"
+  style="border-width: 0px 0px 1px 0px; border-color: #ffc107; border-style: solid;" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <div class="container-fluid">
     <img th:src="@{/img/bd06e812-ef30-4d3e-aeb2-eba19fcd74e6.png}" alt="Logo" height="60" class="me-2" />
     <a class="navbar-brand fw-bold text-warning" href="/">Urza's Oracle</a>
@@ -45,7 +46,8 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end bg-dark border-warning" aria-labelledby="userDropdown">
             <li>
-              <a class="dropdown-item text-light" href="/decks/mydecks">
+              <a class="dropdown-item text-light"
+                th:href="@{'/decks?q=a:'+${#authorization.getAuthentication().principal.getUsername()}}">
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-person-circle me-2" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />

@@ -442,7 +442,7 @@
         )?.content;
 
         fetch(
-          `/decks/mydecks/${deckId}?name=${encodeURIComponent(
+          `/decks/public/${deckId}?name=${encodeURIComponent(
             document.getElementById("deckName").value
           )}&description=${encodeURIComponent(
             document.getElementById("deckDesc").value
