@@ -28,7 +28,6 @@
       </div>
     </div>
     <!-- GRID -->
-
     <div class="row px-4 justify-content-center" th:if="${not #lists.isEmpty(decks)}">
 
       <div class="col-11 row deckholder ">
@@ -64,7 +63,7 @@
           <div class="row ">
             <th:block th:each="deck : ${decks}">
               <div class="col-sm-3 pt-3 px-2">
-                <a href="/decks/public/${deck.id}" class="link-unstyled">
+                <a th:href="@{'/decks/public/'+${deck.id}}" class="link-unstyled">
                   <div class="card-deck"
                     th:style="'background-image:linear-gradient(rgba(0, 0, 0, 0.8)),url(' + @{https://cards.scryfall.io/art_crop/front/b/8/b8dd4693-424d-4d6e-86cf-24401a23d6b1.jpg?1721425770} + '); background-repeat: no-repeat, repeat; background-size: cover;background-origin: border-box;'">
                     <div class="info">
