@@ -52,7 +52,7 @@ public class UrzaUserService extends GenericService<UrzaUser, UrzaUserDTO, UrzaU
         if (tempList.size() == 0) {
             UrzaUser defaultAdmin = getCONTEXT().getBean(UrzaUser.class);
 
-            defaultAdmin.setAuthorities(List.of("ROLE_ADMIN", "ROLE_USER"));
+            defaultAdmin.setAuthorities(List.of("ROLE_ADMIN"));
             defaultAdmin.setEmail("Mambo@cosmo.com");
             defaultAdmin.setUsername("UrzaAdmin");
             defaultAdmin.setDisplayName("UrzaAdmin");
