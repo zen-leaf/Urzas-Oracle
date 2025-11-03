@@ -2,7 +2,6 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{fragments/head :: head('Card info - Urza\'s Oracle')}"></head>
-
 </head>
 
 <body class="bg-dark text-light">
@@ -11,31 +10,27 @@
   <main class="container-fluid ">
     <div class="row">
       <!-- Immagine Carta -->
-
       <div class="col-sm-4 py-5 ">
-        <div class="card-container" style="    aspect-ratio:  0.714;">
-          <div id="dragCard" class="magic-card" sty>
+        <div class="card-container" style="aspect-ratio:0.714;">
+          <div id="dragCard" class="magic-card">
             <div class="card-face card-front">
-              <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}"
-                th:alt="${card.name}" class=" shadow card-img" />
+              <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}" th:alt="${card.name}" class="shadow card-img" />
             </div>
             <div class="card-face card-back">
-
-              <img th:if="${card.backFace != null and card.backFace.images['large'] != null}"
-                th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
-
+              <img th:if="${card.backFace != null and card.backFace.images['large'] != null}" th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
             </div>
           </div>
         </div>
-        <div th:if="${card.images == null or card.images['large'] == null}"
-          class="w-100  d-flex align-items-center justify-content-center text-secondary" style="
-              aspect-ratio: 488/680;
-              background: rgba(108, 117, 125, 0.2);
-              border: 2px dashed rgba(255, 193, 7, 0.2);
-            ">
+        <div th:if="${card.images == null or card.images['large'] == null}" class="w-100 d-flex align-items-center justify-content-center text-secondary"
+          style="
+            aspect-ratio: 488/680;
+            background: rgba(108, 117, 125, 0.2);
+            border: 2px dashed rgba(255, 193, 7, 0.2);
+          ">
           <span>No Image</span>
         </div>
       </div>
+
       <!-- Informazioni sulla carta -->
       <div class="col-sm-7 p-4 cardinfoholder">
         <div class="row">
@@ -51,30 +46,21 @@
                     th:text="${card.manaCost}==''?'{0}':${card.manaCost}">
                   </p>
                 </div>
-
                 <!-- Dati set, rarità, numero -->
-                <a class="col-5 px-2" th:href="@{/cards(q='set:'+${card.expansionSet.code})}"
-                  style="display: flex; justify-content: center; align-items: center;">
-                  <!-- <small class="text-secondary">SET</small> -->
-                  <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;"></img>
-
+                <a class="col-5 px-2" th:href="@{/cards(q='set:'+${card.expansionSet.code})}" style="display: flex; justify-content: center; align-items: center;">
+                  <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;">
                 </a>
               </div>
             </div>
             <h1 class="fw-bold text-warning mb-2" style="
                 font-size: 2.2rem;
                 text-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
-                /* font-family: 'Georgia', serif; */
               " th:text="${card.name}"></h1>
             <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}"></p>
           </div>
         </div>
-        <!-- <hr class="border-warning mb-4" style="opacity: 0.3" /> -->
-
-
         <hr class="border-warning mb-4" style="opacity: 0.3" />
         <div class="row">
-
           <!-- Oracle Text -->
           <div class="col-12 mb-4" th:if="${card.oracleText != null and card.oracleText != ''}">
             <small class="text-secondary d-block mb-2">ORACLE TEXT</small>
@@ -98,7 +84,6 @@
         </div>
 
         <!-- Artista -->
-
         <small class="text-secondary d-block mb-2">ILLUSTRATED BY</small>
         <p class="text-light" style="font-size: 0.95rem" th:text="${#strings.listJoin(card.artistNames, ', ')}"></p>
 
@@ -110,17 +95,13 @@
                 grid-template-columns: repeat(3, 1fr);
                 gap: 0.75rem;
                 ">
-            <!-- th:with="status=${card.legalities.get('standard')}" -->
             <th:block th:each="format : ${card.legalities}">
               <div class="row px-2">
                 <span th:text="${#strings.capitalize(format.key)}" class="col-md-12 format-label">Standard</span>
-
                 <span th:if="${format.value == 'legal'}" class="col-md-5 badge legal">LEGAL</span>
                 <span th:if="${format.value != 'legal'}" class="col-md-5 badge not-legal">NOT LEGAL</span>
               </div>
-
             </th:block>
-
           </div>
         </div>
         <hr class="border-warning mb-4" style="opacity: 0.3" />
@@ -129,8 +110,47 @@
         <div class="mt-5">
           <a href="/cards" class="btn btn-outline-warning fw-bold">&larr; Back to Cards</a>
         </div>
+
+        <!-- Sezione Commenti -->
+        <div class="comments-section mt-5">
+          <h4 class="text-light mb-3">Comments</h4>
+          <div class="comments-list" id="commentsList" style="max-height: 350px; overflow-y: auto;">
+            <!-- Esempio commenti statici -->
+            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
+              <span class="fw-bold text-info">systemlayers</span>
+              <small class="text-secondary ms-2">24 Oct 22:30</small>
+              <p class="mb-1 text-light">Great record, definitely a bit underrated here I feel.</p>
+            </div>
+            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
+              <span class="fw-bold text-info">Apathy1Exhaustion</span>
+              <small class="text-secondary ms-2">01 Nov 13:24</small>
+              <p class="mb-1 text-light">Ashes in the Fall is so sick</p>
+            </div>
+            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
+              <span class="fw-bold text-info">Smally2401</span>
+              <small class="text-secondary ms-2">02 Nov 21:52</small>
+              <p class="mb-1 text-light">happy bday !!</p>
+            </div>
+            <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
+              <span class="fw-bold text-info">TheDavidLol</span>
+              <small class="text-secondary ms-2">02 Nov 21:57</small>
+              <p class="mb-1 text-light">FUCK ICE [15]<br>Also happy 26th!! Will sadly never stop being relevant.</p>
+            </div>
+            <!-- ...altri commenti... -->
+          </div>
+          <!-- Bottone per aggiungere commento -->
+          <div class="text-center mt-4">
+            <button class="btn btn-outline-warning" id="showAddCommentBtn" type="button" onclick="toggleAddComment()">Add comment</button>
+          </div>
+          <!-- Form di aggiunta commento -->
+          <div class="add-comment mt-3" id="addCommentBox" style="display:none;">
+            <textarea class="form-control mb-2" id="commentInput" rows="2" placeholder="Write a comment..."></textarea>
+            <button class="btn btn-warning fw-bold" type="button" onclick="addComment()">Add comment</button>
+          </div>
+        </div>
+        <!-- Fine Sezione Commenti -->
+
       </div>
-    </div>
     </div>
   </main>
 
@@ -138,14 +158,9 @@
 
   <style>
     body {
-      background: radial-gradient(60% 40% at 20% 10%,
-          rgba(123, 31, 162, 0.15),
-          transparent 60%),
-        radial-gradient(50% 35% at 80% 20%,
-          rgba(255, 193, 7, 0.08),
-          transparent 60%),
+      background: radial-gradient(60% 40% at 20% 10%, rgba(123, 31, 162, 0.15), transparent 60%),
+        radial-gradient(50% 35% at 80% 20%, rgba(255, 193, 7, 0.08), transparent 60%),
         linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%);
-      /* font-family: "Roboto", sans-serif; */
       min-height: 100vh;
     }
 
@@ -162,7 +177,6 @@
       transform: scale(1.05);
     }
 
-
     hr {
       opacity: 0.2;
     }
@@ -171,16 +185,56 @@
       display: flex;
       align-items: center;
       justify-content: center;
-
     }
-
     .badge-legal,
     .badge-not-legal {
       width: 40%;
       text-align: center;
     }
+
+    /* Commenti */
+    .comments-section {
+      background: rgba(50, 50, 60, 0.29);
+      border-radius: 0.5rem;
+      border: 1px solid rgba(108, 117, 125, 0.17);
+      padding: 1.5rem 1rem;
+      margin-top: 2.5rem;
+    }
+    .comments-list .comment {
+      border-left: 3px solid rgba(255, 193, 7, 0.13);
+    }
+    #addCommentBox textarea {
+      background-color: #181a20;
+      color: #fff;
+      border: 1px solid rgba(255, 193, 7, 0.15);
+      resize: vertical;
+    }
   </style>
   <script src="/js/cardrotate.js" defer></script>
+  <script>
+    function toggleAddComment() {
+      var box = document.getElementById('addCommentBox');
+      box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+    }
+    function addComment() {
+      var input = document.getElementById('commentInput');
+      var text = input.value.trim();
+      if (text === '') return;
+      var now = new Date();
+      var commentHtml =  `
+        <div class="comment mb-2 p-2 bg-secondary bg-opacity-10 rounded">
+          <span class="fw-bold text-info">You</span>
+          <small class="text-secondary ms-2">${now.toLocaleString()}</small>
+          <p class="mb-1 text-light"></p>
+        </div>`;
+      var temp = document.createElement('div');
+      temp.innerHTML = commentHtml;
+      temp.querySelector('p').innerText = text;
+      document.getElementById('commentsList').appendChild(temp.firstChild);
+      input.value = '';
+      document.getElementById('addCommentBox').style.display = 'none';
+    }
+  </script>
 </body>
 
 </html>
