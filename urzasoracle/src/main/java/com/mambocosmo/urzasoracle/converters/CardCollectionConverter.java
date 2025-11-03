@@ -20,6 +20,8 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
         cc.setName(dto.getName());
         cc.setDescription(dto.getDescription());
         cc.setMainDeckFormat(dto.getMainDeckFormat());
+        cc.setCommander(getCARDCONVERTER().fromDToE(dto.getCommander()));
+        cc.setPreview(getCARDCONVERTER().fromDToE(dto.getBannerCard()));
         return cc;
     }
 
@@ -32,7 +34,7 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
         cc.setDescription(e.getDescription());
         cc.setMainDeckFormat(e.getMainDeckFormat());
         if (e.getPreview() != null) {
-            cc.setPreviewimg(e.getPreview().getImage_uris().get("art_crop"));
+            cc.setBannerCard(getCARDCONVERTER().fromEToD(e.getPreview()));
         }
         if (e.getCommander() != null) {
             cc.setCommander(getCARDCONVERTER().fromEToD(e.getCommander()));

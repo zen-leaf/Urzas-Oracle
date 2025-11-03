@@ -18,6 +18,7 @@ public class CardCollectionDTO implements GenericDTO {
     private Format mainDeckFormat;
     private Integer totalCards;
     private List<CardInDeckDTO> previewCards;
-    private String previewimg;
+    // private String previewimg;
+    private CardDTO bannerCard;
     private CardDTO commander;
 }
