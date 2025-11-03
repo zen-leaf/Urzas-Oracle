@@ -54,6 +54,7 @@ public class UrzaUser extends GenericEntity implements UserDetails {
 
     private String displayName;
 
+    // TODO change to Date SQL
     private LocalDate registerDate;
 
     @Override
