@@ -46,7 +46,7 @@
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
 
             <a th:href="@{/cards/{id}(id=${card.id})}" class="text-decoration-none card-link-wrapper">
-              <div class="card mtg-card bg-dark border-secondary h-100 shadow-sm card-hover">
+              <div class="card mtg-card bg-dark border-secondary h-100 shadow-sm card-hover card-face">
 
 
                 <div class="mtg-card-frame">
@@ -102,9 +102,9 @@
         
 
         <li class="page-item" th:each="i : ${#numbers.sequence(0, 8)}"
-          th:classappend="${i == currentPage} ? 'active'" th:if="${currentPage + i -4>0}">
-          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${currentPage + i -5}, q=${lastQuery})}"
-            th:text="${currentPage + i -4}"></a>
+          th:classappend="${i== 4} ? 'active'" th:if="${currentPage+i-4>=0}">
+          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${currentPage + i -4}, q=${lastQuery})}"
+            th:text="${currentPage + i -3}"></a>
         </li>
 
         <li class="page-item" th:classappend="${currentPage ==totalPages} ? 'disabled'">
@@ -236,7 +236,7 @@
     }
 
     .card {
-      border-radius: 0.5rem;
+          border-radius: 8%/5%;
       transition: all .3s ease;
     }
 
