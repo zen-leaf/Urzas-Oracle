@@ -55,7 +55,9 @@ public class Card extends GenericEntity {
 
     private String lang = "";
 
-    private Date released_at = new Date(0);
+    // @Column(name = "released_at")
+    @JsonProperty("released_at")
+    private Date released = new Date(0);
 
     private String uri = "";
 

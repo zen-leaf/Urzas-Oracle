@@ -11,6 +11,8 @@ import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.DTO.CardInDeckDTO;
 import com.mambocosmo.urzasoracle.DTO.DeckLegalityReportDTO;
 import com.mambocosmo.urzasoracle.converters.CardCollectionConverter;
+import com.mambocosmo.urzasoracle.converters.CardConverter;
+import com.mambocosmo.urzasoracle.converters.CardInDeckConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardInDeck;
@@ -26,6 +28,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CardCollectionService
         extends GenericService<CardCollection, CardCollectionDTO, CardCollectionConverter, CardCollectionRepository> {
+
+    private final CardInDeckConverter CARDINDECKCONVERTER;
+    private final CardConverter CARDCONVERTER;
 
     @Override
     public CardCollection construct(Map<String, String> fromData) {
@@ -72,15 +77,7 @@ public class CardCollectionService
 
         return deck.getCardList().stream()
                 .map(entity -> {
-                    CardInDeckDTO dto = new CardInDeckDTO();
-                    dto.setCardId(entity.getId().getCard().getId());
-                    dto.setCardName(entity.getId().getCard().getName());
-                    dto.setTypeline(entity.getId().getCard().getType_line());
-                    dto.setQuantity(entity.getQuantity());
-                    if (entity.getId().getCard().getImage_uris() != null) {
-                        dto.setImageUrl(entity.getId().getCard().getImage_uris().get("normal"));
-                    }
-                    return dto;
+                    return getCARDINDECKCONVERTER().fromEToD(entity);
                 })
                 .collect(java.util.stream.Collectors.toList());
     }
@@ -158,6 +155,7 @@ public class CardCollectionService
         dto.setCardName(card.getName());
         dto.setTypeline(card.getType_line());
         dto.setQuantity(quantity);
+        dto.setRefCard(getCARDCONVERTER().fromEToD(card));
         if (card.getImage_uris() != null) {
             dto.setImageUrl(card.getImage_uris().get("normal"));
         }
@@ -202,16 +200,16 @@ public class CardCollectionService
             save(deck);
         }
 
-        CardInDeckDTO dto = new CardInDeckDTO();
-        dto.setCardId(card.getId().getCard().getId());
-        dto.setCardName(card.getId().getCard().getName());
-        dto.setTypeline(card.getId().getCard().getType_line());
-        dto.setQuantity(card.getQuantity());
-        if (card.getId().getCard().getImage_uris() != null) {
-            dto.setImageUrl(card.getId().getCard().getImage_uris().get("normal"));
-        }
+        // CardInDeckDTO dto = new CardInDeckDTO();
+        // dto.setCardId(card.getId().getCard().getId());
+        // dto.setCardName(card.getId().getCard().getName());
+        // dto.setTypeline(card.getId().getCard().getType_line());
+        // dto.setQuantity(card.getQuantity());
+        // if (card.getId().getCard().getImage_uris() != null) {
+        // dto.setImageUrl(card.getId().getCard().getImage_uris().get("normal"));
+        // }
 
-        return dto;
+        return getCARDINDECKCONVERTER().fromEToD(card);
     }
 
     public CardInDeckDTO decreaseCardQuantity(UUID deckId, UUID userId, UUID cardId) {
@@ -233,51 +231,51 @@ public class CardCollectionService
             save(deck);
         }
 
-        CardInDeckDTO dto = new CardInDeckDTO();
-        dto.setCardId(card.getId().getCard().getId());
-        dto.setCardName(card.getId().getCard().getName());
-        dto.setTypeline(card.getId().getCard().getType_line());
-        dto.setQuantity(card.getQuantity());
-        if (card.getId().getCard().getImage_uris() != null) {
-            dto.setImageUrl(card.getId().getCard().getImage_uris().get("normal"));
-        }
+        // CardInDeckDTO dto = new CardInDeckDTO();
+        // dto.setCardId(card.getId().getCard().getId());
+        // dto.setCardName(card.getId().getCard().getName());
+        // dto.setTypeline(card.getId().getCard().getType_line());
+        // dto.setQuantity(card.getQuantity());
+        // if (card.getId().getCard().getImage_uris() != null) {
+        // dto.setImageUrl(card.getId().getCard().getImage_uris().get("normal"));
+        // }
 
-        return dto;
+        return getCARDINDECKCONVERTER().fromEToD(card);
     }
     // Aggiungi questi metodi al tuo CardCollectionService
 
-public List<CardCollectionDTO> getAllDecks() {
-    return getREPOSITORY().findAll().stream()
-            .map(getCONVERTER()::fromEToD)
-            .collect(Collectors.toList());
-}
-
-public CardCollectionDTO cloneDeck(UUID originalDeckId, UUID targetUserId) {
-    CardCollection originalDeck = getREPOSITORY().findById(originalDeckId).orElse(null);
-    if (originalDeck == null) return null;
-
-    UrzaUser targetUser = getCONTEXT().getBean(UrzaUserService.class).getEntityByID(targetUserId);
-    if (targetUser == null) return null;
-
-    CardCollection clonedDeck = new CardCollection();
-    clonedDeck.setName(originalDeck.getName() + " (copia)");
-    clonedDeck.setDescription(originalDeck.getDescription());
-    clonedDeck.setMainDeckFormat(originalDeck.getMainDeckFormat());
-    clonedDeck.setOwner(targetUser);
-
-    for (CardInDeck card : originalDeck.getCardList()) {
-        CardInDeck clonedCard = new CardInDeck(
-            clonedDeck,
-            card.getId().getCard(),
-            card.getQuantity()
-        );
-        clonedDeck.getCardList().add(clonedCard);
+    public List<CardCollectionDTO> getAllDecks() {
+        return getREPOSITORY().findAll().stream()
+                .map(getCONVERTER()::fromEToD)
+                .collect(Collectors.toList());
     }
 
-    save(clonedDeck);
-    return getCONVERTER().fromEToD(clonedDeck);
-}
+    public CardCollectionDTO cloneDeck(UUID originalDeckId, UUID targetUserId) {
+        CardCollection originalDeck = getREPOSITORY().findById(originalDeckId).orElse(null);
+        if (originalDeck == null)
+            return null;
 
+        UrzaUser targetUser = getCONTEXT().getBean(UrzaUserService.class).getEntityByID(targetUserId);
+        if (targetUser == null)
+            return null;
+
+        CardCollection clonedDeck = new CardCollection();
+        clonedDeck.setName(originalDeck.getName() + " (copia)");
+        clonedDeck.setDescription(originalDeck.getDescription());
+        clonedDeck.setMainDeckFormat(originalDeck.getMainDeckFormat());
+        clonedDeck.setOwner(targetUser);
+
+        for (CardInDeck card : originalDeck.getCardList()) {
+            CardInDeck clonedCard = new CardInDeck(
+                    clonedDeck,
+                    card.getId().getCard(),
+                    card.getQuantity());
+            clonedDeck.getCardList().add(clonedCard);
+        }
+
+        save(clonedDeck);
+        return getCONVERTER().fromEToD(clonedDeck);
+    }
 
     public DeckLegalityReportDTO checkDecklegality(CardCollection e) {
         Format dFormat = e.getMainDeckFormat();

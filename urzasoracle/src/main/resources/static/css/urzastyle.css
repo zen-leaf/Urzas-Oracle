@@ -1,3 +1,150 @@
+:root {
+    --bs-secondary-color: #ffc107;
+}
+
+.deckBanner {}
+
+.card-deck {
+    /* background: rgba(15, 15, 30, 0.9); */
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    /* border-radius: 12px; */
+    overflow: hidden;
+    transition: all 0.3s ease;
+    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+}
+
+.info {
+    padding: 0.75rem 1rem 0.25rem 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.searchoptions {
+    background-color: rgba(14, 4, 58, 0.164);
+    color: var(--bs-secondary-color);
+
+}
+
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #2a2f3a !important;
+    color: var(--bs-secondary-color);
+
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-left: 12px;
+    border-left: 2px solid #ffc1071e;
+}
+
+.cardTop {
+    padding-top: 8px;
+}
+
+.cardcolumns {
+    column-count: 3;
+    column-gap: 1.5rem;
+}
+
+@media (max-width: 1400px) {
+    .cardcolumns {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 1000px) {
+    .cardcolumns {
+        column-count: 1;
+    }
+}
+
+.categoryincolumn {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+
+.card-row {
+    display: flex;
+    align-items: center;
+    padding: 5px 6px;
+    /* background: rgba(255, 255, 255, 0.04); */
+    /* border-radius: 6px; */
+    border-top: 2px solid #ffc10710;
+    transition: all 0.2s;
+    cursor: pointer;
+    gap: 4px;
+}
+
+.card-row:hover {
+    background: rgba(255, 193, 7, 0.2);
+    transform: translateX(4px);
+}
+
+.card-qty {
+    min-width: 32px;
+    text-align: center;
+    font-weight: bold;
+    color: #ffc107;
+    font-size: 15px;
+}
+
+.card-name {
+    flex: 1;
+    color: #fff;
+    font-size: 14px;
+}
+
+
+.category-column {
+
+    /* background: rgba(15, 15, 30, 0.6); */
+    /* border: 1px solid rgba(255, 193, 7, 0.2); */
+    /* border-radius: 12px; */
+    padding: 4px;
+    backdrop-filter: blur(10px);
+}
+
+.category-header {
+    /* margin-bottom: 12px; */
+    padding: 0px;
+    /* background: rgba(255, 193, 7, 0.15); */
+    /* border-radius: 8px; */
+}
+
+.category-header h6 {
+    color: #ffc107;
+    font-weight: bold;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.deckinfo {
+    background: #00000098;
+    border-width: 0px 0px 1px 0px;
+    border-color: #ffc107;
+    border-style: solid;
+}
+
+.deckholder {
+    background: linear-gradient(to right bottom, #14141677 33%, #292941);
+    border-style: ridge;
+    border-width: 0px 3px;
+    border-color: #ffc107;
+    min-height: 70vh;
+    
+}
+
 .cardinfoholder {
     background: linear-gradient(to right bottom, #141416 33%, #292941);
     /* border: 1px 0px 1px 0px dashed red; */

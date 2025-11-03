@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -74,7 +75,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     public Page<CardDTO> getByNamePaged(String name, Integer numeroPagina, Integer dimensione) {
-        Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+        Pageable pageable = PageRequest.of(numeroPagina, dimensione, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> page = getREPOSITORY().findByNameContainingIgnoreCase(name, pageable);
 
         return page.map(card -> getCONVERTER().fromEToD(card));
@@ -158,14 +159,14 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     public Page<CardDTO> getAllPaged(int numeroPagina, int dimensione) {
-        Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+        Pageable pageable = PageRequest.of(numeroPagina, dimensione, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> page = getREPOSITORY().findAll(pageable);
 
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
 
     public Page<CardDTO> getRandomPaged(int size) {
-        Pageable pageable = PageRequest.of(0, size);
+        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> temp = getREPOSITORY().findRandomSubSet(size, pageable);
         return temp.map(card -> getCONVERTER().fromEToD(card));
 
@@ -189,7 +190,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             QueryParser cardQ = new QueryParser(query);
             spec = spec.and(cardQ);
         }
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "released"));
+
         return getREPOSITORY().findAll(spec, pageable).map(e -> getCONVERTER().fromEToD(e));
 
     }

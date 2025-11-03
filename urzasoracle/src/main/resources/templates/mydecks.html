@@ -70,7 +70,7 @@
           >
             <div class="col-lg-3" th:each="deck : ${decks}">
               <a
-                th:href="@{/decks/mydecks/{id}(id=${deck.id})}"
+                th:href="@{/decks/public/{id}(id=${deck.id})}"
                 class="link-unstyled"
               >
                 <div class="card-deck">
@@ -372,7 +372,7 @@
 
             return `
           <div class="col-lg-3">
-            <a href="/decks/mydecks/${deck.id}" class="link-unstyled">
+            <a href="/decks/public/${deck.id}" class="link-unstyled">
               <div class="card-deck">
                 <div class="preview">
                   <div class="cards">${cardsHtml}</div>
