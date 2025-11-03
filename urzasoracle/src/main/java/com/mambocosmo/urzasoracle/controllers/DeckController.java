@@ -3,9 +3,11 @@ package com.mambocosmo.urzasoracle.controllers;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,7 @@ public class DeckController {
 
     // ============ DECKS PUBBLICI ============
     @GetMapping
-    public String listAllDecks(Model model, Authentication authentication) {
+    public String listAllDecks(Model model, Authentication authentication, HttpServletRequest request) {
         List<CardCollectionDTO> allDecks = cardCollectionService.getAllDecks();
 
         for (CardCollectionDTO deck : allDecks) {
@@ -48,11 +50,17 @@ public class DeckController {
         model.addAttribute("decks", allDecks);
         model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
         model.addAttribute("active", "decks");
+        
+        // ✅ AGGIUNGI CSRF TOKEN
+        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
+        model.addAttribute("csrfHeader", csrf != null ? csrf.getHeaderName() : "X-CSRF-TOKEN");
+        
         return "decks";
     }
 
     @GetMapping("/public/{id}")
-    public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication) {
+    public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication, HttpServletRequest request) {
         CardCollectionDTO deck = cardCollectionService.getByID(id);
 
         if (deck == null) {
@@ -80,7 +88,16 @@ public class DeckController {
                 cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
                         : getCardService().getAll().get(0));
 
+        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
+        model.addAttribute("csrfHeader", csrf != null ? csrf.getHeaderName() : "X-CSRF-TOKEN");
+
         return "deck-detail";
+    }
+
+    @GetMapping("/{id}")
+    public String viewDeck(@PathVariable UUID id, Model model, Authentication authentication, HttpServletRequest request) {
+        return viewPublicDeck(id, model, authentication, request);
     }
 
     @PostMapping("/public/{deckId}/clone")
@@ -106,7 +123,7 @@ public class DeckController {
 
     // ============ I MIEI MAZZI ============
     @GetMapping("/mydecks")
-    public String listMyDecks(Model model, Authentication authentication) {
+    public String listMyDecks(Model model, Authentication authentication, HttpServletRequest request) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
@@ -128,11 +145,43 @@ public class DeckController {
 
         model.addAttribute("decks", userDecks);
         model.addAttribute("active", "mydecks");
-        return "mydecks";
+        model.addAttribute("isLoggedIn", true);
+        
+        // ✅ AGGIUNGI CSRF TOKEN
+        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
+        model.addAttribute("csrfHeader", csrf != null ? csrf.getHeaderName() : "X-CSRF-TOKEN");
+        
+        return "decks";
+    }
+
+    @GetMapping("/api/mydecks")
+    @ResponseBody
+    public List<CardCollectionDTO> getMyDecksAPI(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return List.of();
+        }
+
+        String username = authentication.getName();
+        UrzaUser user = urzaUserService.findByUsername(username);
+        List<CardCollectionDTO> userDecks = cardCollectionService.getDecksByUser(user.getId());
+
+        for (CardCollectionDTO deck : userDecks) {
+            Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
+            deck.setTotalCards(cardCount != null ? cardCount : 0);
+
+            List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
+            List<CardInDeckDTO> preview = allCards.stream()
+                    .limit(4)
+                    .collect(Collectors.toList());
+            deck.setPreviewCards(preview);
+        }
+
+        return userDecks;
     }
 
     @GetMapping("/mydecks/{id}")
-    public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication) {
+    public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication, HttpServletRequest request) {
         CardCollectionDTO deck = cardCollectionService.getByID(id);
 
         if (deck == null) {
@@ -162,6 +211,11 @@ public class DeckController {
         model.addAttribute("active", "mydecks");
         model.addAttribute("card", cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
                 : getCardService().getAll().get(0));
+
+        CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
+        model.addAttribute("csrfHeader", csrf != null ? csrf.getHeaderName() : "X-CSRF-TOKEN");
+
         return "deck-detail";
     }
 
@@ -197,7 +251,7 @@ public class DeckController {
         }
     }
 
-    @PutMapping("/mydecks/{id}")
+    @PutMapping("/public/{id}")
     @ResponseBody
     public ResponseEntity<CardCollectionDTO> updateDeck(
             @PathVariable UUID id,
@@ -222,7 +276,7 @@ public class DeckController {
         return ResponseEntity.ok(updatedDeck);
     }
 
-    @DeleteMapping("/mydecks/{id}")
+    @DeleteMapping("/public/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteDeck(
             @PathVariable UUID id,
@@ -243,7 +297,7 @@ public class DeckController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/mydecks/{deckId}/cards/{cardId}")
+    @PostMapping("/public/{deckId}/cards/{cardId}")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> addCardToDeck(
             @PathVariable UUID deckId,
@@ -268,7 +322,7 @@ public class DeckController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @DeleteMapping("/mydecks/{deckId}/cards/{cardId}")
+    @DeleteMapping("/public/{deckId}/cards/{cardId}")
     @ResponseBody
     public ResponseEntity<Void> removeCardFromDeck(
             @PathVariable UUID deckId,
@@ -292,7 +346,7 @@ public class DeckController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/mydecks/{deckId}/cards/{cardId}/increase")
+    @PutMapping("/public/{deckId}/cards/{cardId}/increase")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> increaseCardQuantity(
             @PathVariable UUID deckId,
@@ -316,7 +370,7 @@ public class DeckController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/mydecks/{deckId}/cards/{cardId}/decrease")
+    @PutMapping("/public/{deckId}/cards/{cardId}/decrease")
     @ResponseBody
     public ResponseEntity<CardInDeckDTO> decreaseCardQuantity(
             @PathVariable UUID deckId,

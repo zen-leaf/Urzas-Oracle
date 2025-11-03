@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.DTO.CardInDeckDTO;
@@ -129,32 +130,59 @@ public class CardCollectionService
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    // ✅ FIXATO: Metodo che causa errore 500
+    @Transactional
     public CardInDeckDTO addCardToDeck(UUID deckId, UUID userId, UUID cardId, Integer quantity) {
+        // Carica deck
         CardCollection deck = getREPOSITORY().findById(deckId).orElse(null);
-        if (deck == null)
+        if (deck == null || !deck.getOwner().getId().equals(userId))
             return null;
 
+        // Carica carta
         Card card = getCONTEXT().getBean(CardService.class).getREPOSITORY().findById(cardId).orElse(null);
         if (card == null)
             return null;
 
+        // Validazione quantità (rimuovi limite 4 per basic lands)
         int qty = quantity;
-        if (qty < 1 || qty > 4)
+        if (qty < 1)
             return null;
 
+        // ✅ FIXATO: Permetti > 4 copie per basic lands
+        boolean isBasicLand = card.getType_line() != null && 
+                              card.getType_line().toLowerCase().contains("basic land");
+        if (!isBasicLand && qty > 4)
+            return null;
+
+        // Verifica limite 100 carte totali
         int total = deck.getCardList().stream().mapToInt(c -> c.getQuantity()).sum();
         if (total + qty > 100)
             return null;
 
-        CardInDeck cid = new CardInDeck(deck, card, quantity);
-        deck.getCardList().add(cid);
+        // ✅ FIXATO: Cerca se carta esiste già
+        CardInDeck existingCard = deck.getCardList().stream()
+                .filter(c -> c.getId().getCard().getId().equals(cardId))
+                .findFirst()
+                .orElse(null);
+
+        if (existingCard != null) {
+            // Incrementa quantità esistente
+            existingCard.setQuantity(existingCard.getQuantity() + qty);
+        } else {
+            // Crea nuova entry
+            CardInDeck cid = new CardInDeck(deck, card, qty);
+            deck.getCardList().add(cid);
+        }
+
+        // ✅ Salva (cascade gestisce CardInDeck)
         save(deck);
 
+        // Ritorna DTO
         CardInDeckDTO dto = new CardInDeckDTO();
         dto.setCardId(card.getId());
         dto.setCardName(card.getName());
         dto.setTypeline(card.getType_line());
-        dto.setQuantity(quantity);
+        dto.setQuantity(existingCard != null ? existingCard.getQuantity() : qty);
         dto.setRefCard(getCARDCONVERTER().fromEToD(card));
         if (card.getImage_uris() != null) {
             dto.setImageUrl(card.getImage_uris().get("normal"));
@@ -200,15 +228,6 @@ public class CardCollectionService
             save(deck);
         }
 
-        // CardInDeckDTO dto = new CardInDeckDTO();
-        // dto.setCardId(card.getId().getCard().getId());
-        // dto.setCardName(card.getId().getCard().getName());
-        // dto.setTypeline(card.getId().getCard().getType_line());
-        // dto.setQuantity(card.getQuantity());
-        // if (card.getId().getCard().getImage_uris() != null) {
-        // dto.setImageUrl(card.getId().getCard().getImage_uris().get("normal"));
-        // }
-
         return getCARDINDECKCONVERTER().fromEToD(card);
     }
 
@@ -231,18 +250,8 @@ public class CardCollectionService
             save(deck);
         }
 
-        // CardInDeckDTO dto = new CardInDeckDTO();
-        // dto.setCardId(card.getId().getCard().getId());
-        // dto.setCardName(card.getId().getCard().getName());
-        // dto.setTypeline(card.getId().getCard().getType_line());
-        // dto.setQuantity(card.getQuantity());
-        // if (card.getId().getCard().getImage_uris() != null) {
-        // dto.setImageUrl(card.getId().getCard().getImage_uris().get("normal"));
-        // }
-
         return getCARDINDECKCONVERTER().fromEToD(card);
     }
-    // Aggiungi questi metodi al tuo CardCollectionService
 
     public List<CardCollectionDTO> getAllDecks() {
         return getREPOSITORY().findAll().stream()
@@ -296,14 +305,12 @@ public class CardCollectionService
             }
 
             return report;
-
         }
         return report;
     }
 
     public DeckLegalityReportDTO checkDeckLegality(UUID deckid) {
         CardCollection deck = getREPOSITORY().findById(deckid).orElse(null);
-
         return checkDecklegality(deck);
     }
 }

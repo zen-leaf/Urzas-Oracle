@@ -51,8 +51,9 @@ public class CardCollection extends GenericEntity {
     @MapKeyColumn(name = "format")
     private Map<Format, String> legalIn;
 
-    @OneToMany(mappedBy = "id.deck", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CardInDeck> cardList = new ArrayList<>();
+   @OneToMany(mappedBy = "id.deck", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<CardInDeck> cardList = new ArrayList<>();
+
 
     @ManyToOne()
     @JoinColumn(name = "commander")
