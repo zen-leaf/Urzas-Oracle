@@ -40,8 +40,8 @@ public class SearchCriteria {
             }
 
             out.add(new SearchCriteria(m.group(1), m.group(2), tempValue, parse));
-            System.out.println("result:\n" + "key: " + m.group(1) + "\n" + "logic: " + m.group(2) + "\n" + "value: "
-                    + tempValue);
+            // System.out.println("result:\n" + "key: " + m.group(1) + "\n" + "logic: " + m.group(2) + "\n" + "value: "
+            //         + tempValue);
         }
 
         if (!hasNameField) {
