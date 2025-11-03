@@ -40,13 +40,13 @@
             <div class="col-12 d-flex justify-content-center">
               <small class="text-secondary" style="font-size:0.6rem;">Drag or tap the card to rotate it</small>
             </div>
-            <div class="col-sm-4">
-              <a class="btn btn-outline-warning fw-bold" style="width: 100%;" onclick="resetRotation()">&larr; Reset
+            <div class="col-md-12 col-lg-4">
+              <a class="btn btn-outline-warning fw-bold" style="width: 100%;" onclick="resetRotation()">Reset
                 rotation</a>
             </div>
-            <div class="col-sm-4">
-              <a href="/cards" class="btn btn-outline-warning fw-bold " style="width: 100%;"
-                onclick="flipCard()">&#x21BB; Flip card</a>
+            <div class="col-md-12 col-lg-4">
+              <a class="btn btn-outline-warning fw-bold " style="width: 100%;" onclick="flipCard()">Flip
+                card</a>
             </div>
           </div>
         </div>
@@ -198,6 +198,7 @@
     }
   </style>
   <script src="/js/cardrotate.js" defer></script>
+  <script>momentumID = requestAnimationFrame(applyMomentum);</script>
 </body>
 
 </html>

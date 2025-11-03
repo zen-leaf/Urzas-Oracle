@@ -8,7 +8,7 @@ function reformatText() {
 
         var editedText = originalText.replace(/\{([^}]+)\}/g, (value, content) => {
 
-            content=content.replace("/","")
+            content = content.replace("/", "")
             var wrapperIcon = `<abbr class="card-symbol card-symbol-${content}">${value}</abbr>`;
             return wrapperIcon;
         })
@@ -18,4 +18,5 @@ function reformatText() {
 
 
 }
+
 document.addEventListener('DOMContentLoaded', () => { reformatText() })
