@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
   <head th:replace="~{fragments/head :: head('Decks')}"></head>
+
   <body class="bg-dark text-light">
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
@@ -33,7 +34,7 @@
                   </button>
                 </div>
 
-                <!-- ✅ TASTO CREA DECK -->
+                <!-- ✅ TASTO CREA DECK (solo in My Decks) -->
                 <button
                   id="createDeckBtn"
                   class="btn btn-success fw-bold mt-3"
@@ -53,23 +54,23 @@
       <!-- GRID -->
       <div class="row px-4 justify-content-center">
         <div class="col-11 row deckholder">
-          <!-- ✅ FILTRI -->
+          <!-- FILTRI -->
           <div class="col-12 py-3">
             <div class="row g-2 mb-4">
               <div class="col-md-4">
                 <input
                   type="text"
                   class="form-control searchoptions border-warning"
-                  id="searchDeck"
-                  placeholder="🔍 Cerca..."
+                  id="searchCatalog"
+                  placeholder="Search"
                 />
               </div>
               <div class="col-md-2">
                 <select
                   class="form-select searchoptions border-warning"
-                  id="formatFilter"
+                  id="formatFilterCatalog"
                 >
-                  <option value="">Tutti i formati</option>
+                  <option value="">Formats</option>
                   <option value="standard">Standard</option>
                   <option value="modern">Modern</option>
                   <option value="commander">Commander</option>
@@ -79,26 +80,28 @@
               <div class="col-md-2">
                 <select
                   class="form-select searchoptions border-warning"
-                  id="sortDeck"
+                  id="sortCatalog"
                 >
                   <option value="name">Nome</option>
+                  <option value="author">Autore</option>
                   <option value="cards">Carte</option>
                 </select>
               </div>
               <div class="col-md-2">
                 <button
                   class="btn btn-outline-warning w-100 fw-bold"
-                  onclick="resetFilters()"
+                  onclick="resetFiltersCatalog()"
                 >
                   Reset
                 </button>
               </div>
             </div>
 
-            <!-- ✅ GRIGLIA MAZZI -->
-            <div class="row" id="decksContainer"></div>
+            <div class="row">
+              <div class="row" id="catalogContainer"></div>
+            </div>
 
-            <!-- ✅ EMPTY STATE -->
+            <!-- EMPTY STATE -->
             <div id="emptyState" style="display: none" class="text-center py-5">
               <p class="text-secondary mb-3">Nessun mazzo trovato</p>
               <button
@@ -180,110 +183,6 @@
 
     <div th:replace="~{fragments/footer :: footer}"></div>
 
-    <style>
-      body {
-        background: linear-gradient(180deg, #0a0e17 0%, #151a2b 100%);
-        font-family: "Segoe UI", sans-serif;
-      }
-
-      .deckinfo {
-        background: rgba(10, 10, 20, 0.7);
-        border-bottom: 1px solid rgba(255, 193, 7, 0.2);
-      }
-
-      .deckholder {
-        background: rgba(10, 10, 20, 0.5);
-        border-radius: 12px;
-        padding: 20px;
-      }
-
-      .searchoptions {
-        background-color: rgba(14, 4, 58, 0.164);
-        color: var(--bs-secondary-color, #ffc107);
-      }
-
-      .searchoptions:focus {
-        background-color: #2a2f3a !important;
-        color: var(--bs-secondary-color, #ffc107);
-        border-color: #ffc107 !important;
-        box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
-      }
-
-      .card-deck {
-        background: rgba(15, 15, 30, 0.9);
-        border: 1px solid rgba(255, 193, 7, 0.2);
-        border-radius: 12px;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: inherit;
-      }
-
-      .card-deck:hover {
-        border-color: #ffc107;
-        box-shadow: 0 15px 40px rgba(255, 193, 7, 0.15);
-        transform: translateY(-4px);
-      }
-
-      .info {
-        padding: 0.75rem 1rem 0.25rem 1rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .title {
-        color: #ffc107;
-        font-weight: 700;
-        margin-bottom: 4px;
-        font-size: 1.05rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .author {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.75rem;
-        margin-bottom: 6px;
-        font-weight: 600;
-      }
-
-      .desc {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.8rem;
-        margin-bottom: 10px;
-        flex: 1;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-      }
-
-      .stats {
-        display: flex;
-        gap: 6px;
-      }
-
-      .btn-tab {
-        transition: all 0.3s ease;
-      }
-
-      .btn-tab.active {
-        background: #ffc107 !important;
-        color: #000 !important;
-        border-color: #ffc107 !important;
-      }
-
-      .link-unstyled {
-        text-decoration: none;
-        color: inherit;
-      }
-    </style>
-
     <script th:inline="javascript">
       const isLoggedIn = /*[[${isLoggedIn}]]*/ false;
       const activeTab = /*[[${active}]]*/ "decks";
@@ -291,35 +190,25 @@
       const csrfHeader = /*[[${csrfHeader}]]*/ "X-CSRF-TOKEN";
       const initialDecks = /*[[${decks}]]*/ [];
 
-      console.log("🔍 DEBUG INFO:");
-      console.log("isLoggedIn:", isLoggedIn);
-      console.log("activeTab:", activeTab);
-      console.log("initialDecks:", initialDecks);
-
-      if (initialDecks.length > 0) {
-        console.log("First deck:", initialDecks[0]);
-        console.log("previewCards:", initialDecks[0].previewCards);
-      }
-
-      let allDecks = {
+      let allDecksFromCatalog = {
         community: [],
         mydecks: [],
       };
 
       if (activeTab === "mydecks") {
-        allDecks.mydecks = initialDecks;
+        allDecksFromCatalog.mydecks = initialDecks;
       } else {
-        allDecks.community = initialDecks;
+        allDecksFromCatalog.community = initialDecks;
       }
 
       let currentTab = "community";
 
       window.addEventListener("load", async () => {
-        if (isLoggedIn && allDecks.mydecks.length === 0) {
+        if (isLoggedIn && allDecksFromCatalog.mydecks.length === 0) {
           try {
             const res = await fetch("/decks/api/mydecks");
             if (res.ok) {
-              allDecks.mydecks = await res.json();
+              allDecksFromCatalog.mydecks = await res.json();
             }
           } catch (e) {
             console.error("Error loading mydecks:", e);
@@ -362,16 +251,27 @@
             tab === "mydecks" && isLoggedIn ? "block" : "none";
         }
 
-        filterDecks();
+        filterCatalog();
       }
 
-      function filterDecks() {
-        const search =
-          document.getElementById("searchDeck")?.value.toLowerCase() || "";
-        const format = document.getElementById("formatFilter")?.value || "";
-        const sort = document.getElementById("sortDeck")?.value || "name";
+      document
+        .getElementById("searchCatalog")
+        ?.addEventListener("input", filterCatalog);
+      document
+        .getElementById("formatFilterCatalog")
+        ?.addEventListener("change", filterCatalog);
+      document
+        .getElementById("sortCatalog")
+        ?.addEventListener("change", filterCatalog);
 
-        let decks = allDecks[currentTab] || [];
+      function filterCatalog() {
+        const search =
+          document.getElementById("searchCatalog")?.value.toLowerCase() || "";
+        const format =
+          document.getElementById("formatFilterCatalog")?.value || "";
+        const sort = document.getElementById("sortCatalog")?.value || "name";
+
+        let decks = allDecksFromCatalog[currentTab] || [];
 
         let filtered = decks.filter((deck) => {
           const matchSearch =
@@ -385,98 +285,59 @@
 
         if (sort === "name")
           filtered.sort((a, b) => a.name.localeCompare(b.name));
+        else if (sort === "author")
+          filtered.sort((a, b) => (a.owner || "").localeCompare(b.owner || ""));
         else if (sort === "cards")
-          filtered.sort((a, b) => b.totalCards - a.totalCards);
+          filtered.sort((a, b) => (b.totalCards || 0) - (a.totalCards || 0));
 
-        renderDecks(filtered);
+        renderCatalog(filtered);
       }
 
-      function renderDecks(decks) {
-        const container = document.getElementById("decksContainer");
+      function renderCatalog(decks) {
+        const container = document.getElementById("catalogContainer");
         const emptyState = document.getElementById("emptyState");
 
         if (!container) return;
 
         if (decks.length === 0) {
-          container.style.display = "none";
+          container.innerHTML = "";
           emptyState.style.display = "block";
           return;
         }
 
-        container.style.display = "flex";
         emptyState.style.display = "none";
 
         container.innerHTML = decks
           .map((deck) => {
-            console.log(
-              "Rendering deck:",
-              deck.name,
-              "previewCards:",
-              deck.previewCards
-            );
-
-            // ✅ Usa previewimg se esiste, altrimenti fallback
-            let previewHtml = "";
-            if (deck.previewimg) {
-              previewHtml = `<img src="${deck.previewimg}" alt="${deck.name}" style="width:100%; height:100%; object-fit:cover;" />`;
-            } else if (deck.previewCards && deck.previewCards.length > 0) {
-              previewHtml = deck.previewCards
-                .slice(0, 4)
-                .map((card, idx) => {
-                  const imgUrl = card.imageUrl || card.imageurl || "";
-                  return `<img src="${imgUrl}" alt="Card" style="position:absolute; left:${
-                    idx * 30
-                  }px; width:60px; height:85px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,193,7,0.2); box-shadow:0 2px 6px rgba(0,0,0,0.5);" onerror="this.style.display='none'" />`;
-                })
-                .join("");
-            } else {
-              previewHtml =
-                '<div style="color:#666; font-size:0.9rem; margin:auto;">Nessuna carta</div>';
-            }
+            const previewImg =
+              deck.previewimg ||
+              "https://cards.scryfall.io/art_crop/front/b/8/b8dd4693-424d-4d6e-86cf-24401a23d6b1.jpg?1721425770";
 
             return `
-            <div class="col-sm-3 pt-3 px-2">
-              <a href="/decks/public/${deck.id}" class="link-unstyled">
-                <div class="card-deck">
-                  <div class="info">
-                    <h5 class="title">${deck.name}</h5>
-                    <p class="author">by ${deck.owner || "Unknown"}, for ${
+          <div class="col-sm-3 pt-3 px-2">
+            <a href="/decks/public/${deck.id}" class="link-unstyled">
+              <div class="card-deck" style="background-image:linear-gradient(rgba(0, 0, 0, 0.8)),url(${previewImg}); background-repeat: no-repeat, repeat; background-size: cover; background-origin: border-box;">
+                <div class="info">
+                  <h5 class="title">${deck.name}</h5>
+                  <p class="author">by ${deck.owner || "Unknown"}, for ${
               deck.mainDeckFormat
             }</p>
-                    <p class="desc">${deck.description || ""}</p>
-                    <div class="stats">
-                      <span class="badge bg-warning text-dark">${
-                        deck.totalCards
-                      }/100</span>
-                      <span class="badge bg-info text-dark">${
-                        deck.mainDeckFormat
-                      }</span>
-                    </div>
-                  </div>
+                  <p class="desc">${deck.description || ""}</p>
                 </div>
-              </a>
-            </div>
-          `;
+              </div>
+            </a>
+          </div>
+        `;
           })
           .join("");
       }
 
-      function resetFilters() {
-        document.getElementById("searchDeck").value = "";
-        document.getElementById("formatFilter").value = "";
-        document.getElementById("sortDeck").value = "name";
-        filterDecks();
+      function resetFiltersCatalog() {
+        document.getElementById("searchCatalog").value = "";
+        document.getElementById("formatFilterCatalog").value = "";
+        document.getElementById("sortCatalog").value = "name";
+        filterCatalog();
       }
-
-      document
-        .getElementById("searchDeck")
-        ?.addEventListener("input", filterDecks);
-      document
-        .getElementById("formatFilter")
-        ?.addEventListener("change", filterDecks);
-      document
-        .getElementById("sortDeck")
-        ?.addEventListener("change", filterDecks);
 
       document
         .getElementById("createForm")
@@ -496,7 +357,7 @@
           });
           if (res.ok) {
             const newDeck = await res.json();
-            allDecks.mydecks.push(newDeck);
+            allDecksFromCatalog.mydecks.push(newDeck);
             switchTab("mydecks");
             bootstrap.Modal.getInstance(
               document.getElementById("createDeckModal")
