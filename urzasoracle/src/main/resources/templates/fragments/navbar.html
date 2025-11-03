@@ -42,7 +42,7 @@
             </svg>
             <span th:text="${#authorization.getAuthentication().principal.getDisplayName()}">Username</span>
             <span class="badge bg-warning text-dark ms-2" sec:authentication="principal.authorities[0].authority"
-              th:text="${#strings.replace(#authorization.authentication.authorities[0].authority, 'ROLE_', '')}">ROLE</span>
+              th:text="${#strings.replace(#authorization.authentication.authorities[0].authority, 'ROLE_', '')}" style="width: 70px;">ROLE</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end bg-dark border-warning" aria-labelledby="userDropdown">
             <li>
