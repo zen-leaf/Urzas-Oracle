@@ -32,48 +32,44 @@
 
         <!-- Mostra solo se autenticato -->
         <li class="nav-item dropdown mx-3" sec:authorize="isAuthenticated()">
-          <a class="nav-link dropdown-toggle text-warning fw-bold" href="#" id="userDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle text-warning fw-bold d-flex align-items-center" href="#" id="userDropdown"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
               class="bi bi-person-circle me-1" viewBox="0 0 16 16">
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
               <path fill-rule="evenodd"
                 d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
             </svg>
-            <span th:text="${#authorization.getAuthentication().principal.getDisplayName()}">Username</span>
+
+            <span th:text="${#authorization.getAuthentication().principal.getDisplayName()}"
+              class="me-1">Username</span>
+
             <span class="badge bg-warning text-dark ms-2" sec:authentication="principal.authorities[0].authority"
-              th:text="${#strings.replace(#authorization.authentication.authorities[0].authority, 'ROLE_', '')}" style="width: 70px;">ROLE</span>
+              th:text="${#strings.replace(#authorization.authentication.authorities[0].authority, 'ROLE_', '')}"
+              style="width: 70px;">ROLE</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end bg-dark border-warning" aria-labelledby="userDropdown">
             <li>
-              <a class="dropdown-item text-light"
+              <a class="dropdown-item text-light d-flex align-items-center"
                 th:href="@{'/decks?q=a:'+${#authorization.getAuthentication().principal.getUsername()}}">
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-person-circle me-2" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                <path fill-rule="evenodd"
-                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-              </svg> -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                  class="bi bi-person-fill" viewBox="0 0 16 16">
-                  <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                  class="bi bi-flask-fill me-2" viewBox="0 0 16 16">
+                  <path
+                    d="M11.5 0a.5.5 0 0 1 0 1H11v5.358l4.497 7.36c.099.162.16.332.192.503l.013.063.008.083q.006.053.007.107l-.003.09q-.001.047-.005.095-.006.053-.017.106l-.016.079q-.012.049-.028.096l-.028.086a1.5 1.5 0 0 1-.17.322 1.5 1.5 0 0 1-.395.394q-.04.028-.082.054-.045.026-.095.049l-.073.035-.09.033q-.05.02-.103.034-.04.01-.08.017-.053.012-.108.021l-.006.002-.202.013H1.783l-.214-.015a1.503 1.503 0 0 1-1.066-2.268L5 6.359V1h-.5a.499.499 0 0 1-.354-.854A.5.5 0 0 1 4.5 0zm.5 12a.5.5 0 0 0 0 1h1.885l-.61-1zm-1-2a.5.5 0 0 0 0 1h1.664l-.612-1zm-1-2a.5.5 0 0 0 0 1h1.441l-.61-1zM9 6a.5.5 0 0 0 0 1h1.22l-.147-.24A.5.5 0 0 1 10 6.5V6zm0-2a.5.5 0 0 0 0 1h1V4zm0-2a.5.5 0 0 0 0 1h1V2z" />
                 </svg>
-                Profilo
+                My decks
               </a>
             </li>
+
             <li>
               <hr class="dropdown-divider border-warning" />
             </li>
+
             <li>
-              <a class="dropdown-item text-light" href="/profile">
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-person-circle me-2" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                <path fill-rule="evenodd"
-                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-              </svg> -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
-                  viewBox="0 0 16 16">
+              <a class="dropdown-item text-light d-flex align-items-center" href="/profile">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-gear me-2" viewBox="0 0 16 16">
                   <path
                     d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
                   <path
@@ -82,12 +78,14 @@
                 Settings
               </a>
             </li>
+
             <li>
               <hr class="dropdown-divider border-warning" />
             </li>
+
             <li>
-              <form th:action="@{/auth/logout}" method="post" class="d-inline">
-                <button type="submit" class="dropdown-item text-danger">
+              <form th:action="@{/auth/logout}" method="post" class="d-inline w-100">
+                <button type="submit" class="dropdown-item text-danger d-flex align-items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-box-arrow-right me-2" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
