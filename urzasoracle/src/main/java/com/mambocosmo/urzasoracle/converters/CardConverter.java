@@ -28,6 +28,14 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
 
     @Override
     public Card fromDToE(CardDTO dto) {
+
+        // Card e = new Card();
+        // e.setId(dto.getId());
+        // e.setName(dto.getName());
+        // e.setMana_cost(dto.getManaCost());
+        // e.setType_line(dto.getTypeline());
+        
+        // return e;
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'fromDToE'");
     }

@@ -18,6 +18,12 @@ import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 public interface CommentOnCardRepository extends JpaRepository<CommentOnCard, UUID>, JpaSpecificationExecutor<CommentOnCard>{
 
     @Query("SELECT coc FROM CommentOnCard coc WHERE coc.card.id = :cardId")
-    List<CommentOnCard> findByCardId(@Param("cardId") UUID cardId);
+    List<CommentOnCard> findByCardIdList(@Param("cardId") UUID cardId);
+    
+    @Query("SELECT coc FROM CommentOnCard coc WHERE coc.card.id = :cardId")
+    Page<CommentOnCard> findByCardIdPage(@Param("cardId") UUID cardId, Pageable pageable);
+    
+    @Query("SELECT coc FROM CommentOnCard coc WHERE coc.user.id = :userId")
+    List<CommentOnCard> findByUserId(@Param("userId") UUID userId);
 
 }

@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
+import com.mambocosmo.urzasoracle.DTO.CommentOnCardDTO;
 import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.services.CardService;
+import com.mambocosmo.urzasoracle.services.CommentOnCardService;
 
 import lombok.Data;
 
@@ -22,6 +24,7 @@ import lombok.Data;
 public class CardController {
 
     private final CardService CARDSERVICE;
+    private final CommentOnCardService COMMENTONCARDSERVICE;
 
     @GetMapping("/cards")
     public String getAllCards(Model model, @RequestParam(defaultValue = "") String q,
@@ -50,7 +53,7 @@ public class CardController {
                 return "redirect:/cards";
             }
 
-            List<CommentOnCard> comments = getCARDSERVICE().getCommentsByCard(card.getId()); 
+            List<CommentOnCardDTO> comments = getCOMMENTONCARDSERVICE().getCommentsByCard(card.getId()); 
             // Log per debug
             System.out.println("Card found: " + card.getName());
 

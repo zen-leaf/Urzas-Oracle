@@ -87,6 +87,10 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return out;
     }
 
+    public Card getByIdEntity (UUID id){
+        return getREPOSITORY().findById(id).orElse(null);
+    }
+
     public Page<CardDTO> getByNamePaged(String name, Integer numeroPagina, Integer dimensione) {
         Pageable pageable = PageRequest.of(numeroPagina, dimensione, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> page = getREPOSITORY().findByNameContainingIgnoreCase(name, pageable);
@@ -207,10 +211,6 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
         return getREPOSITORY().findAll(spec, pageable).map(e -> getCONVERTER().fromEToD(e));
 
-    }
-
-    public List<CommentOnCard> getCommentsByCard(UUID idCard) {
-        return getCOMMENTONCARDREPOSITORY().findByCardId(idCard);
     }
 
 }
