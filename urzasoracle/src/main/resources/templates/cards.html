@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head('Carte Magic')}"></head>
+<head th:replace="~{fragments/head :: head('Search cards')}"></head>
 
 <body class="bg-dark text-light">
 
@@ -10,21 +10,21 @@
   <main class="container-fluid py-5">
 
     <header class="text-center mb-5">
-      <h1 class="display-4 fw-bold text-warning mb-3">Carte Magic: The Gathering</h1>
-      <p class="lead text-secondary mb-4">
-        Sfoglia tutte le carte archiviate nel database — filtrabili per nome e con paginazione.
-      </p>
+      <h1 class="display-1 fw-bold text-warning mb-3">Card list</h1>
+      <p class=" text-secondary mb-4">Browse all cards in our database</p>
 
       <form th:action="@{/cards}" method="get" class="mx-auto" style="max-width:700px;">
         <div class="input-group input-group-lg shadow">
           <input type="text" name="q" class="form-control bg-dark text-warning border-warning"
-            placeholder="Cerca per nome..." th:value="${lastQuery}">
+            placeholder="" th:value="${lastQuery}">
           <button class="btn btn-warning fw-bold" type="submit">Cerca</button>
           <th:block th:if="${query != ''}">
             <a th:href="@{/cards}" class="btn btn-outline-warning">Reset</a>
           </th:block>
+          
         </div>
       </form>
+      <p class=" text-secondary mb-4">available filters: "name", "cmc", "set" </p>
     </header>
 
     <section>
@@ -36,9 +36,9 @@
 
       <div th:if="${lista == null or #lists.isEmpty(lista)}" class="alert alert-warning text-center mx-auto"
         style="max-width: 600px;">
-        <h5 class="alert-heading">Nessuna carta trovata</h5>
-        <p>Prova un altro termine o ricarica la pagina.</p>
-        <a th:href="@{/cards}" class="btn btn-sm btn-warning">Mostra tutte</a>
+        <h5 class="alert-heading">No card found</h5>
+        <p>Either the search terms are wrong or we're missing the card!</p>
+        <a th:href="@{/cards}" class="btn btn-sm btn-warning">Show all</a>
       </div>
 
       <div class="row g-4 justify-content-center" th:if="${not #lists.isEmpty(lista)}">
