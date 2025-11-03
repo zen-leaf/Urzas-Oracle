@@ -70,7 +70,9 @@
                 <!-- Dati set, rarità, numero -->
                 <a class="col-5 px-2" th:href="@{/cards(q='set:'+${card.expansionSet.code})}"
                   style="display: flex; justify-content: center; align-items: center;">
-                  <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;">
+                  <!-- <small class="text-secondary">SET</small> -->
+                  <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;"></img>
+
                 </a>
               </div>
             </div>
@@ -133,7 +135,6 @@
         <div class="mt-5">
           <a href="/cards" class="btn btn-outline-warning fw-bold">&larr; Back to Cards</a>
         </div>
-
         <!-- Sezione Commenti -->
         <div class="comments-section mt-5">
           <h4 class="text-light mb-3">Comments</h4>
@@ -210,13 +211,11 @@
       align-items: center;
       justify-content: center;
     }
-
     .badge-legal,
     .badge-not-legal {
       width: 40%;
       text-align: center;
     }
-
     /* Commenti */
     .comments-section {
       background: rgba(50, 50, 60, 0.29);
@@ -262,6 +261,6 @@
       document.getElementById('addCommentBox').style.display = 'none';
     }
   </script>
-</body>
+  </body>
 
 </html>
