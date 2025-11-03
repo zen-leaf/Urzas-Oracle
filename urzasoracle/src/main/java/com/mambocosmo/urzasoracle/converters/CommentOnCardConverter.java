@@ -32,6 +32,7 @@ public class CommentOnCardConverter implements GenericConverter<CommentOnCard, C
         CommentOnCardDTO dto = new CommentOnCardDTO();
         dto.setCardId(e.getCard().getId());
         dto.setUserId(e.getUser().getId());
+        dto.setUserName(e.getUser().getUsername());
         dto.setComment(e.getComment());
         dto.setTimeOfComment(e.getTimeOfComment());
         return dto;
