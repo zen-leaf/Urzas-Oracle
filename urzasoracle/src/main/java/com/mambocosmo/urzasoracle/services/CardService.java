@@ -22,9 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.converters.CardConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardCollection;
+import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.misc.Utils.QueryParser;
 import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
 import com.mambocosmo.urzasoracle.repositories.CardRepository;
+import com.mambocosmo.urzasoracle.repositories.CommentOnCardRepository;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,6 +38,8 @@ import lombok.EqualsAndHashCode;
 public class CardService extends GenericService<Card, CardDTO, CardConverter, CardRepository> {
 
     private final CardExpansionSetService EXPANSIONSETSERVICE;
+    private final CardConverter CARDCONVERTER;
+    private final CommentOnCardRepository COMMENTONCARDREPOSITORY;
 
     @Override
     public Card construct(Map<String, String> fromData) {
@@ -72,6 +77,18 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             return getCONVERTER().fromEToD(e);
         }).toList();
         return out;
+    }
+
+    //TODO IMPORTANT THIS METHOD IS HERE ONLY FOR COMMENT TESTING, CREATE COMMENT DTO AND USE THAT
+    public List<Card> getByNameEntity(String name) {
+        List<Card> out = getREPOSITORY().findByNameContainingIgnoreCase(name).stream().map(e -> {
+            return e;
+        }).toList();
+        return out;
+    }
+
+    public Card getByIdEntity (UUID id){
+        return getREPOSITORY().findById(id).orElse(null);
     }
 
     public Page<CardDTO> getByNamePaged(String name, Integer numeroPagina, Integer dimensione) {
