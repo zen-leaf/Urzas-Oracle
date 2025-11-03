@@ -40,7 +40,7 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         dto.setId(e.getId());
         dto.setName(e.getName());
         String actualmana = e.getMana_cost();
-        System.out.println(actualmana);
+        // System.out.println(actualmana);
         if (e.getMana_cost() == null || e.getMana_cost().equals("")) {
             for (CardFace cf : e.getCard_faces()) {
                 actualmana = (cf.getMana_cost().equals("") ? "" : cf.getMana_cost()) + " " + actualmana;
