@@ -220,10 +220,19 @@ public class DeckController {
     }
 
     @GetMapping("/api/cards")
-    @ResponseBody
-    public List<CardDTO> getAllCardsAPI() {
-        return cardService.getAllPaged(0, Integer.MAX_VALUE).getContent();
+@ResponseBody
+public ResponseEntity<?> getAllCardsAPI(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "100") int size) {
+    try {
+        var pageResult = cardService.getAllPaged(page, size);
+        return ResponseEntity.ok(pageResult);
+    } catch (Exception e) {
+        System.err.println("❌ Errore caricamento carte: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+}
+
 
     @PostMapping("/create")
     @ResponseBody
