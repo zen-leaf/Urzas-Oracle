@@ -76,7 +76,9 @@ public class DeckController {
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
         model.addAttribute("active", "decks");
-        model.addAttribute("card", getCardService().getByID(cards.get(0).getCardId()));
+        model.addAttribute("card",
+                cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
+                        : getCardService().getAll().get(0));
 
         return "public-deck-detail";
     }
@@ -158,8 +160,8 @@ public class DeckController {
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
         model.addAttribute("active", "mydecks");
-        model.addAttribute("card", getCardService().getByID(cards.get(0).getCardId()));
-
+        model.addAttribute("card", cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
+                : getCardService().getAll().get(0));
         return "deck-detail";
     }
 

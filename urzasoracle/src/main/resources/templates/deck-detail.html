@@ -42,7 +42,8 @@
       </div>
 
       <!-- Immagine Carta -->
-
+    </div>
+    <div class="row">
       <div class="col-sm-5 col-md-5 col-lg-3 py-5 d-none d-md-block">
         <div class="card-container" style="    aspect-ratio:  0.714;">
           <div id="dragCard" class="magic-card" sty>
@@ -578,6 +579,7 @@
                        onmousemove="updatePreviewPosition(event)">
                     <span class="card-qty">${card.quantity}</span>
                     <span class="card-name">${card.cardName}</span>
+                    <span class="replaceCandidate">${card.refCard.manaCost}</span>
                   </div>
                 `
             )
