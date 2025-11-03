@@ -1,6 +1,6 @@
 package com.mambocosmo.urzasoracle.DTO;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -19,6 +19,6 @@ public class UrzaUserDTO implements GenericDTO {
     private String email;
     private String displayName;
     List<? extends GrantedAuthority> authorities;
-    private LocalDate registrerDate;
+    private Date registrerDate;
     private Set<CardCollection> userDecks;
 }

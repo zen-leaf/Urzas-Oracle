@@ -188,16 +188,12 @@ function flipCard() {
     }
     card.style.transition = 'transform 0.5s';
     rotationY = (Math.round(rotationY / 180) * 180 + 180) % 360;
-    // rotationZ = (rotationZ + 180) % 360;
+
     velocityX = 0;
     velocityY = 0;
-    // if (rotationY == 180) {
-    card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
-    // } else {
-    //     rotationY = 0;
-    //     card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
 
-    // }
+    card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
+
     isDragging = false;
 }
 //#endregion events
