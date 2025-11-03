@@ -84,11 +84,12 @@
                     class="form-label text-warning fw-bold"
                     >Membro da</label
                   >
+
                   <input
                     type="text"
                     id="registerDate"
                     class="form-control bg-dark text-secondary border-warning form-control-lg"
-                    th:value="${#temporals.format(user.registerDate, 'dd MMMM yyyy')}"
+                    th:value="${#dates.format(user.registerDate, 'dd MMMM yyyy')}"
                     disabled
                   />
                 </div>
@@ -350,7 +351,7 @@
                             </td>
                             <td
                               class="text-light"
-                              th:text="${#temporals.format(u.registerDate, 'dd/MM/yyyy')}"
+                              th:text="${#dates.format(u.registerDate, 'dd/MM/yyyy')}"
                             >
                               01/01/2025
                             </td>

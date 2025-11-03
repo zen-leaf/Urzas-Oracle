@@ -29,7 +29,7 @@ public class CardController {
     @GetMapping("/cards")
     public String getAllCards(Model model, @RequestParam(defaultValue = "") String q,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "12") int size) {
 
         // Page<CardDTO> cardPage = getCARDSERVICE().getAllPaged(page, size);
         Page<CardDTO> cardPage = getCARDSERVICE().searchByQueryPaged(q, page, size);

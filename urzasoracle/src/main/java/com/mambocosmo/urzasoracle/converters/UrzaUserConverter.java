@@ -1,5 +1,9 @@
 package com.mambocosmo.urzasoracle.converters;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.UrzaUserDTO;
@@ -21,7 +25,7 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         u.setAuthorities(dto.getAuthorities());
         u.setRegisterDate(dto.getRegistrerDate());
         u.setUserDecks(dto.getUserDecks());
-        
+
         return u;
     }
 
@@ -33,9 +37,10 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         dto.setEmail(e.getEmail());
         dto.setDisplayName(e.getDisplayName());
         dto.setAuthorities(e.getAuthorities());
+        System.out.println(e.getRegisterDate());
         dto.setRegistrerDate(e.getRegisterDate());
         dto.setUserDecks(e.getUserDecks());
-        
+
         return dto;
     }
 

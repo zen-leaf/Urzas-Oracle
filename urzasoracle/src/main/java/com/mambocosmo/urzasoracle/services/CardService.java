@@ -107,7 +107,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/uniques.json"));
             List<Card> cardList = new ArrayList<>();
 
             Long myTimer = System.nanoTime();
@@ -120,17 +120,20 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
                     // System.out.println(e.toString());
-                    // cardList.add(myCard);
+                    cardList.add(myCard);
                     // System.out.println(
                     // myCard.getName() + " - " + myCard.getId() + " - \n" + "Artist:\n" +
                     // myCard.getArtistRef());
-                    save(myCard);
-                    System.out.println("Saved card: " + myCard.getName());
 
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
                     System.out.println("Error generating card!!! " + e1.getMessage());
                 }
             });
+            cardList.forEach(e -> {
+                save(e);
+                System.out.println("Saved card: " + e.getName());
+            });
+
             System.out.println("Completed card generation - Generated " + cardList.size() + " cards in "
                     + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
 

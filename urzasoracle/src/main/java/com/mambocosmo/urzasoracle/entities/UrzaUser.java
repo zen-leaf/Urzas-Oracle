@@ -1,6 +1,6 @@
 package com.mambocosmo.urzasoracle.entities;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -15,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -46,7 +46,7 @@ public class UrzaUser extends GenericEntity implements UserDetails {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = ""))
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     List<String> authorities;
 
     @Column(unique = true)
@@ -54,8 +54,7 @@ public class UrzaUser extends GenericEntity implements UserDetails {
 
     private String displayName;
 
-    // TODO change to Date SQL
-    private LocalDate registerDate;
+    private Date registerDate;
 
     @Override
     public List<? extends GrantedAuthority> getAuthorities() {

@@ -19,7 +19,7 @@ public interface UrzaUserRepository extends JpaRepository<UrzaUser, UUID> {
 
     UrzaUser findByUsername(String username);
 
-    List<UrzaUser> findByAuthorities(List<? extends GrantedAuthority> role);
+    List<UrzaUser> findByAuthoritiesIn(List<String> role);
 
     UrzaUser save(Map<String, String> map);
 
