@@ -1,147 +1,100 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head :: head('Home - Urza\'s Oracle')}"></head>
 
-  <body class="bg-dark text-light d-flex flex-column">
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+<head th:replace="~{fragments/head :: head('Home - Urza\'s Oracle')}"></head>
 
-    <div class="cards-full-background" id="cardsMosaicFull">
-      <th:block th:each="card : ${topCards}">
-        <div
-          class="mosaic-card-full"
-          th:if="${card.images != null and card.images.get('small') != null}"
-          th:style="'background-image: url(' + ${card.images.get('small')} + ');'"
-        ></div>
-      </th:block>
-    </div>
-    <div class="content-overlay"></div>
+<body class="bg-dark text-light d-flex flex-column">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <main class="container-fluid py-4 flex-grow-1 animate-content">
-      <!-- Hero Section -->
-      <header
-        class="text-center mb-3 animate-item"
-        style="--direction-x: 0; --direction-y: -100; animation-delay: 0.2s"
-      >
-        <h1 class="fw-bold text-warning mb-3 title-epic">Urza's Oracle</h1>
-        <p
-          class="lead mb-3"
-          style="font-size: 1.3rem; font-weight: 500; color: #ffffff"
-        >
-          The definitive portal for
-        </p>
+  <div class="cards-full-background" id="cardsMosaicFull">
+    <th:block th:each="card : ${topCards}">
+      <div class="mosaic-card-full" th:if="${card.images != null and card.images.get('small') != null}"
+        th:style="'background-image: url(' + ${card.images.get('small')} + ');'"></div>
+    </th:block>
+  </div>
+  <div class="content-overlay"></div>
 
-        <!-- LOGO UFFICIALE MAGIC CON GLOW RIDOTTO -->
-        <div class="mtg-logo-container mb-3">
-          <img
-            src="https://images.ctfassets.net/s5n2t79q9icq/3dB5uyWzUH95O1ZPBNNUX5/6cff7c65a809285755ea24b164b6ac65/magic-logo.png?fm=webp
-            
-            "
-            alt="Magic: The Gathering"
-            class="mtg-logo"
-          />
-        </div>
+  <main class="container-fluid py-4 flex-grow-1 animate-content">
+    <!-- Hero Section -->
+    <header class="text-center mb-3 animate-item" style="--direction-x: 0; --direction-y: -100; animation-delay: 0.2s">
+      <h1 class="fw-bold text-warning py-5 mb-3 title-epic">Urza's Oracle</h1>
+      <p class="lead" style="font-size: 1.3rem; font-weight: 500; color: #ffffff">
+        The definitive portal for
+      </p>
 
-        <div class="d-flex gap-3 justify-content-center flex-wrap">
-          <a
-            href="/cards"
-            class="btn btn-warning btn-lg fw-bold px-4 py-2"
-            style="font-size: 1.1rem"
-          >
-            Find cards
-          </a>
-          <a
-            href="/search"
-            class="btn btn-outline-warning btn-lg fw-bold px-4 py-2"
-            style="font-size: 1.1rem"
-          >
-            Advanced Search
-          </a>
-        </div>
-      </header>
+      <!-- LOGO UFFICIALE MAGIC CON GLOW RIDOTTO -->
+      <div class="mtg-logo-container pb-2 mb-3">
+        <img src="https://images.ctfassets.net/s5n2t79q9icq/3dB5uyWzUH95O1ZPBNNUX5/6cff7c65a809285755ea24b164b6ac65/magic-logo.png?fm=webp" alt="Magic: The Gathering" class="mtg-logo" />
+      </div>
 
-      <!-- Descrizione -->
-      <section
-        class="container mb-3 animate-item"
-        style="--direction-x: -80; --direction-y: 50; animation-delay: 0.4s"
-      >
-        <div class="row justify-content-center">
-          <div class="col-lg-8 text-center">
-            <h2 class="text-warning mb-3 fw-bold" style="font-size: 2rem">
-              
-              Welcome to your TCG Finder
-            </h2>
-            <p
-              style="
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="/cards" class="btn btn-warning btn-lg fw-bold px-4 py-2" style="font-size: 1.1rem">
+          Find cards
+        </a>
+        <a href="/decks" class="btn btn-outline-warning btn-lg fw-bold px-4 py-2" style="font-size: 1.1rem">
+          Explore decks
+        </a>
+      </div>
+    </header>
+
+    <!-- Descrizione -->
+    <section class="container mb-3 animate-item" style="--direction-x: -80; --direction-y: 50; animation-delay: 0.4s">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2 class="text-warning mb-3 fw-bold" style="font-size: 2rem">
+
+            Welcome to your TCG Finder
+          </h2>
+          <p style="
                 font-size: 1.1rem;
                 line-height: 1.6;
                 color: #ffffff;
                 font-weight: 600;
-              "
-            >
-              Find rare cards or explore creative decks.
-              <span class="text-warning fw-bold">Urza's Oracle</span>
-              
-              it's here to help you explore the world of Magic: The Gathering like never before.
-            </p>
-          </div>
-        </div>
-      </section>
+              ">
+            Find rare cards or explore creative decks.
+            <span class="text-warning fw-bold">Urza's Oracle</span>
 
-      <!-- Cards Features -->
-      <section class="container mb-3">
-        <div class="row g-3 justify-content-center">
-          <!-- Card 1 -->
-          <div
-            class="col-12 col-sm-6 col-md-4 animate-item"
-            style="
+            it's here to help you explore the world of Magic: The Gathering like never before.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cards Features -->
+    <section class="container mb-3">
+      <div class="row g-3 justify-content-center">
+        <!-- Card 1 -->
+        <div class="col-12 col-sm-6 col-md-4 animate-item" style="
               --direction-x: -120;
               --direction-y: 80;
               animation-delay: 0.6s;
-            "
-          >
-            <div class="card glass-card bg-dark border-warning h-100 shadow-lg">
-              <div class="card-body text-center p-3">
-                <div class="mb-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="36"
-                    height="36"
-                    fill="#ffc107"
-                    class="bi bi-search"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                    />
-                  </svg>
-                </div>
-                <h5
-                  class="card-title text-warning fw-bold mb-2"
-                  style="font-size: 1.2rem"
-                >
-                  
-                  Advanced Search
-                </h5>
-                <p
-                  class="card-text mb-2"
-                  style="color: #ffffff; font-weight: 600; font-size: 0.95rem"
-                >
-                  
-                  Filter cards by set, color, rarity, and more.
-                </p>
-                <a
-                  href="/cards"
-                  class="btn btn-outline-warning btn-sm fw-bold px-3"
-                  style="font-size: 0.9rem"
-                >
-                  Search now
-                </a>
+            ">
+          <!-- <div class="card glass-card bg-dark border-warning h-100 shadow-lg">
+            <div class="card-body text-center p-3">
+              <div class="mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#ffc107" class="bi bi-search"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
               </div>
+              <h5 class="card-title text-warning fw-bold mb-2" style="font-size: 1.2rem">
+
+                Advanced Search
+              </h5>
+              <p class="card-text mb-2" style="color: #ffffff; font-weight: 600; font-size: 0.95rem">
+
+                Filter cards by set, color, rarity, and more.
+              </p>
+              <a href="/cards" class="btn btn-outline-warning btn-sm fw-bold px-3" style="font-size: 0.9rem">
+                Search now
+              </a>
             </div>
           </div>
+        </div> -->
 
-          <!-- Card 2 -->
-          <!-- <div
+        <!-- Card 2 -->
+        <!-- <div
             class="col-12 col-sm-6 col-md-4 animate-item"
             style="--direction-x: 0; --direction-y: 120; animation-delay: 0.8s"
           >
@@ -184,380 +137,350 @@
             </div>
           </div> -->
 
-          <!-- Card 3 -->
-          <div
-            class="col-12 col-sm-6 col-md-4 animate-item"
-            style="--direction-x: 120; --direction-y: 80; animation-delay: 1s"
-          >
-            <div class="card glass-card bg-dark border-warning h-100 shadow-lg">
-              <div class="card-body text-center p-3">
-                <div class="mb-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="36"
-                    height="36"
-                    fill="#ffc107"
-                    class="bi bi-stack"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z"
-                    />
-                    <path
-                      d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z"
-                    />
-                  </svg>
-                </div>
-                <h5
-                  class="card-title text-warning fw-bold mb-2"
-                  style="font-size: 1.2rem"
-                >
-                  Search Decks
-                </h5>
-                <p
-                  class="card-text mb-2"
-                  style="color: #ffffff; font-weight: 600; font-size: 0.95rem"
-                >
-                  Look up and discover decks shared by other players.
-                </p>
-                <a
-                  href="/decks"
-                  class="btn btn-outline-warning btn-sm fw-bold px-3"
-                  style="font-size: 0.9rem"
-                >
-                  Explore
-                </a>
+        <!-- Card 3 -->
+        <!-- <div class="col-12 col-sm-6 col-md-4 animate-item"
+          style="--direction-x: 120; --direction-y: 80; animation-delay: 1s">
+          <div class="card glass-card bg-dark border-warning h-100 shadow-lg">
+            <div class="card-body text-center p-3">
+              <div class="mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#ffc107" class="bi bi-stack"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z" />
+                  <path
+                    d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z" />
+                </svg>
               </div>
+              <h5 class="card-title text-warning fw-bold mb-2" style="font-size: 1.2rem">
+                Search Decks
+              </h5>
+              <p class="card-text mb-2" style="color: #ffffff; font-weight: 600; font-size: 0.95rem">
+                Look up and discover decks shared by other players.
+              </p>
+              <a href="/decks" class="btn btn-outline-warning btn-sm fw-bold px-3" style="font-size: 0.9rem">
+                Explore
+              </a>
             </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div> -->
+    </section>
+  </main>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+  <div th:replace="~{fragments/footer :: footer}"></div>
 
-    <style>
-      /* Import Font Epico */
-      @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap");
+  <style>
+    /* Import Font Epico */
+    @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap");
 
-      body {
-        background: linear-gradient(
-          180deg,
+    body {
+      background: linear-gradient(180deg,
           #0b0f1a 0%,
           #1a1033 50%,
-          #0b0f1a 100%
-        );
-        font-family: "Roboto", sans-serif;
-        min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
+          #0b0f1a 100%);
+      font-family: "Roboto", sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: relative;
+      z-index: 100;
+    }
+
+    footer {
+      position: relative;
+      z-index: 100;
+      margin-top: auto;
+    }
+
+    /* ANIMAZIONE DIAGONALE INFINITA */
+    @keyframes scrollCardsDiagonal {
+      0% {
+        transform: translateX(0) translateY(0);
       }
 
-      nav {
-        position: relative;
-        z-index: 100;
+      100% {
+        transform: translateX(-66.666%) translateY(-66.666%);
       }
+    }
 
-      footer {
-        position: relative;
-        z-index: 100;
-        margin-top: auto;
-      }
+    /* TAPPEZZERIA DI CARTE */
+    .cards-full-background {
+      position: fixed;
+      width: 300%;
+      height: 300%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 4px;
+      padding: 10px;
+      filter: blur(0.1rem);
+      animation: scrollCardsDiagonal 300s linear infinite;
+      will-change: transform;
+    }
 
-      /* ANIMAZIONE DIAGONALE INFINITA */
-      @keyframes scrollCardsDiagonal {
-        0% {
-          transform: translateX(0) translateY(0);
-        }
-        100% {
-          transform: translateX(-66.666%) translateY(-66.666%);
-        }
-      }
+    .mosaic-card-full {
+      width: 160px;
+      height: 230px;
+      flex-shrink: 0;
+      border-radius: 6px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #1a1a2e;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 193, 7, 0.15);
+      opacity: 0.7;
+    }
 
-      /* TAPPEZZERIA DI CARTE */
-      .cards-full-background {
-        position: fixed;
-        width: 300%;
-        height: 300%;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        gap: 4px;
-        padding: 10px;
-        filter: blur(0.1rem);
-        animation: scrollCardsDiagonal 300s linear infinite;
-        will-change: transform;
-      }
-
+    @media (max-width: 1024px) {
       .mosaic-card-full {
-        width: 160px;
-        height: 230px;
-        flex-shrink: 0;
-        border-radius: 6px;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-color: #1a1a2e;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 193, 7, 0.15);
-        opacity: 0.7;
+        width: 140px;
+        height: 200px;
       }
+    }
 
-      @media (max-width: 1024px) {
-        .mosaic-card-full {
-          width: 140px;
-          height: 200px;
-        }
+    @media (max-width: 768px) {
+      .mosaic-card-full {
+        width: 120px;
+        height: 170px;
       }
+    }
 
-      @media (max-width: 768px) {
-        .mosaic-card-full {
-          width: 120px;
-          height: 170px;
-        }
+    @media (max-width: 480px) {
+      .mosaic-card-full {
+        width: 100px;
+        height: 140px;
       }
+    }
 
-      @media (max-width: 480px) {
-        .mosaic-card-full {
-          width: 100px;
-          height: 140px;
-        }
-      }
-
-      /* OVERLAY PIÙ CHIARO */
-      .content-overlay {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(
-          ellipse at center,
+    /* OVERLAY PIÙ CHIARO */
+    .content-overlay {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center,
           rgba(11, 15, 26, 0.5) 0%,
           rgba(11, 15, 26, 0.7) 50%,
-          rgba(11, 15, 26, 0.85) 100%
-        );
-        pointer-events: none;
-        z-index: 1;
-      }
+          rgba(11, 15, 26, 0.85) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
 
-      main {
-        position: relative;
-        z-index: 2;
-        background: transparent;
-      }
+    main {
+      position: relative;
+      z-index: 2;
+      background: transparent;
+    }
 
-      /* ===== TITOLO EPICO ===== */
-      .title-epic {
-        font-family: "Cinzel", serif !important;
-        font-weight: 900 !important;
-        font-size: 4.5rem !important;
-        letter-spacing: 6px !important;
-        text-transform: uppercase;
-        background: linear-gradient(
-          180deg,
+    /* ===== TITOLO EPICO ===== */
+    .title-epic {
+      font-family: "Cinzel", serif !important;
+      font-weight: 900 !important;
+      font-size: 5.5rem !important;
+      letter-spacing: 6px !important;
+      text-transform: uppercase;
+      background: linear-gradient(180deg,
           #ffd700 0%,
           #ffaa00 50%,
-          #cc8800 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        filter: drop-shadow(0 0 30px rgba(255, 193, 7, 0.8));
+          #cc8800 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      filter: drop-shadow(0 0 30px rgba(255, 193, 7, 0.8));
+    }
+
+    /* ===== LOGO MAGIC - GLOW RIDOTTO ED ELEGANTE ===== */
+    .mtg-logo-container {
+      display: inline-block;
+      animation: logoGlowSubtle 4s ease-in-out infinite;
+    }
+
+    .mtg-logo {
+      height: 100px;
+      width: auto;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+      transition: all 0.5s ease;
+    }
+
+    /* Animazione delicata - appena percettibile */
+    @keyframes logoGlowSubtle {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 15px rgba(255, 193, 7, 0.3));
       }
 
-      /* ===== LOGO MAGIC - GLOW RIDOTTO ED ELEGANTE ===== */
-      .mtg-logo-container {
-        display: inline-block;
-        animation: logoGlowSubtle 4s ease-in-out infinite;
+      50% {
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 20px rgba(255, 193, 7, 0.4));
       }
+    }
 
-      .mtg-logo {
-        height: 100px;
-        width: auto;
-        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-        transition: all 0.5s ease;
-      }
+    .mtg-logo:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 25px rgba(255, 193, 7, 0.5));
+    }
 
-      /* Animazione delicata - appena percettibile */
-      @keyframes logoGlowSubtle {
-        0%,
-        100% {
-          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4))
-            drop-shadow(0 0 15px rgba(255, 193, 7, 0.3));
-        }
-        50% {
-          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4))
-            drop-shadow(0 0 20px rgba(255, 193, 7, 0.4));
-        }
-      }
+    /* ===== ANIMAZIONE RICOMPOSIZIONE PARTICELLE ===== */
 
-      .mtg-logo:hover {
-        transform: scale(1.05);
-        filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5))
-          drop-shadow(0 0 25px rgba(255, 193, 7, 0.5));
-      }
+    .animate-content {
+      opacity: 0;
+    }
 
-      /* ===== ANIMAZIONE RICOMPOSIZIONE PARTICELLE ===== */
+    .animate-item {
+      opacity: 0;
+      transform: translate(calc(var(--direction-x) * 1px),
+          calc(var(--direction-y) * 1px)) scale(0.8) rotate(5deg);
+      filter: blur(15px);
+    }
 
-      .animate-content {
+    @keyframes reconstruct {
+      0% {
         opacity: 0;
-      }
-
-      .animate-item {
-        opacity: 0;
-        transform: translate(
-            calc(var(--direction-x) * 1px),
-            calc(var(--direction-y) * 1px)
-          )
-          scale(0.8) rotate(5deg);
+        transform: translate(calc(var(--direction-x) * 1px),
+            calc(var(--direction-y) * 1px)) scale(0.8) rotate(5deg);
         filter: blur(15px);
       }
 
-      @keyframes reconstruct {
-        0% {
-          opacity: 0;
-          transform: translate(
-              calc(var(--direction-x) * 1px),
-              calc(var(--direction-y) * 1px)
-            )
-            scale(0.8) rotate(5deg);
-          filter: blur(15px);
-        }
-        100% {
-          opacity: 1;
-          transform: translate(0, 0) scale(1) rotate(0deg);
-          filter: blur(0);
-        }
+      100% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        filter: blur(0);
       }
+    }
 
-      .animate-content.loaded .animate-item {
-        animation: reconstruct 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
+    .animate-content.loaded .animate-item {
+      animation: reconstruct 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
-      /* ===== LIQUID GLASS ===== */
+    /* ===== LIQUID GLASS ===== */
 
-      .glass-card {
-        background: rgba(15, 15, 30, 0.6) !important;
-        backdrop-filter: blur(12px) saturate(150%);
-        -webkit-backdrop-filter: blur(12px) saturate(150%);
-        border: 1px solid rgba(255, 193, 7, 0.25) !important;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4),
-          inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
-        position: relative;
-        overflow: hidden;
-        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      }
+    .glass-card {
+      background: rgba(15, 15, 30, 0.6) !important;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      border: 1px solid rgba(255, 193, 7, 0.25) !important;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-      .glass-card::before {
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(
-          45deg,
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg,
           transparent 30%,
           rgba(255, 255, 255, 0.08) 50%,
-          transparent 70%
-        );
-        transform: rotate(45deg);
-        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          transparent 70%);
+      transform: rotate(45deg);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
       }
 
-      @keyframes shimmer {
-        0% {
-          transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
+    }
+
+    .glass-card:hover::before {
+      animation: shimmer 1.5s ease-in-out;
+    }
+
+    .glass-card:hover {
+      background: rgba(20, 20, 40, 0.8) !important;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-color: rgba(255, 193, 7, 0.6) !important;
+      box-shadow: 0 0 40px rgba(255, 193, 7, 0.5),
+        0 8px 32px 0 rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    /* ===== BUTTON ELEGANTI - GLOW RIDOTTO ===== */
+
+    .btn-warning {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-warning:hover {
+      background-color: #ffce3d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+    }
+
+    .btn-outline-warning {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-outline-warning:hover {
+      background-color: #ffc107;
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+    }
+
+    .card {
+      border-radius: 1rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      letter-spacing: 1px;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const container = document.getElementById("cardsMosaicFull");
+      const originalCards = Array.from(
+        container.querySelectorAll(".mosaic-card-full")
+      );
+
+      console.log("Carte originali:", originalCards.length);
+
+      for (let i = 0; i < 5; i++) {
+        originalCards.forEach((card) => {
+          const clone = card.cloneNode(true);
+          container.appendChild(clone);
+        });
+      }
+
+      console.log(
+        "Carte totali:",
+        container.querySelectorAll(".mosaic-card-full").length
+      );
+
+      setTimeout(() => {
+        const mainContent = document.querySelector(".animate-content");
+        if (mainContent) {
+          mainContent.style.opacity = "1";
+          mainContent.classList.add("loaded");
         }
-        100% {
-          transform: translateX(100%) translateY(100%) rotate(45deg);
-        }
-      }
+      }, 600);
+    });
+  </script>
+</body>
 
-      .glass-card:hover::before {
-        animation: shimmer 1.5s ease-in-out;
-      }
-
-      .glass-card:hover {
-        background: rgba(20, 20, 40, 0.8) !important;
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border-color: rgba(255, 193, 7, 0.6) !important;
-        box-shadow: 0 0 40px rgba(255, 193, 7, 0.5),
-          0 8px 32px 0 rgba(0, 0, 0, 0.5),
-          inset 0 2px 4px 0 rgba(255, 255, 255, 0.15);
-      }
-
-      /* ===== BUTTON ELEGANTI - GLOW RIDOTTO ===== */
-
-      .btn-warning {
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      }
-
-      .btn-warning:hover {
-        background-color: #ffce3d;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
-      }
-
-      .btn-outline-warning {
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-
-      .btn-outline-warning:hover {
-        background-color: #ffc107;
-        color: #000;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
-      }
-
-      .card {
-        border-radius: 1rem;
-      }
-
-      h1,
-      h2,
-      h3 {
-        letter-spacing: 1px;
-      }
-    </style>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const container = document.getElementById("cardsMosaicFull");
-        const originalCards = Array.from(
-          container.querySelectorAll(".mosaic-card-full")
-        );
-
-        console.log("Carte originali:", originalCards.length);
-
-        for (let i = 0; i < 5; i++) {
-          originalCards.forEach((card) => {
-            const clone = card.cloneNode(true);
-            container.appendChild(clone);
-          });
-        }
-
-        console.log(
-          "Carte totali:",
-          container.querySelectorAll(".mosaic-card-full").length
-        );
-
-        setTimeout(() => {
-          const mainContent = document.querySelector(".animate-content");
-          if (mainContent) {
-            mainContent.style.opacity = "1";
-            mainContent.classList.add("loaded");
-          }
-        }, 600);
-      });
-    </script>
-  </body>
 </html>
