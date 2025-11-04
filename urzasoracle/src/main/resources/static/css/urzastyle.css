@@ -2,18 +2,21 @@
   --bs-secondary-color: #ffc107;
 }
 
-.deckBanner {
-}
+.deckBanner {}
+
 
 .card-deck {
   /* background: rgba(15, 15, 30, 0.9); */
-  border: 1px solid rgba(255, 193, 7, 0.2);
+  border: 2px solid rgba(255, 193, 7, 0.2);
   /* border-radius: 12px; */
   overflow: hidden;
   transition: all 0.3s ease;
   /* height: 100%; */
   display: flex;
   flex-direction: column;
+  min-height: 10rem;
+  box-shadow: 2px 2px 4px rgb(0, 0, 0) !important;
+
 }
 
 .info {
@@ -133,21 +136,21 @@
 }
 
 .deckholder {
-    background: linear-gradient(to right bottom, #14141677 33%, #292941);
-    border-style: ridge;
-    border-width: 0px 3px;
-    border-color: #ffc107;
-    min-height: 70vh;
+  background: linear-gradient(to right bottom, #14141677 33%, #292941);
+  border-style: ridge;
+  border-width: 0px 3px;
+  border-color: #ffc107;
+  min-height: 70vh;
 
 }
 
 .cardinfoholder {
-    background: linear-gradient(to right bottom, #141416 33%, #292941);
-    /* border: 1px 0px 1px 0px dashed red; */
-    border-style: solid;
-    border-width: 0px 2px;
-    border-color: #ffc107;
-    background-origin: padding-box;
+  background: linear-gradient(to right bottom, #141416 33%, #292941);
+  /* border: 1px 0px 1px 0px dashed red; */
+  border-style: solid;
+  border-width: 0px 2px;
+  border-color: #ffc107;
+  background-origin: padding-box;
 }
 
 .legality-item {
@@ -189,25 +192,25 @@
 }
 
 @media (max-width: 1400px) {
-    .cardcolumns {
-        column-count: 2;
-    }
+  .cardcolumns {
+    column-count: 2;
+  }
 }
 
 @media (max-width: 1000px) {
-    .cardcolumns {
-        column-count: 1;
-    }
+  .cardcolumns {
+    column-count: 1;
+  }
 }
 
 @media(max-width:576px) {
-    .cardinfoholder {
-        border-width: 2px 2px 0px 2px;
-    }
+  .cardinfoholder {
+    border-width: 2px 2px 0px 2px;
+  }
 }
 
 .card-symbol+.card-symbol {
-    margin-left: 2px;
+  margin-left: 2px;
 }
 
 .card-symbol {
@@ -658,12 +661,14 @@
 .card-symbol-Z {
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdC b3g9JzAgMCAxMDAgMTAwJz48ZyBmaWxsPSdub25lJz48cGF0aCBkPSdNMTAw IDQ5Ljk5OGMwIDI3LjYxNS0yMi4zODQgNTAuMDAyLTUwIDUwLjAwMi0yNy42 MTMgMC01MC0yMi4zODctNTAtNTAuMDAyIDAtMjcuNjEzIDIyLjM4Ny00OS45 OTggNTAtNDkuOTk4IDI3LjYxNiAwIDUwIDIyLjM4NSA1MCA0OS45OTh6JyBp ZD0nU2hhcGUnIGZpbGw9JyNDOUM0QkUnLz48cGF0aCBkPSdNNzQuMzU1IDc5 Ljk5OWgtNTMuNzZ2LTIuNzExbDQyLjYzNS01Ny4yMmgtMTguOTc5Yy0zLjEx OC4wNjMtNS41MTcuMzkxLTcuMi45ODEtMS42ODMuNTk0LTMuMjQyIDEuNzMt NC42NzUgMy40MTMtLjEyNS4xMjYtLjIzMy4yNS0uMzI3LjM3NC0uMDkzLjEy Ni0uMjAzLjI1LS4zMjcuMzczLS4yNS4zNzUtLjQ4My43MDItLjcwMi45ODIt LjIxOS4yOC0uNDIuNTc3LS42MDcuODg5LS4wNjMuMTg4LS4xNTYuMzc0LS4y OC41NjFsLS4zNzQuNTYyYy0uMTI2LjM3NC0uMjgxLjc2NS0uNDY3IDEuMTY4 LS4xODguNDA2LS40MDcuODg5LS42NTQgMS40NDlsLTMuMzY3LS4wOTR2LTE0 LjQ5MWg1MS4wNDl2Mi41MjRsLTQzLjAwNyA1Ny40MDZoMTguNjA1YzIuODA1 LjA2MyA1LjAzMyAwIDYuNjg1LS4xODggMS42NS0uMTg3IDMuMTkzLS41OSA0 LjYyOC0xLjIxM2wuNTE0LS4xODguNDIxLS4xODhjLjg3My0uNDM2IDEuNzE0 LS45MzUgMi41MjQtMS40OTYuODA5LS41NjEgMS42Mi0xLjIxNSAyLjQzMS0x Ljk2My41NjEtLjU2MiAxLjEyMi0xLjE2OCAxLjY4My0xLjgyMi41NjEtLjY1 NSAxLjE1My0xLjM4OCAxLjc3Ny0yLjE5N2wyLjQzMS0zLjQ2MWgzLjU1Mmwt NC4yMDkgMTYuNTV6JyBmaWxsPScjMEQwRjBGJy8+PC9nPjwvc3ZnPgo= ");
 }
+
 .link-unstyled {
   text-decoration: none;
   color: inherit;
   display: block;
   height: 100%;
 }
+
 .card-deck {
   background: rgba(15, 15, 30, 0.8);
   border: 1px solid rgba(255, 193, 7, 0.15);

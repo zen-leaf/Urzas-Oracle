@@ -180,6 +180,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     public Page<CardDTO> getAllPaged(int numeroPagina, int dimensione) {
+        System.out.println("Requested page of "+dimensione+" cards" );
         Pageable pageable = PageRequest.of(numeroPagina, dimensione, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> page = getREPOSITORY().findAll(pageable);
 
