@@ -50,17 +50,18 @@ public class DeckController {
         model.addAttribute("decks", allDecks);
         model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
         model.addAttribute("active", "decks");
-        
+
         // ✅ AGGIUNGI CSRF TOKEN
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
         model.addAttribute("csrfHeader", csrf != null ? csrf.getHeaderName() : "X-CSRF-TOKEN");
-        
+
         return "decks";
     }
 
     @GetMapping("/public/{id}")
-    public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication, HttpServletRequest request) {
+    public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication,
+            HttpServletRequest request) {
         CardCollectionDTO deck = cardCollectionService.getByID(id);
 
         if (deck == null) {
@@ -74,6 +75,7 @@ public class DeckController {
         }
 
         List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
+        System.out.println("CARDLIST " + cards);
         int totalCards = cards.stream()
                 .mapToInt(c -> c.getQuantity())
                 .sum();
@@ -86,7 +88,7 @@ public class DeckController {
         model.addAttribute("active", "decks");
         model.addAttribute("card",
                 cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
-                        : getCardService().getAll().get(0));
+                        : getCardService().getByName("Forest").get(0));
 
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
@@ -96,7 +98,8 @@ public class DeckController {
     }
 
     @GetMapping("/{id}")
-    public String viewDeck(@PathVariable UUID id, Model model, Authentication authentication, HttpServletRequest request) {
+    public String viewDeck(@PathVariable UUID id, Model model, Authentication authentication,
+            HttpServletRequest request) {
         return viewPublicDeck(id, model, authentication, request);
     }
 
@@ -146,12 +149,12 @@ public class DeckController {
         model.addAttribute("decks", userDecks);
         model.addAttribute("active", "mydecks");
         model.addAttribute("isLoggedIn", true);
-        
+
         // ✅ AGGIUNGI CSRF TOKEN
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
         model.addAttribute("csrfHeader", csrf != null ? csrf.getHeaderName() : "X-CSRF-TOKEN");
-        
+
         return "decks";
     }
 
@@ -207,7 +210,8 @@ public class DeckController {
 }
 
     @GetMapping("/mydecks/{id}")
-    public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication, HttpServletRequest request) {
+    public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication,
+            HttpServletRequest request) {
         CardCollectionDTO deck = cardCollectionService.getByID(id);
 
         if (deck == null) {
@@ -246,19 +250,18 @@ public class DeckController {
     }
 
     @GetMapping("/api/cards")
-@ResponseBody
-public ResponseEntity<?> getAllCardsAPI(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "100") int size) {
-    try {
-        var pageResult = cardService.getAllPaged(page, size);
-        return ResponseEntity.ok(pageResult);
-    } catch (Exception e) {
-        System.err.println("❌ Errore caricamento carte: " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @ResponseBody
+    public ResponseEntity<?> getAllCardsAPI(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        try {
+            var pageResult = cardService.getAllPaged(page, size);
+            return ResponseEntity.ok(pageResult);
+        } catch (Exception e) {
+            System.err.println("❌ Errore caricamento carte: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-}
-
 
     @PostMapping("/create")
     @ResponseBody

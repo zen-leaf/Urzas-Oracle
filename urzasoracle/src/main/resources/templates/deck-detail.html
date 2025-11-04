@@ -28,6 +28,15 @@
               >
                 ✏️
               </p>
+              <p
+                th:if="${isOwner}"
+                class="fw-bold d-inline"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteDeckModal"
+                style="cursor: pointer"
+              >
+                ❌
+              </p>
               <p class="deck-desc" th:text="${deck.description}"></p>
             </div>
             <div class="col-md-2">
