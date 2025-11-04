@@ -18,7 +18,7 @@ public class Util {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData = null;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/oracles.json"));
             Set<String> params = new HashSet<>();
             String searchfor = insideOf;
             cardData.forEach(e -> {

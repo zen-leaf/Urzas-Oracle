@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.DTO.CardFaceDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.entities.CardFace;
 import com.mambocosmo.urzasoracle.misc.enums.Format;
 
@@ -19,6 +20,8 @@ import lombok.Data;
 @Data
 public class CardConverter implements GenericConverter<Card, CardDTO> {
 
+    private final CardExpansionSet cardExpansionSet;
+
     private final ArtistConverter ARTISTCONVERTER;
     private final CardFaceConverter CARDFACECONVERTER;
     private final CardPartConverter CARDPARTCONVERTER;
@@ -26,6 +29,7 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
     private final List<Format> relevantFormat = List.of(Format.standard, Format.pioneer, Format.modern, Format.legacy,
             Format.vintage, Format.commander, Format.alchemy, Format.historic, Format.timeless, Format.pauper,
             Format.penny, Format.premodern);
+
 
     @Override
     public Card fromDToE(CardDTO dto) {
@@ -35,7 +39,7 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         // e.setName(dto.getName());
         // e.setMana_cost(dto.getManaCost());
         // e.setType_line(dto.getTypeline());
-        
+
         // return e;
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'fromDToE'");
@@ -102,8 +106,10 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
                 dto.getCardFaces().add(getCARDFACECONVERTER().fromEToD(entry));
             });
         }
-        dto.setExpansionSet(getCARDSETCONVERTER().fromEToD(e.getExpansion()));
+        dto.setExpansionSet(getCARDSETCONVERTER().fromEToD(e.getExpansion()==null? new CardExpansionSet():e.getExpansion()));
 
+        // System.out.println("WARNING EXPENSIVE OPERATION: CARD CONVERT TO DTO");
+        System.out.println("loaded DTO: " + dto.getName());
         return dto;
     }
 

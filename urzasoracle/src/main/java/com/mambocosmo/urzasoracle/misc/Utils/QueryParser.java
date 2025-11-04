@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-
 @AllArgsConstructor
 public class QueryParser implements Specification<Card> {
     private final SearchCriteria CRITERIA;

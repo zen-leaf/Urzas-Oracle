@@ -50,7 +50,6 @@ public class CardCollectionService
     }
 
     public boolean bulksave(String in, String toDeckID) {
-        // System.out.println(in);
         final String regex = "^(\\d+)\\s+(.+?)\\s*\\(";
         final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 

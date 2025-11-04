@@ -72,6 +72,10 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         }
     }
 
+    public List<Card> getEntityByName(String name) {
+        return getREPOSITORY().findByName(name);
+    }
+
     public List<CardDTO> getByName(String name) {
         List<CardDTO> out = getREPOSITORY().findByNameContainingIgnoreCase(name).stream().map(e -> {
             return getCONVERTER().fromEToD(e);
@@ -108,7 +112,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/oracles.json"));
             List<Card> cardList = new ArrayList<>();
 
             Long myTimer = System.nanoTime();
@@ -148,7 +152,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/uniques.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/oracles.json"));
             Map<String, Integer> uniqueFaces = new java.util.HashMap<>();
             Long myTimer = System.nanoTime();
             System.out.println("start");
@@ -180,7 +184,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     public Page<CardDTO> getAllPaged(int numeroPagina, int dimensione) {
-        System.out.println("Requested page of "+dimensione+" cards" );
+        System.out.println("Requested page of " + dimensione + " cards");
         Pageable pageable = PageRequest.of(numeroPagina, dimensione, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> page = getREPOSITORY().findAll(pageable);
 
