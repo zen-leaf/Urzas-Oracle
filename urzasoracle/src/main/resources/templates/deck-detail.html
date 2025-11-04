@@ -608,10 +608,10 @@
       return (FORMAT_RULES[format.toLowerCase()] || FORMAT_RULES.standard)
         .maxCopies;
     }
-
+      //  Commander: [],
     function categorizeCards(cards, sortBy = "name") {
       const categories = {
-        Commander: [],
+ 
         Planeswalker: [],
         Creature: [],
         Instant: [],
@@ -623,9 +623,9 @@
 
       cards.forEach((card) => {
         const typeline = card.typeline || "";
-        if (typeline.includes("Legendary") && typeline.includes("Creature"))
-          categories.Commander.push(card);
-        else if (typeline.includes("Planeswalker"))
+        // if (typeline.includes("Legendary") && typeline.includes("Creature"))
+        //   categories.Commander.push(card);
+        if (typeline.includes("Planeswalker"))
           categories.Planeswalker.push(card);
         else if (typeline.includes("Creature"))
           categories.Creature.push(card);
