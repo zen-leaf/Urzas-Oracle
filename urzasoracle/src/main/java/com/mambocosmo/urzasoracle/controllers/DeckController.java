@@ -21,6 +21,8 @@ import com.mambocosmo.urzasoracle.services.CardService;
 import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/decks")
@@ -59,6 +61,15 @@ public class DeckController {
         return "decks";
     }
 
+    @PostMapping("/bulkadd")
+    public String getMethodName(@RequestParam("bulktext") String text, @RequestParam String deckId,
+            HttpServletRequest request) {
+
+        getCardCollectionService().bulksave(text, deckId);
+
+        return "redirect:" + request.getHeader("Referer");
+    }
+
     @GetMapping("/public/{id}")
     public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication,
             HttpServletRequest request) {
@@ -75,7 +86,7 @@ public class DeckController {
         }
 
         List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
-        System.out.println("CARDLIST " + cards);
+        // System.out.println("CARDLIST " + cards);
         int totalCards = cards.stream()
                 .mapToInt(c -> c.getQuantity())
                 .sum();

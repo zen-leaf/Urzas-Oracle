@@ -1,8 +1,11 @@
 package com.mambocosmo.urzasoracle.services;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -32,6 +35,7 @@ public class CardCollectionService
 
     private final CardInDeckConverter CARDINDECKCONVERTER;
     private final CardConverter CARDCONVERTER;
+    private final CardService CARDSERVICE;
 
     @Override
     public CardCollection construct(Map<String, String> fromData) {
@@ -43,6 +47,38 @@ public class CardCollectionService
             e.printStackTrace();
         }
         return cc;
+    }
+
+    public boolean bulksave(String in, String toDeckID) {
+        // System.out.println(in);
+        final String regex = "^(\\d+)\\s+(.+?)\\s*\\(";
+        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+
+        Map<String, Integer> cardQuantities = new HashMap<>();
+
+        final Matcher matcher = pattern.matcher(in);
+
+        while (matcher.find()) {
+            try {
+                int quantity = Integer.parseInt(matcher.group(1));
+                String cardName = matcher.group(2).trim();
+                cardQuantities.put(cardName, quantity);
+
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing quantity for line starting with: " + matcher.group(0));
+            }
+        }
+        CardCollection deck = getEntityByID(UUID.fromString(toDeckID));
+
+        // System.out.println(cardQuantities);
+        cardQuantities.forEach((card, quantity) -> {
+            if (getCARDSERVICE().getEntityByName(card).size() > 0) {
+                addCardToDeck(deck.getId(), deck.getOwner().getId(),
+                        getCARDSERVICE().getEntityByName(card).get(0).getId(), quantity);
+            }
+        });
+
+        return false;
     }
 
     public List<CardCollection> getByName(String name) {
@@ -149,8 +185,8 @@ public class CardCollectionService
             return null;
 
         // ✅ FIXATO: Permetti > 4 copie per basic lands
-        boolean isBasicLand = card.getType_line() != null && 
-                              card.getType_line().toLowerCase().contains("basic land");
+        boolean isBasicLand = card.getType_line() != null &&
+                card.getType_line().toLowerCase().contains("basic land");
         if (!isBasicLand && qty > 4)
             return null;
 
