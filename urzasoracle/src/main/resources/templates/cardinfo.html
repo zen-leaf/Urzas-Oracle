@@ -208,6 +208,10 @@
       margin-top: 2.5rem;
     }
 
+    .comment-user{
+      color: #fffb07;
+    }
+
     .comments-list .comment {
       border-left: 3px solid rgba(255, 193, 7, 0.13);
     }
@@ -244,7 +248,7 @@
           comments.forEach(c => {
             let div = document.createElement('div');
             div.className = 'comment mb-2 p-2 bg-secondary bg-opacity-10 rounded';
-            div.innerHTML = '<span class="fw-bold text-info">' + c.userName + '</span>' +
+            div.innerHTML = '<span class=comment-user>' + c.userName + '</span>' +
               '<small class="text-secondary ms-2">' + c.timeOfComment.toLocaleString() + '</small>' +
               '<p class="mb-1 text-light">' + c.comment + '</p>';
             list.appendChild(div);
