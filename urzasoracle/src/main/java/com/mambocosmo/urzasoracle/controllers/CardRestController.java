@@ -34,40 +34,40 @@ public class CardRestController {
     private final ArtistService ARTSERVICE;
     private final CardPartService CARDPARTSERVICE;
 
-    @GetMapping("/saveAll")
-    public String saveAll() {
-        System.out.println("Saving cards with their relationships");
-        List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
-        // myCards.forEach(e -> {
-        //     getCARDSERVICE().save(e);
-        //     // System.out.println(e.getCard_faces());
-        // });
-        // System.out.println("Saved card: " + e.getName());
-        // Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
-        // return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique
-        // faces found and "+myCards.size()+" cards saved.";
-        return myCards.size() + " cards saved.";
-    }
+    // @GetMapping("/saveAll")
+    // public String saveAll() {
+    //     System.out.println("Saving cards with their relationships");
+    //     List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
+    //     // myCards.forEach(e -> {
+    //     //     getCARDSERVICE().save(e);
+    //     //     // System.out.println(e.getCard_faces());
+    //     // });
+    //     // System.out.println("Saved card: " + e.getName());
+    //     // Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
+    //     // return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique
+    //     // faces found and "+myCards.size()+" cards saved.";
+    //     return myCards.size() + " cards saved.";
+    // }
 
     @GetMapping("/delete")
     public String deleteone(@RequestParam String param) {
         return new String();
     }
 
-    @GetMapping("/saveSet")
-    public String saveSet() {
-        List<CardExpansionSet> mySets = getEXPANSIONSETSERVICE().generateAllSetsFromJSON();
-        System.out.println("Saving sets with their relationships");
-        // Card card = myCards.get(4);
-        // CardExpansionSet set = mySets.get(4);
-        mySets.forEach(e -> {
-            // Save the card - cascade will handle artists and parts
-            getEXPANSIONSETSERVICE().save(e);
-            System.out.println("Saved set: " + e.getName());
-        });
+    // @GetMapping("/saveSet")
+    // public String saveSet() {
+    //     List<CardExpansionSet> mySets = getEXPANSIONSETSERVICE().generateSetsFromJSON();
+    //     System.out.println("Saving sets with their relationships");
+    //     // Card card = myCards.get(4);
+    //     // CardExpansionSet set = mySets.get(4);
+    //     mySets.forEach(e -> {
+    //         // Save the card - cascade will handle artists and parts
+    //         getEXPANSIONSETSERVICE().save(e);
+    //         System.out.println("Saved set: " + e.getName());
+    //     });
 
-        return mySets.size() + " sets saved.";
-    }
+    //     return mySets.size() + " sets saved.";
+    // }
 
     // @GetMapping("/byname")
     // public ResponseEntity<List<CardDTO>> getByName(@RequestParam String name) {
