@@ -11,7 +11,9 @@ let isClicking = false;
 let velocityX = 20;
 let velocityY = 0;
 let momentumID = 0;
-const DRAG_THRESHOLD = 5;
+let posX = 0;
+let posY = 0;
+const DRAG_THRESHOLD = 10
 const friction = 0.95;
 const snapSpeed = 0.1;
 momentumID = requestAnimationFrame(applyMomentum);
@@ -67,7 +69,6 @@ function applyMomentum() {
 //#region events
 
 function handleMouseDown(e) {
-
     cancelAnimationFrame(momentumID);
     velocityX = 0;
     velocityY = 0;
@@ -79,14 +80,47 @@ function handleMouseDown(e) {
     startY = e.clientY;
     card.style.transition = 'transform 0s';
 }
+function handleTouchDown(e) {
+    cancelAnimationFrame(momentumID);
+    velocityX = 0;
+    velocityY = 0;
+
+    e.preventDefault();
+    isDragging = false;
+    isClicking = true;
+    startX = e.targetTouches[0].clientX;
+    startY = e.targetTouches[0].clientY;
+    card.style.transition = 'transform 0s';
+}
 
 function handleMouseMove(e) {
     if (!e.buttons) return;
+    posX = e.clientX;
+    posY = e.clientY;
+    handleMove(e);
+    // if (isDragging) {
+    //     startX = e.clientX;
+    //     startY = e.clientY;
+    // }
+}
+function handleTouchMove(e) {
 
-    const deltaX = e.clientX - startX;
-    const deltaY = e.clientY - startY;
+    if (!isClicking && !isDragging) return;
 
+    posX = e.targetTouches[0].clientX;
+    posY = e.targetTouches[0].clientY;
+    handleMove(e);
+    // if (isDragging) {
+    //     startX = e.targetTouches[0].clientX;
+    //     startY = e.targetTouches[0].clientY;
+    // }
+}
+function handleMove(e) {
 
+    const deltaX = posX - startX;
+    const deltaY = posY - startY;
+
+    e.preventDefault();
     if (isClicking && (Math.abs(deltaX) > DRAG_THRESHOLD || Math.abs(deltaY) > DRAG_THRESHOLD)) {
         isClicking = false;
         isDragging = true;
@@ -103,8 +137,8 @@ function handleMouseMove(e) {
     rotationX = Math.max(-45, Math.min(45, rotationX));
 
     card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
-    startX = e.clientX;
-    startY = e.clientY;
+    startX = posX;
+    startY = posY;
 }
 
 function handleMouseUp(e) {
@@ -139,7 +173,27 @@ function resetRotation() {
     velocityX = 0;
     velocityY = 0;
     card.style.transition = 'transform 0.5s ease-out';
-    card.style.transform = `rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+    card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    isDragging = false;
+}
+
+
+function flipCard() {
+    cancelAnimationFrame(momentumID)
+    if (isNaN(rotationX)) {
+        rotationX = 0;
+    }
+    if (isNaN(rotationY)) {
+        rotationY = 0;
+    }
+    card.style.transition = 'transform 0.5s';
+    rotationY = (Math.round(rotationY / 180) * 180 + 180) % 360;
+
+    velocityX = 0;
+    velocityY = 0;
+
+    card.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
+
     isDragging = false;
 }
 //#endregion events
@@ -149,6 +203,6 @@ card.addEventListener('mousedown', handleMouseDown);
 window.addEventListener('mousemove', handleMouseMove);
 window.addEventListener('mouseup', handleMouseUp);
 
-card.addEventListener('touchstart', handleMouseDown, { passive: true });
-window.addEventListener('touchmove', handleMouseMove);
+card.addEventListener('touchstart', handleTouchDown);
+window.addEventListener('touchmove', handleTouchMove, { passive: false });
 window.addEventListener('touchend', handleMouseUp);

@@ -12,6 +12,7 @@ import com.mambocosmo.urzasoracle.entities.Card;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
 import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
 import com.mambocosmo.urzasoracle.entities.CardPart;
+import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
 import com.mambocosmo.urzasoracle.services.UrzaUserService;
@@ -70,6 +71,14 @@ public class EntityConfiguration {
 
     @Bean
     @Scope("prototype")
+    public CommentOnCard commentOnCard() {
+        CommentOnCard coc = new CommentOnCard();
+
+        return coc;
+    }
+
+    @Bean
+    @Scope("prototype")
     public UrzaUser urzaUser(Map<String, String> fromData) {
         UrzaUser u = new UrzaUser();
         u.fromMap(fromData);
@@ -83,6 +92,8 @@ public class EntityConfiguration {
 
         return sc;
     }
+
+
 
     // @Bean
     // @Scope("prototype")

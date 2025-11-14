@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head('Carte Magic')}"></head>
+<head th:replace="~{fragments/head :: head('Search cards')}"></head>
 
 <body class="bg-dark text-light">
 
@@ -10,21 +10,21 @@
   <main class="container-fluid py-5">
 
     <header class="text-center mb-5">
-      <h1 class="display-4 fw-bold text-warning mb-3">Carte Magic: The Gathering</h1>
-      <p class="lead text-secondary mb-4">
-        Sfoglia tutte le carte archiviate nel database — filtrabili per nome e con paginazione.
-      </p>
+      <h1 class="display-1 fw-bold text-warning mb-3">Card list</h1>
+      <p class=" text-secondary mb-4">Browse all cards in our database</p>
 
       <form th:action="@{/cards}" method="get" class="mx-auto" style="max-width:700px;">
         <div class="input-group input-group-lg shadow">
           <input type="text" name="q" class="form-control bg-dark text-warning border-warning"
-            placeholder="Cerca per nome..." th:value="${query}">
+            placeholder="" th:value="${lastQuery}">
           <button class="btn btn-warning fw-bold" type="submit">Cerca</button>
           <th:block th:if="${query != ''}">
             <a th:href="@{/cards}" class="btn btn-outline-warning">Reset</a>
           </th:block>
+          
         </div>
       </form>
+      <p class=" text-secondary mb-4">available filters: "name", "cmc", "set" </p>
     </header>
 
     <section>
@@ -36,58 +36,55 @@
 
       <div th:if="${lista == null or #lists.isEmpty(lista)}" class="alert alert-warning text-center mx-auto"
         style="max-width: 600px;">
-        <h5 class="alert-heading">Nessuna carta trovata</h5>
-        <p>Prova un altro termine o ricarica la pagina.</p>
-        <a th:href="@{/cards}" class="btn btn-sm btn-warning">Mostra tutte</a>
+        <h5 class="alert-heading">No card found</h5>
+        <p>Either the search terms are wrong or we're missing the card!</p>
+        <a th:href="@{/cards}" class="btn btn-sm btn-warning">Show all</a>
       </div>
 
       <div class="row g-4 justify-content-center" th:if="${not #lists.isEmpty(lista)}">
         <th:block th:each="card : ${lista}">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-           
+
             <a th:href="@{/cards/{id}(id=${card.id})}" class="text-decoration-none card-link-wrapper">
-              <div class="card mtg-card bg-dark border-secondary h-100 shadow-sm card-hover">
-                
-              
+              <div class="card mtg-card bg-dark border-secondary h-100 shadow-sm card-hover card-face">
+
+
                 <div class="mtg-card-frame">
-                  
+
                   <div class="card-data-overlay">
                     <!-- Nome -->
                     <div th:text="${card.name}"></div>
-                    
+
                     <!-- Tipo -->
                     <div th:text="${card.typeline}"></div>
-                    
+
                     <!-- Set -->
                     <div th:if="${card.expansionSet != null}" th:text="${card.expansionSet.name}"></div>
-                    
-                    <!-- Artisti -->
-                   
-                        <span th:text="${#strings.listJoin(card.artistNames, ', ')}"></span>
-                      </span>
 
-                    
+                    <!-- Artisti -->
+
+                    <span th:text="${#strings.listJoin(card.artistNames, ', ')}"></span>
+                    </span>
+
+
                     <!-- Colori -->
                     <div th:if="${card.colorIdentity != null and !#lists.isEmpty(card.colorIdentity)}">
                       <span th:each="c, stat : ${card.colorIdentity}">
                         <span th:text="${c}"></span><span th:if="${not stat.last}">, </span>
                       </span>
                     </div>
-                    
+
                     <!-- Legalità -->
                     <div th:if="${card.legalities != null}" th:text="${card.legalities.get('standard')}"></div>
                   </div>
-                  
-                  <img th:if="${card.images != null and card.images.get('normal') != null}" 
-                       th:src="${card.images.get('normal')}"
-                       th:alt="${card.name}" 
-                       class="mtg-card-img" 
-                       loading="lazy">
+
+                  <img th:if="${card.images != null and card.images.get('normal') != null}"
+                    th:src="${card.images.get('normal')}" th:alt="${card.name}" class="mtg-card-img" loading="lazy">
                 </div>
 
                 <div class="card-body p-3">
                   <!-- Tutto il contenuto del card-body è COMPLETAMENTE NASCOSTO - i dati sono sopra nella carta invisibile -->
-                 
+
                 </div>
               </div>
             </a>
@@ -100,13 +97,14 @@
       <ul class="pagination pagination-lg">
         <li class="page-item" th:classappend="${currentPage==0} ? 'disabled'">
           <a class="page-link bg-dark text-warning border-warning"
-            th:href="@{/cards(page=${totalPages - 1}, q=${query})}">&laquo;</a>
+            th:href="@{/cards(page=${currentPage - 1}, q=${query})}">&laquo;</a>
         </li>
+        
 
-        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-          th:classappend="${i == currentPage} ? 'active'">
-          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${i}, q=${query})}"
-            th:text="${i + 1}"></a>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, 8)}"
+          th:classappend="${i== 4} ? 'active'" th:if="${currentPage+i-4>=0}">
+          <a class="page-link bg-dark text-warning border-warning" th:href="@{/cards(page=${currentPage + i -4}, q=${lastQuery})}"
+            th:text="${currentPage + i -3}"></a>
         </li>
 
         <li class="page-item" th:classappend="${currentPage ==totalPages} ? 'disabled'">
@@ -238,7 +236,7 @@
     }
 
     .card {
-      border-radius: 0.5rem;
+          border-radius: 8%/5%;
       transition: all .3s ease;
     }
 

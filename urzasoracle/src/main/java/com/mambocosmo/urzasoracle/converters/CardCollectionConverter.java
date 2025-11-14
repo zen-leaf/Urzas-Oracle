@@ -12,8 +12,8 @@ import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
 
-@Data
 @Service
+@Data
 public class CardCollectionConverter implements GenericConverter<CardCollection, CardCollectionDTO> {
 
     private final CardConverter CARDCONVERTER;
@@ -35,6 +35,9 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
             CardInDeck tempCid = new CardInDeck(e, getCARDCONVERTER().fromDToE(key), value);
             e.getCardList().add(tempCid);
         });
+
+        e.setCommander(getCARDCONVERTER().fromDToE(dto.getCommander()));
+        e.setPreview(getCARDCONVERTER().fromDToE(dto.getBannerCard()));
         return e;
     }
 
@@ -53,6 +56,13 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
                 getCARDCONVERTER().fromEToD(entry.getId().getCard()),
                 entry.getQuantity());
         });
+        
+        if (e.getPreview() != null) {
+            dto.setBannerCard(getCARDCONVERTER().fromEToD(e.getPreview()));
+        }
+        if (e.getCommander() != null) {
+            dto.setCommander(getCARDCONVERTER().fromEToD(e.getCommander()));
+        }
         return dto;
     }
 }

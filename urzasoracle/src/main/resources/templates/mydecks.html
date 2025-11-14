@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/head :: head('I Miei Mazzi')}">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  </head>
+  <body class="bg-dark text-light">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="container-fluid">
+      <div class="wrapper">
+        <div class="content">
+          <div class="mb-5">
+            <h1 class="fw-bold mb-0" style="font-size: 2.5rem">I Miei Mazzi</h1>
+            <button
+              class="btn btn-warning fw-bold mt-3"
+              data-bs-toggle="modal"
+              data-bs-target="#createDeckModal"
+            >
+              ➕ Nuovo Mazzo
+            </button>
+          </div>
+
+          <!-- FILTRI -->
+          <div class="row g-2 mb-4">
+            <div class="col-md-5">
+              <input
+                type="text"
+                class="form-control bg-secondary text-white border-warning"
+                id="searchDeck"
+                placeholder="🔍 Cerca..."
+              />
+            </div>
+            <div class="col-md-3">
+              <select
+                class="form-select bg-secondary text-white border-warning"
+                id="formatFilter"
+              >
+                <option value="">Tutti</option>
+                <option value="standard">Standard</option>
+                <option value="modern">Modern</option>
+                <option value="commander">Commander</option>
+                <option value="legacy">Legacy</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select
+                class="form-select bg-secondary text-white border-warning"
+                id="sortDeck"
+              >
+                <option value="name">Nome</option>
+                <option value="cards">Carte</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button
+                class="btn btn-outline-warning w-100 fw-bold"
+                onclick="resetFilters()"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- GRID -->
+          <div
+            class="row g-3"
+            id="decksContainer"
+            th:if="${not #lists.isEmpty(decks)}"
+          >
+            <div class="col-lg-3" th:each="deck : ${decks}">
+              <a
+                th:href="@{/decks/public/{id}(id=${deck.id})}"
+                class="link-unstyled"
+              >
+                <div class="card-deck">
+                  <div class="preview">
+                    <div
+                      class="cards"
+                      th:if="${deck.previewCards != null and not #lists.isEmpty(deck.previewCards)}"
+                    >
+                      <img
+                        th:each="card, it : ${deck.previewCards}"
+                        th:if="${it.index < 16}"
+                        th:src="${card.imageUrl}"
+                        th:alt="${card.cardName}"
+                        th:style="'left: ' + ${it.index * 5} + 'px;'"
+                      />
+                    </div>
+                    <div
+                      th:if="${deck.previewCards == null or #lists.isEmpty(deck.previewCards)}"
+                      class="empty"
+                    >
+                      Nessuna carta
+                    </div>
+                  </div>
+                  <div class="info">
+                    <h5 class="title" th:text="${deck.name}"></h5>
+                    <p class="desc" th:text="${deck.description}"></p>
+                    <div class="stats">
+                      <span
+                        class="badge bg-warning text-dark"
+                        th:text="${deck.totalCards} + '/100'"
+                      ></span>
+                      <span
+                        class="badge bg-info text-dark"
+                        th:text="${deck.mainDeckFormat}"
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div th:if="${#lists.isEmpty(decks)}" class="text-center py-5">
+            <p class="text-secondary">Nessun mazzo</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- MODAL: CREA -->
+    <div class="modal fade" id="createDeckModal" tabindex="-1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content bg-dark border-warning">
+          <div class="modal-header border-warning">
+            <h5 class="modal-title text-warning fw-bold">Crea Mazzo</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <form id="createForm">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label text-warning fw-bold">Nome</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm bg-secondary text-white border-warning"
+                  id="newDeckName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label text-warning fw-bold"
+                  >Descrizione</label
+                >
+                <textarea
+                  class="form-control form-control-sm bg-secondary text-white border-warning"
+                  id="newDeckDesc"
+                  rows="2"
+                ></textarea>
+              </div>
+              <div class="mb-0">
+                <label class="form-label text-warning fw-bold">Formato</label>
+                <select
+                  class="form-select form-select-sm bg-secondary text-white border-warning"
+                  id="newDeckFormat"
+                >
+                  <option value="standard">Standard</option>
+                  <option value="modern">Modern</option>
+                  <option value="commander">Commander</option>
+                  <option value="legacy">Legacy</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer border-warning">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Annulla
+              </button>
+              <button type="submit" class="btn btn-warning fw-bold">
+                Crea
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <style>
+      body {
+        background: linear-gradient(180deg, #0a0e17 0%, #151a2b 100%);
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      .wrapper {
+        background: radial-gradient(
+            60% 40% at 20% 10%,
+            rgba(123, 31, 162, 0.12),
+            transparent 60%
+          ),
+          radial-gradient(
+            50% 35% at 80% 20%,
+            rgba(255, 193, 7, 0.08),
+            transparent 60%
+          ),
+          rgba(0, 0, 0, 0.2);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+      }
+
+      .content {
+        width: 100%;
+        max-width: 1400px;
+        background: rgba(10, 10, 20, 0.7);
+        border: 1px solid rgba(255, 193, 7, 0.2);
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+
+      .card-deck {
+        background: rgba(15, 15, 30, 0.9);
+        border: 1px solid rgba(255, 193, 7, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-deck:hover {
+        border-color: #ffc107;
+        box-shadow: 0 15px 40px rgba(255, 193, 7, 0.15);
+        transform: translateY(-4px);
+      }
+
+      .preview {
+        height: 130px;
+        background: rgba(5, 5, 15, 0.9);
+        position: relative;
+        overflow: hidden;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .cards {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .cards img {
+        position: absolute;
+        width: 60px;
+        height: 85px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 193, 7, 0.2);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+      }
+
+      .empty {
+        color: #666;
+        font-size: 0.9rem;
+        margin: auto;
+      }
+
+      .info {
+        padding: 16px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .title {
+        color: #ffc107;
+        font-weight: 700;
+        margin-bottom: 6px;
+        font-size: 1.05rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .desc {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+        flex: 1;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .stats {
+        display: flex;
+        gap: 6px;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        background-color: #2a2f3a !important;
+        color: #fff !important;
+        border-color: #ffc107 !important;
+        box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+      }
+
+      .link-unstyled {
+        text-decoration: none;
+        color: inherit;
+      }
+    </style>
+
+    <script th:inline="javascript">
+      const csrfToken = /*[[${_csrf.token}]]*/ "";
+      const csrfHeader = /*[[${_csrf.headerName}]]*/ "X-CSRF-TOKEN";
+      let allDecks = /*[[${decks}]]*/ [];
+
+      document
+        .getElementById("searchDeck")
+        ?.addEventListener("input", filterDecks);
+      document
+        .getElementById("formatFilter")
+        ?.addEventListener("change", filterDecks);
+      document
+        .getElementById("sortDeck")
+        ?.addEventListener("change", filterDecks);
+
+      function filterDecks() {
+        const search =
+          document.getElementById("searchDeck")?.value.toLowerCase() || "";
+        const format = document.getElementById("formatFilter")?.value || "";
+        const sort = document.getElementById("sortDeck")?.value || "name";
+
+        let filtered = allDecks.filter((deck) => {
+          const matchSearch = deck.name.toLowerCase().includes(search);
+          const matchFormat =
+            !format ||
+            deck.mainDeckFormat.toLowerCase() === format.toLowerCase();
+          return matchSearch && matchFormat;
+        });
+
+        if (sort === "name")
+          filtered.sort((a, b) => a.name.localeCompare(b.name));
+        else if (sort === "cards")
+          filtered.sort((a, b) => b.totalCards - a.totalCards);
+
+        renderDecks(filtered);
+      }
+
+      function renderDecks(decks) {
+        const container = document.getElementById("decksContainer");
+        if (!container) return;
+
+        container.innerHTML = decks
+          .map((deck) => {
+            const cardsHtml = (deck.previewCards || [])
+              .slice(0, 16)
+              .map(
+                (card, idx) =>
+                  `<img src="${card.imageUrl}" alt="${
+                    card.cardName
+                  }" style="left: ${idx * 5}px;" />`
+              )
+              .join("");
+
+            return `
+          <div class="col-lg-3">
+            <a href="/decks/public/${deck.id}" class="link-unstyled">
+              <div class="card-deck">
+                <div class="preview">
+                  <div class="cards">${cardsHtml}</div>
+                </div>
+                <div class="info">
+                  <h5 class="title">${deck.name}</h5>
+                  <p class="desc">${deck.description || ""}</p>
+                  <div class="stats">
+                    <span class="badge bg-warning text-dark">${
+                      deck.totalCards
+                    }/100</span>
+                    <span class="badge bg-info text-dark">${
+                      deck.mainDeckFormat
+                    }</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        `;
+          })
+          .join("");
+      }
+
+      function resetFilters() {
+        document.getElementById("searchDeck").value = "";
+        document.getElementById("formatFilter").value = "";
+        document.getElementById("sortDeck").value = "name";
+        filterDecks();
+      }
+
+      document
+        .getElementById("createForm")
+        ?.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const res = await fetch("/decks/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              [csrfHeader]: csrfToken,
+            },
+            body: new URLSearchParams({
+              name: document.getElementById("newDeckName").value,
+              description: document.getElementById("newDeckDesc").value,
+              mainDeckFormat: document.getElementById("newDeckFormat").value,
+            }),
+          });
+          if (res.ok) location.reload();
+        });
+
+      window.addEventListener("load", () => {
+        allDecks = /*[[${decks}]]*/ [];
+        filterDecks();
+      });
+    </script>
+  </body>
+</html>

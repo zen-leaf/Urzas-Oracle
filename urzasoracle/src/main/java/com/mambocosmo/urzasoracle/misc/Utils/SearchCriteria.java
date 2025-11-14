@@ -22,27 +22,32 @@ public class SearchCriteria {
         String regex = "(\\w+)\\s*([:<>]|~)\\s*(\"(.+?)\"|(.+?)(?=\\s\\w+[:<>~]|$))";
         Pattern pattern = Pattern.compile(regex);
         Matcher m = pattern.matcher(inCriteria.trim());
+        String remainder = inCriteria.replaceAll(regex, "");
+        boolean hasNameField = false;
         List<SearchCriteria> out = new ArrayList<>();
+
         while (m.find()) {
-            // System.out.println();
-            // for (int i = 0; i < m.groupCount(); i++) {
-            // System.out.println("Group " + i + ": " + m.group(i));
-            // }
             String tempValue = (m.group(4) == null ? m.group(3) : m.group(4));
             Double parse = null;
             try {
-                System.out.println("parsing " + tempValue + " to double");
                 parse = Double.parseDouble(tempValue);
             } catch (NumberFormatException e) {
-                System.out.println(e.getMessage());
+                parse = null;
+
+            }
+
+            if (m.group(1).equalsIgnoreCase("name")) {
+                hasNameField = true;
             }
 
             out.add(new SearchCriteria(m.group(1), m.group(2), tempValue, parse));
-            System.out.println("result:\n" + "key: " + m.group(1) + "\n" + "logic: " + m.group(2) + "\n" + "value: "
-                    + tempValue);
+            // System.out.println("result:\n" + "key: " + m.group(1) + "\n" + "logic: " +
+            // m.group(2) + "\n" + "value: "
+            // + tempValue);
         }
-        if (out.size() == 0) {
-            out.add(new SearchCriteria("name", ":", inCriteria, null));
+
+        if (!hasNameField) {
+            out.add(new SearchCriteria("name", ":", remainder.trim(), null));
         }
         return out;
     }

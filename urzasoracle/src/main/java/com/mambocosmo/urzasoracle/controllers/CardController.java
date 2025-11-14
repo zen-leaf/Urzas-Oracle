@@ -1,5 +1,6 @@
 package com.mambocosmo.urzasoracle.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
+import com.mambocosmo.urzasoracle.DTO.CommentOnCardDTO;
+import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.services.CardService;
+import com.mambocosmo.urzasoracle.services.CommentOnCardService;
 
 import lombok.Data;
 
@@ -20,11 +24,12 @@ import lombok.Data;
 public class CardController {
 
     private final CardService CARDSERVICE;
+    private final CommentOnCardService COMMENTONCARDSERVICE;
 
     @GetMapping("/cards")
     public String getAllCards(Model model, @RequestParam(defaultValue = "") String q,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "12") int size) {
 
         // Page<CardDTO> cardPage = getCARDSERVICE().getAllPaged(page, size);
         Page<CardDTO> cardPage = getCARDSERVICE().searchByQueryPaged(q, page, size);
@@ -48,11 +53,13 @@ public class CardController {
                 return "redirect:/cards";
             }
 
+            List<CommentOnCardDTO> comments = getCOMMENTONCARDSERVICE().getCommentsByCard(card.getId()); 
             // Log per debug
             System.out.println("Card found: " + card.getName());
 
             model.addAttribute("card", card);
             model.addAttribute("active", "cards");
+            model.addAttribute("comments", comments);
             return "cardinfo";
         } catch (Exception e) {
             System.err.println("Error loading card: " + e.getMessage());

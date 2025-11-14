@@ -12,23 +12,20 @@ import lombok.Data;
 
 @Data
 public class Util {
-    
-
 
     public static Set<String> generateUniqueFieldNames(String insideOf) {
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData = null;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/uniques.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/oracles.json"));
             Set<String> params = new HashSet<>();
             String searchfor = insideOf;
             cardData.forEach(e -> {
+                // System.out.println("CardData: " + e.properties().);
                 if (e.get(searchfor) != null) {
-                    e.get(searchfor).forEach(e1 -> e1.properties().forEach(e3 -> {
-                        System.out.println(e3.getKey());
-                        params.add(e3.getKey());
-                    }));
+                    params.add(e.get(searchfor).asText());
+
                     // .forEach(e2 -> System.out.println(e2))
                     // System.out.println(e.get(searchfor).asText());
                     // params.add(e.get(searchfor).asText());
@@ -36,7 +33,9 @@ public class Util {
             });
             return params;
             // cardData.get(0).properties().forEach(e -> System.out.println(e.getKey()));
-        } catch (IOException e) {
+        } catch (
+
+        IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;

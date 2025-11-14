@@ -1,5 +1,7 @@
 package com.mambocosmo.urzasoracle.controllers;
 
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.mambocosmo.urzasoracle.services.CardService;
 import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Controller
-@Data
+@RequiredArgsConstructor // Sostituisce @Data con questa annotation più appropriata
 public class AppController {
 
     private final CardService cardService;
@@ -32,8 +34,10 @@ public class AppController {
         return "login";
     }
 
+
     @GetMapping("/about")
-    public String aboutPage() {
+    public String aboutPage(Model model){
+        model.addAttribute("active", "about");
         return "about"; // about.html in templates
     }
 

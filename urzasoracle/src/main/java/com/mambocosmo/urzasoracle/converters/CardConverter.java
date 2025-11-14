@@ -2,6 +2,7 @@ package com.mambocosmo.urzasoracle.converters;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.DTO.CardFaceDTO;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardExpansionSet;
+import com.mambocosmo.urzasoracle.entities.CardFace;
+import com.mambocosmo.urzasoracle.misc.enums.Format;
 
 import lombok.Data;
 
@@ -16,13 +20,27 @@ import lombok.Data;
 @Data
 public class CardConverter implements GenericConverter<Card, CardDTO> {
 
+    private final CardExpansionSet cardExpansionSet;
+
     private final ArtistConverter ARTISTCONVERTER;
     private final CardFaceConverter CARDFACECONVERTER;
     private final CardPartConverter CARDPARTCONVERTER;
     private final CardExpansionSetConverter CARDSETCONVERTER;
+    private final List<Format> relevantFormat = List.of(Format.standard, Format.pioneer, Format.modern, Format.legacy,
+            Format.vintage, Format.commander, Format.alchemy, Format.historic, Format.timeless, Format.pauper,
+            Format.penny, Format.premodern);
+
 
     @Override
     public Card fromDToE(CardDTO dto) {
+
+        // Card e = new Card();
+        // e.setId(dto.getId());
+        // e.setName(dto.getName());
+        // e.setMana_cost(dto.getManaCost());
+        // e.setType_line(dto.getTypeline());
+
+        // return e;
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'fromDToE'");
     }
@@ -33,14 +51,28 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         CardDTO dto = new CardDTO();
         dto.setId(e.getId());
         dto.setName(e.getName());
-        dto.setManaCost(e.getMana_cost());
+        String actualmana = e.getMana_cost();
+        // System.out.println(actualmana);
+        if (e.getMana_cost() == null || e.getMana_cost().equals("")) {
+            for (CardFace cf : e.getCard_faces()) {
+                actualmana = (cf.getMana_cost().equals("") ? "" : cf.getMana_cost()) + " " + actualmana;
+                // System.out.println(actualmana);
+            }
+        }
+        actualmana = (actualmana.equals("") ? "{0}" : actualmana);
+        // System.out.println(actualmana);
+        actualmana = actualmana.strip().replace("} {", "} // {");
+        dto.setManaCost(actualmana);
         dto.setTypeline(e.getType_line());
-        dto.setImages(e.getImage_uris().isEmpty() ? e.getCard_faces().get(1).getImage_uris() : e.getImage_uris());
+        dto.setImages(e.getImage_uris().isEmpty() ? e.getCard_faces().get(0).getImage_uris() : e.getImage_uris());
         dto.setCardFaces(e.getCard_faces().stream().map(e1 -> getCARDFACECONVERTER().fromEToD(e1)).toList());
 
-        CardFaceDTO defaultBack = e.getCard_faces().size() == 0 ? new CardFaceDTO("blank") : null;
+        CardFaceDTO defaultBack = e.getCard_faces().size() == 0 || e.getCard_faces().get(1).getImage_uris().isEmpty()
+                ? new CardFaceDTO("blank")
+                : dto.getCardFaces().get(1);
 
-        dto.setBackFace(dto.getCardFaces().size() > 0 ? dto.getCardFaces().get(0) : defaultBack);
+        dto.setBackFace(defaultBack);
+        dto.setReleased_at(String.valueOf(e.getReleased()));
         dto.setFlavorText(e.getFlavor_text());
         dto.setOracleText(e.getOracle_text());
         dto.setColorIdentity(e.getColor_identity().stream().map(entry -> entry.toString()).toList());
@@ -48,7 +80,9 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         dto.setCollectorNumber(e.getCollector_number());
         Map<String, String> tempLegal = new HashMap<>();
         e.getLegalities().forEach((key, value) -> {
-            tempLegal.put(key.toString().toLowerCase(), value);
+            if (relevantFormat.contains(key)) {
+                tempLegal.put(key.toString().toLowerCase(), value);
+            }
         });
         dto.setLegalities(tempLegal);
         // System.out.println("ARTISTREFF " + e.getArtistRef());
@@ -72,8 +106,10 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
                 dto.getCardFaces().add(getCARDFACECONVERTER().fromEToD(entry));
             });
         }
-        dto.setExpansionSet(getCARDSETCONVERTER().fromEToD(e.getExpansion()));
+        dto.setExpansionSet(getCARDSETCONVERTER().fromEToD(e.getExpansion()==null? new CardExpansionSet():e.getExpansion()));
 
+        // System.out.println("WARNING EXPENSIVE OPERATION: CARD CONVERT TO DTO");
+        System.out.println("loaded DTO: " + dto.getName());
         return dto;
     }
 

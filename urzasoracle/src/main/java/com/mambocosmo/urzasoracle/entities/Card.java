@@ -1,5 +1,6 @@
 package com.mambocosmo.urzasoracle.entities;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +55,9 @@ public class Card extends GenericEntity {
 
     private String lang = "";
 
-    private String released_at = "";
+    // @Column(name = "released_at")
+    @JsonProperty("released_at")
+    private Date released = new Date(0);
 
     private String uri = "";
 

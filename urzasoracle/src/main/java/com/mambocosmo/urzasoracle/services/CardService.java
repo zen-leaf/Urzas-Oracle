@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.converters.CardConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
+import com.mambocosmo.urzasoracle.entities.CardCollection;
+import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.misc.Utils.QueryParser;
 import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
 import com.mambocosmo.urzasoracle.repositories.CardRepository;
+import com.mambocosmo.urzasoracle.repositories.CommentOnCardRepository;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +38,8 @@ import lombok.EqualsAndHashCode;
 public class CardService extends GenericService<Card, CardDTO, CardConverter, CardRepository> {
 
     private final CardExpansionSetService EXPANSIONSETSERVICE;
+    private final CardConverter CARDCONVERTER;
+    private final CommentOnCardRepository COMMENTONCARDREPOSITORY;
 
     @Override
     public Card construct(Map<String, String> fromData) {
@@ -66,6 +72,10 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         }
     }
 
+    public List<Card> getEntityByName(String name) {
+        return getREPOSITORY().findByName(name);
+    }
+
     public List<CardDTO> getByName(String name) {
         List<CardDTO> out = getREPOSITORY().findByNameContainingIgnoreCase(name).stream().map(e -> {
             return getCONVERTER().fromEToD(e);
@@ -73,8 +83,21 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return out;
     }
 
+    // TODO IMPORTANT THIS METHOD IS HERE ONLY FOR COMMENT TESTING, CREATE COMMENT
+    // DTO AND USE THAT
+    public List<Card> getByNameEntity(String name) {
+        List<Card> out = getREPOSITORY().findByNameContainingIgnoreCase(name).stream().map(e -> {
+            return e;
+        }).toList();
+        return out;
+    }
+
+    public Card getByIdEntity(UUID id) {
+        return getREPOSITORY().findById(id).orElse(null);
+    }
+
     public Page<CardDTO> getByNamePaged(String name, Integer numeroPagina, Integer dimensione) {
-        Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+        Pageable pageable = PageRequest.of(numeroPagina, dimensione, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> page = getREPOSITORY().findByNameContainingIgnoreCase(name, pageable);
 
         return page.map(card -> getCONVERTER().fromEToD(card));
@@ -89,7 +112,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/test.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/oracles.json"));
             List<Card> cardList = new ArrayList<>();
 
             Long myTimer = System.nanoTime();
@@ -102,17 +125,20 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
                     // System.out.println(e.toString());
-                    // cardList.add(myCard);
+                    cardList.add(myCard);
                     // System.out.println(
                     // myCard.getName() + " - " + myCard.getId() + " - \n" + "Artist:\n" +
                     // myCard.getArtistRef());
-                    save(myCard);
-                    System.out.println("Saved card: " + myCard.getName());
 
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
                     System.out.println("Error generating card!!! " + e1.getMessage());
                 }
             });
+            cardList.forEach(e -> {
+                save(e);
+                System.out.println("Saved card: " + e.getName());
+            });
+
             System.out.println("Completed card generation - Generated " + cardList.size() + " cards in "
                     + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
 
@@ -126,7 +152,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/uniques.json"));
+            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/oracles.json"));
             Map<String, Integer> uniqueFaces = new java.util.HashMap<>();
             Long myTimer = System.nanoTime();
             System.out.println("start");
@@ -158,14 +184,15 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     }
 
     public Page<CardDTO> getAllPaged(int numeroPagina, int dimensione) {
-        Pageable pageable = PageRequest.of(numeroPagina, dimensione);
+        System.out.println("Requested page of " + dimensione + " cards");
+        Pageable pageable = PageRequest.of(numeroPagina, dimensione, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> page = getREPOSITORY().findAll(pageable);
 
         return page.map(card -> getCONVERTER().fromEToD(card));
     }
 
     public Page<CardDTO> getRandomPaged(int size) {
-        Pageable pageable = PageRequest.of(0, size);
+        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> temp = getREPOSITORY().findRandomSubSet(size, pageable);
         return temp.map(card -> getCONVERTER().fromEToD(card));
 
@@ -179,12 +206,18 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
     public Page<CardDTO> searchByQueryPaged(String q, int page, int size) {
         Specification<Card> spec = Specification.unrestricted();
+        if (!q.toLowerCase().contains("nonplayable:")) {
+            // System.out.println("adding default artwork exclusion");
+            q += " nonplayable:exclude";
+            // System.out.println(q);
+        }
 
         for (SearchCriteria query : SearchCriteria.StringToCriteria(q)) {
             QueryParser cardQ = new QueryParser(query);
             spec = spec.and(cardQ);
         }
-        Pageable pageable = PageRequest.of(0, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "released"));
+
         return getREPOSITORY().findAll(spec, pageable).map(e -> getCONVERTER().fromEToD(e));
 
     }

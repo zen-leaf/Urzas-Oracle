@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('Dettagli Mazzo')}"> </head>
+
+<body class="bg-dark text-light">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <main class="container-fluid">
+    <div class="row">
+      <div class="col-12" style="border:1px solid red;">
+        <div class="header">
+          <a th:href="@{/decks}" class="btn-back">← Torna</a>
+          <div class="row py-3">
+            <div class="col-md-10">
+              <h1 class="deck-title" th:text="${deck.name}"></h1>
+              <p class="deck-desc" th:text="${deck.description}"></p>
+            </div>
+            <div class="col-md-2">
+              <div class="meta">
+                <span class="badge bg-warning text-dark fw-bold" th:text="${totalCards} + ' / 100'"></span>
+                <span class="badge bg-info text-dark fw-bold" th:text="${deck.mainDeckFormat}"></span>
+                <span class="badge bg-secondary fw-bold">by: <strong th:text="${deck.owner}"></strong></span>
+              </div>
+            </div>
+          </div>
+
+          <button th:if="${isOwner}" class="btn btn-warning fw-bold" data-bs-toggle="modal"
+            data-bs-target="#editDeckModal">
+            ✏️ Modifica
+          </button>
+
+          <button th:if="${isLoggedIn and not isOwner}" class="btn btn-success fw-bold" onclick="cloneDeck()">
+            📋 Copia
+          </button>
+
+          <div class="progress-bar bg-warning" th:style="'width: ' + ${(totalCards/100)*100} + '%'"></div>
+
+        </div>
+      </div>
+      <!-- Immagine Carta -->
+
+      <div class="col-sm-3 py-5 ">
+        <div class="card-container" style="    aspect-ratio:  0.714;">
+          <div id="dragCard" class="magic-card" sty>
+            <div class="card-face card-front">
+              <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}"
+                th:alt="${card.name}" class=" shadow card-img" />
+            </div>
+            <div class="card-face card-back">
+
+              <img th:if="${card.backFace != null and card.backFace.images['large'] != null}"
+                th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
+
+            </div>
+          </div>
+        </div>
+        <div th:if="${card.images == null or card.images['large'] == null}"
+          class="w-100  d-flex align-items-center justify-content-center text-secondary" style="
+              aspect-ratio: 488/680;
+              background: rgba(108, 117, 125, 0.2);
+              border: 2px dashed rgba(255, 193, 7, 0.2);
+              ">
+          <span>No Image</span>
+        </div>
+      </div>
+      <div class="col-sm-8">
+
+
+        <!-- LISTE CARTE IN GRID -->
+        <div class="cards-section">
+          <h5 class="section-title">Carte nel Deck</h5>
+          <div class="cards-grid" id="deckGridContainer"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PREVIEW CARTA HOVER -->
+  <div id="cardPreview" class="card-preview">
+    <img id="cardPreviewImg" src="" alt="Card Preview" />
+  </div>
+
+  <!-- MODAL: MODIFICA -->
+  <div class="modal fade" id="editDeckModal" tabindex="-1" th:if="${isOwner}">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content bg-dark border-warning">
+        <div class="modal-header border-warning">
+          <h5 class="modal-title text-warning fw-bold">Modifica Mazzo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="editForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label text-warning fw-bold">Nome</label>
+              <input type="text" class="form-control form-control-sm bg-secondary text-white border-warning"
+                id="deckName" th:value="${deck.name}" />
+            </div>
+            <div class="mb-0">
+              <label class="form-label text-warning fw-bold">Descrizione</label>
+              <textarea class="form-control form-control-sm bg-secondary text-white border-warning" id="deckDesc"
+                rows="2" th:text="${deck.description}"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-warning">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Annulla
+            </button>
+            <button type="submit" class="btn btn-warning fw-bold">
+              Salva
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
+
+  <style>
+    body {
+      background: linear-gradient(180deg, #0a0e17 0%, #151a2b 100%);
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .wrapper {
+      background: radial-gradient(60% 40% at 20% 10%,
+          rgba(123, 31, 162, 0.12),
+          transparent 60%),
+        radial-gradient(50% 35% at 80% 20%,
+          rgba(255, 193, 7, 0.08),
+          transparent 60%),
+        rgba(0, 0, 0, 0.2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .content {
+      width: 100%;
+      max-width: 1300px;
+      background: rgba(10, 10, 20, 0.7);
+      border: 1px solid rgba(255, 193, 7, 0.2);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .header {
+      margin-bottom: 40px;
+    }
+
+    .btn-back {
+      color: #ffc107;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.2s;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .btn-back:hover {
+      color: #ffeb3b;
+      transform: translateX(-4px);
+    }
+
+    .deck-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .deck-desc {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .meta .badge {
+      font-size: 0.9rem;
+      padding: 6px 14px;
+    }
+
+    .progress {
+      height: 6px;
+      background: #1a1f2e;
+      border-radius: 3px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .actions .btn {
+      padding: 8px 20px;
+      font-size: 0.95rem;
+    }
+
+    .cards-section {
+      margin-top: 40px;
+    }
+
+    .section-title {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    /* GRID LAYOUT ORIZZONTALE */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .category {
+      background: rgba(15, 15, 30, 0.8);
+      border: 1px solid rgba(255, 193, 7, 0.2);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .category-title {
+      color: #ffc107;
+      font-weight: 700;
+      margin-bottom: 15px;
+      font-size: 1.05rem;
+      border-bottom: 2px solid rgba(255, 193, 7, 0.2);
+      padding-bottom: 10px;
+    }
+
+    .card-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 193, 7, 0.1);
+    }
+
+    .card-item:hover {
+      background: rgba(255, 193, 7, 0.12);
+      border-color: rgba(255, 193, 7, 0.3);
+      transform: translateX(4px);
+    }
+
+    .card-qty {
+      color: #ffc107;
+      font-weight: 700;
+      min-width: 30px;
+      text-align: center;
+      background: rgba(255, 193, 7, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-right: 12px;
+    }
+
+    .card-name {
+      color: #fff;
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    /* CARD PREVIEW HOVER */
+    .card-preview {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      display: none;
+    }
+
+    .card-preview img {
+      width: 280px;
+      border-radius: 12px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(255, 193, 7, 0.5);
+      border: 3px solid rgba(255, 193, 7, 0.6);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      background-color: #2a2f3a !important;
+      color: #fff !important;
+      border-color: #ffc107 !important;
+      box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    }
+  </style>
+  <script src="/js/cardrotate.js" defer></script>
+
+  <script th:inline="javascript">
+    const deckId = /*[[${deck.id}]]*/ null;
+    const isOwner = /*[[${isOwner}]]*/ false;
+    const isLoggedIn = /*[[${isLoggedIn}]]*/ false;
+    let deckCards = /*[[${cards}]]*/[];
+
+    function categorizeCards(cards) {
+      const categories = {
+        Commander: [],
+        Planeswalker: [],
+        Creature: [],
+        Instant: [],
+        Sorcery: [],
+        Artifact: [],
+        Enchantment: [],
+        Land: [],
+      };
+
+      cards.forEach((card) => {
+        const typeline = card.typeline || "";
+        if (typeline.includes("Legendary") && typeline.includes("Creature"))
+          categories.Commander.push(card);
+        else if (typeline.includes("Planeswalker"))
+          categories.Planeswalker.push(card);
+        else if (typeline.includes("Creature"))
+          categories.Creature.push(card);
+        else if (typeline.includes("Instant")) categories.Instant.push(card);
+        else if (typeline.includes("Sorcery")) categories.Sorcery.push(card);
+        else if (typeline.includes("Artifact"))
+          categories.Artifact.push(card);
+        else if (typeline.includes("Enchantment"))
+          categories.Enchantment.push(card);
+        else if (typeline.includes("Land")) categories.Land.push(card);
+      });
+
+      Object.keys(categories).forEach((key) => {
+        categories[key].sort((a, b) => a.cardName.localeCompare(b.cardName));
+      });
+
+      return categories;
+    }
+
+    function renderCategories() {
+      const categorized = categorizeCards(deckCards);
+      const container = document.getElementById("deckGridContainer");
+
+      let html = "";
+      Object.keys(categorized).forEach((categoryName) => {
+        const cards = categorized[categoryName];
+        if (cards.length === 0) return;
+
+        html += `
+          <div class="category">
+            <h6 class="category-title">${categoryName} (${cards.length})</h6>
+            ${cards
+            .map(
+              (card) => `
+              <div class="card-item" 
+                   onclick="goToCard('${card.cardId}')"
+                   onmouseenter="showCardPreview(event, '${card.imageUrl || ""
+                }')"
+                   onmouseleave="hideCardPreview()"
+                   onmousemove="updatePreviewPosition(event)">
+                <span class="card-qty">${card.quantity}</span>
+                <span class="card-name">${card.cardName}</span>
+              </div>
+            `
+            )
+            .join("")}
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function goToCard(cardId) {
+      window.location.href = `/cards/${cardId}`;
+    }
+
+    function showCardPreview(e, imgUrl) {
+      if (!imgUrl) return;
+      const preview = document.getElementById("cardPreview");
+      const previewImg = document.getElementById("cardPreviewImg");
+      previewImg.src = imgUrl;
+      preview.style.display = "block";
+      updatePreviewPosition(e);
+    }
+
+    function updatePreviewPosition(e) {
+      const preview = document.getElementById("cardPreview");
+      if (preview.style.display !== "block") return;
+      const offset = 20;
+      preview.style.left = e.pageX + offset + "px";
+      preview.style.top = e.pageY + offset + "px";
+    }
+
+    function hideCardPreview() {
+      document.getElementById("cardPreview").style.display = "none";
+    }
+
+    function cloneDeck() {
+      if (!isLoggedIn) {
+        window.location.href = "/login";
+        return;
+      }
+
+      const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
+      const csrfHeader = document.querySelector(
+        'meta[name="_csrf_header"]'
+      )?.content;
+
+      fetch(`/decks/public/${deckId}/clone`, {
+        method: "POST",
+        headers: csrfHeader ? { [csrfHeader]: csrfToken } : {},
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          alert("✅ Mazzo copiato!");
+          window.location.href = "/decks/mydecks";
+        })
+        .catch((e) => alert("Errore nella copia"));
+    }
+
+    if (deckCards && deckCards.length > 0) {
+      renderCategories();
+    }
+
+    const editForm = document.getElementById("editForm");
+    if (editForm && isOwner) {
+      editForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const csrfToken =
+          document.querySelector('meta[name="_csrf"]')?.content;
+        const csrfHeader = document.querySelector(
+          'meta[name="_csrf_header"]'
+        )?.content;
+
+        fetch(
+          `/decks/public/${deckId}?name=${encodeURIComponent(
+            document.getElementById("deckName").value
+          )}&description=${encodeURIComponent(
+            document.getElementById("deckDesc").value
+          )}`,
+          {
+            method: "PUT",
+            headers: csrfHeader ? { [csrfHeader]: csrfToken } : {},
+          }
+        ).then((r) => r.ok && location.reload());
+      });
+    }
+  </script>
+</body>
+
+</html>

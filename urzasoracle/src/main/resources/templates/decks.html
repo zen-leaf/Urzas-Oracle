@@ -1,294 +1,320 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{fragments/head :: head('I Miei Mazzi')}">
-    <meta name="_csrf" th:content="${_csrf.token}" />
-    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-  </head>
-  <body
-    class="bg-dark text-light"
-    style="margin: 0; padding: 0; overflow-x: hidden"
-  >
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <main style="padding: 30px 50px; min-height: calc(100vh - 80px)">
-      <header class="mb-5">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h1 class="display-4 fw-bold text-warning mb-2">⚔️ I Miei Mazzi</h1>
-            <p class="fs-6 text-secondary">
-              Gestisci i tuoi deck di Magic: The Gathering
-            </p>
-          </div>
-          <button
-            class="btn btn-lg btn-warning fw-bold px-4"
-            data-bs-toggle="modal"
-            data-bs-target="#createDeckModal"
-          >
-            + Nuovo Mazzo
-          </button>
-        </div>
-      </header>
+<head th:replace="~{fragments/head :: head('Decks')}"></head>
 
-      <div
-        th:if="${decks == null or #lists.isEmpty(decks)}"
-        class="alert alert-warning text-center py-5 mt-5"
-      >
-        <h2>📭 Nessun mazzo creato</h2>
-        <p class="fs-6 text-secondary mb-3">
-          Inizia creando il tuo primo deck!
-        </p>
-        <button
-          class="btn btn-lg btn-warning"
-          data-bs-toggle="modal"
-          data-bs-target="#createDeckModal"
-        >
-          Crea Mazzo
-        </button>
-      </div>
+<body class="bg-dark text-light">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-      <div
-        class="row g-4"
-        th:if="${not #lists.isEmpty(decks)}"
-        style="
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 20px;
-        "
-      >
-        <th:block th:each="deck : ${decks}">
-          <div
-            class="deck-card"
-            style="
-              background: linear-gradient(135deg, #1a1a1a 0%, #2a1a3a 100%);
-              border: 2px solid #ffc107;
-              border-radius: 12px;
-              padding: 20px;
-              transition: all 0.3s ease;
-              cursor: pointer;
-              position: relative;
-              overflow: hidden;
-            "
-          >
-            <!-- Background Effect -->
-            <div
-              style="
-                position: absolute;
-                top: -50%;
-                right: -50%;
-                width: 200px;
-                height: 200px;
-                background: radial-gradient(
-                  circle,
-                  rgba(255, 193, 7, 0.1) 0%,
-                  transparent 70%
-                );
-                border-radius: 50%;
-                pointer-events: none;
-              "
-            ></div>
+  <main class="container-fluid">
+    <div class="row">
+      <div class="col-12 pt-3 pb-2 deckinfo">
+        <div class="row px-2">
+          <div class="col-md-10">
+            <div class="mb-5">
+              <h1 class="fw-bold mb-0" style="font-size: 2.5rem">
+                <span id="pageTitle">Community Decks</span>
+              </h1>
 
-            <div style="position: relative; z-index: 1">
-              <h3 class="text-warning mb-3 fw-bold" th:text="${deck.name}"></h3>
-
-              <p
-                class="text-secondary mb-3 fs-7"
-                th:text="${#strings.abbreviate(deck.description, 80)}"
-              ></p>
-
-              <div class="mb-4">
-                <div class="d-flex gap-2 mb-2">
-                  <span class="badge bg-warning text-dark px-3 py-2 fs-7">
-                    <strong>📋 Formato:</strong>
-                  </span>
-                  <span
-                    class="badge bg-info text-dark px-3 py-2 fs-7"
-                    th:text="${deck.mainDeckFormat}"
-                  ></span>
-                </div>
-                <small class="text-muted d-block"
-                  >👤 di <span th:text="${deck.owner}"></span
-                ></small>
-              </div>
-
-              <div class="d-flex gap-2" style="margin-top: auto">
-                <a
-                  th:href="@{/decks/{id}(id=${deck.id})}"
-                  class="btn btn-sm btn-warning flex-grow-1 fw-bold"
-                  style="flex: 1"
-                >
-                  👁️ Apri
-                </a>
-                <button
-                  class="btn btn-sm btn-outline-danger"
-                  onclick="deleteDeckBtn(event)"
-                  th:data-deck-id="${deck.id}"
-                >
-                  🗑️
+              <!-- ✅ TAB SWITCHER -->
+              <div class="d-flex gap-3 mt-3">
+                <button id="btnCommunity" class="btn btn-warning fw-bold active" onclick="switchTab('community')">
+                  🌍 Community Decks
+                </button>
+                <button id="btnMyDecks" class="btn btn-outline-warning fw-bold" onclick="switchTab('mydecks')"
+                  th:if="${isLoggedIn}">
+                  📚 My Decks
                 </button>
               </div>
-            </div>
-          </div>
-        </th:block>
-      </div>
-    </main>
 
-    <div class="modal fade" id="createDeckModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content bg-dark border-warning">
-          <div class="modal-header border-warning">
-            <h5 class="modal-title text-warning">⚔️ Crea Nuovo Mazzo</h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
+              <!-- ✅ TASTO CREA DECK (solo in My Decks) -->
+              <button id="createDeckBtn" class="btn btn-success fw-bold mt-3" data-bs-toggle="modal"
+                data-bs-target="#createDeckModal" style="display: none" th:if="${isLoggedIn}">
+                ➕ Nuovo Mazzo
+              </button>
+            </div>
           </div>
-          <form id="createDeckForm">
-            <div class="modal-body">
-              <div class="mb-3">
-                <label class="form-label text-warning fw-bold"
-                  >Nome Mazzo</label
-                >
-                <input
-                  type="text"
-                  class="form-control bg-dark text-warning border-warning"
-                  id="deckName"
-                  placeholder="Es: Rakdos Control"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label text-warning fw-bold"
-                  >Descrizione</label
-                >
-                <textarea
-                  class="form-control bg-dark text-warning border-warning"
-                  id="deckDesc"
-                  placeholder="Descrivi il tuo deck..."
-                  rows="3"
-                ></textarea>
-              </div>
-              <div class="mb-3">
-                <label class="form-label text-warning fw-bold">Formato</label>
-                <select
-                  class="form-select bg-dark text-warning border-warning"
-                  id="deckFormat"
-                >
-                  <option value="standard">Standard</option>
-                  <option value="pioneer">Pioneer</option>
-                  <option value="modern">Modern</option>
-                  <option value="legacy">Legacy</option>
-                  <option value="vintage">Vintage</option>
-                  <option value="commander" selected>Commander</option>
-                  <option value="oathbreaker">Oathbreaker</option>
-                  <option value="alchemy">Alchemy</option>
-                  <option value="historic">Historic</option>
-                  <option value="brawl">Brawl</option>
-                  <option value="timeless">Timeless</option>
-                  <option value="pauper">Pauper</option>
-                  <option value="penny">Penny</option>
-                  <option value="free">Libero</option>
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer border-warning">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Annulla
-              </button>
-              <button type="submit" class="btn btn-warning fw-bold">
-                Crea
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
 
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <!-- GRID -->
+    <div class="row px-4 justify-content-center">
+      <div class="col-11 row deckholder">
+        <!-- FILTRI -->
+        <div class="col-12 py-3">
+          <div class="row g-2 mb-4">
+            <div class="col-md-4">
+              <input type="text" class="form-control searchoptions border-warning" id="searchCatalog"
+                placeholder="Search" />
+            </div>
+            <div class="col-md-2">
+              <select class="form-select searchoptions border-warning" id="formatFilterCatalog">
+                <option value="">Formats</option>
+                <option value="standard">Standard</option>
+                <option value="modern">Modern</option>
+                <option value="commander">Commander</option>
+                <option value="legacy">Legacy</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-select searchoptions border-warning" id="sortCatalog">
+                <option value="name">Nome</option>
+                <option value="author">Autore</option>
+                <option value="cards">Carte</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-outline-warning w-100 fw-bold" onclick="resetFiltersCatalog()">
+                Reset
+              </button>
+            </div>
+          </div>
 
-    <style>
-      body {
-        background: linear-gradient(
-          180deg,
-          #0b0f1a 0%,
-          #1a1033 50%,
-          #0b0f1a 100%
-        );
-      }
-      .deck-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(255, 193, 7, 0.3);
-        border-color: #ffce3d;
-      }
-      .form-control:focus,
-      .form-select:focus {
-        background-color: #1a1a1a !important;
-        color: #ffc107 !important;
-        border-color: #ffc107 !important;
-        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
-      }
-      .fs-7 {
-        font-size: 0.85rem;
-      }
-      .badge {
-        font-weight: 500;
-      }
-    </style>
+          <div class="row">
+            <div class="row" id="catalogContainer"></div>
+          </div>
 
-    <script th:inline="javascript">
-      const csrfToken = /*[[${_csrf.token}]]*/ "";
-      const csrfHeader = /*[[${_csrf.headerName}]]*/ "X-CSRF-TOKEN";
+          <!-- EMPTY STATE -->
+          <div id="emptyState" style="display: none" class="text-center py-5">
+            <p class="text-secondary mb-3">Nessun mazzo trovato</p>
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#createDeckModal"
+              th:if="${isLoggedIn}">
+              ➕ Crea il tuo primo mazzo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ✅ MODAL: CREA MAZZO -->
+  <div class="modal fade" id="createDeckModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content bg-dark border-warning">
+        <div class="modal-header border-warning">
+          <h5 class="modal-title text-warning fw-bold">Crea Mazzo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="createForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label text-warning fw-bold">Nome</label>
+              <input type="text" class="form-control form-control-sm bg-secondary text-white border-warning"
+                id="newDeckName" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-warning fw-bold">Descrizione</label>
+              <textarea class="form-control form-control-sm bg-secondary text-white border-warning" id="newDeckDesc"
+                rows="2"></textarea>
+            </div>
+            <div class="mb-0">
+              <label class="form-label text-warning fw-bold">Formato</label>
+              <select class="form-select form-select-sm bg-secondary text-white border-warning" id="newDeckFormat">
+                <option value="standard">Standard</option>
+                <option value="modern">Modern</option>
+                <option value="commander">Commander</option>
+                <option value="legacy">Legacy</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer border-warning">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Annulla
+            </button>
+            <button type="submit" class="btn btn-warning fw-bold">
+              Crea
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
+
+  <script th:inline="javascript">
+    const isLoggedIn = /*[[${isLoggedIn}]]*/ false;
+    const activeTab = /*[[${active}]]*/ "decks";
+    const csrfToken = /*[[${csrfToken}]]*/ "";
+    const csrfHeader = /*[[${csrfHeader}]]*/ "X-CSRF-TOKEN";
+    const initialDecks = /*[[${decks}]]*/[];
+
+    let allDecksFromCatalog = {
+      community: [],
+      mydecks: [],
+    };
+
+    if (activeTab === "mydecks") {
+      allDecksFromCatalog.mydecks = initialDecks;
+    } else {
+      allDecksFromCatalog.community = initialDecks;
+    }
+
+    let currentTab = "community";
+
+    window.addEventListener("load", async () => {
+      if (isLoggedIn && allDecksFromCatalog.mydecks.length === 0) {
+        try {
+          const res = await fetch("/decks/api/mydecks");
+          if (res.ok) {
+            allDecksFromCatalog.mydecks = await res.json();
+          }
+        } catch (e) {
+          console.error("Error loading mydecks:", e);
+        }
+      }
+
+      if (activeTab === "mydecks") {
+        switchTab("mydecks");
+      } else {
+        switchTab("community");
+      }
+    });
+
+    function switchTab(tab) {
+      currentTab = tab;
+
+      document.getElementById("pageTitle").textContent =
+        tab === "mydecks" ? "My Decks" : "Community Decks";
 
       document
-        .getElementById("createDeckForm")
-        ?.addEventListener("submit", async function (e) {
-          e.preventDefault();
+        .getElementById("btnCommunity")
+        .classList.toggle("active", tab === "community");
+      document
+        .getElementById("btnCommunity")
+        .classList.toggle("btn-warning", tab === "community");
+      document
+        .getElementById("btnCommunity")
+        .classList.toggle("btn-outline-warning", tab !== "community");
 
-          const name = document.getElementById("deckName").value;
-          const desc = document.getElementById("deckDesc").value;
-          const format = document.getElementById("deckFormat").value;
-
-          const url =
-            "/decks/create?name=" +
-            encodeURIComponent(name) +
-            "&description=" +
-            encodeURIComponent(desc) +
-            "&mainDeckFormat=" +
-            encodeURIComponent(format);
-
-          try {
-            const res = await fetch(url, {
-              method: "POST",
-              headers: { [csrfHeader]: csrfToken },
-            });
-
-            if (res.ok) {
-              alert("✅ Mazzo creato!");
-              location.reload();
-            } else {
-              alert("❌ Errore: " + res.status);
-            }
-          } catch (e) {
-            alert("❌ Errore: " + e.message);
-          }
-        });
-
-      function deleteDeckBtn(e) {
-        e.preventDefault();
-        if (!confirm("Sei sicuro di voler eliminare questo mazzo?")) return;
-        const deckId = e.target.closest("button").getAttribute("data-deck-id");
-
-        fetch("/decks/" + deckId, {
-          method: "DELETE",
-          headers: { [csrfHeader]: csrfToken },
-        }).then((r) =>
-          r.ok ? location.reload() : alert("Errore eliminazione")
-        );
+      const myDecksBtn = document.getElementById("btnMyDecks");
+      if (myDecksBtn) {
+        myDecksBtn.classList.toggle("active", tab === "mydecks");
+        myDecksBtn.classList.toggle("btn-warning", tab === "mydecks");
+        myDecksBtn.classList.toggle("btn-outline-warning", tab !== "mydecks");
       }
-    </script>
-  </body>
+
+      const createBtn = document.getElementById("createDeckBtn");
+      if (createBtn) {
+        createBtn.style.display =
+          tab === "mydecks" && isLoggedIn ? "block" : "none";
+      }
+
+      filterCatalog();
+    }
+
+    document
+      .getElementById("searchCatalog")
+      ?.addEventListener("input", filterCatalog);
+    document
+      .getElementById("formatFilterCatalog")
+      ?.addEventListener("change", filterCatalog);
+    document
+      .getElementById("sortCatalog")
+      ?.addEventListener("change", filterCatalog);
+
+    function filterCatalog() {
+      const search =
+        document.getElementById("searchCatalog")?.value.toLowerCase() || "";
+      const format =
+        document.getElementById("formatFilterCatalog")?.value || "";
+      const sort = document.getElementById("sortCatalog")?.value || "name";
+
+      let decks = allDecksFromCatalog[currentTab] || [];
+
+      let filtered = decks.filter((deck) => {
+        const matchSearch =
+          deck.name.toLowerCase().includes(search) ||
+          (deck.owner && deck.owner.toLowerCase().includes(search));
+        const matchFormat =
+          !format ||
+          deck.mainDeckFormat.toLowerCase() === format.toLowerCase();
+        return matchSearch && matchFormat;
+      });
+
+      if (sort === "name")
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      else if (sort === "author")
+        filtered.sort((a, b) => (a.owner || "").localeCompare(b.owner || ""));
+      else if (sort === "cards")
+        filtered.sort((a, b) => (b.totalCards || 0) - (a.totalCards || 0));
+
+      renderCatalog(filtered);
+    }
+
+    function renderCatalog(decks) {
+      const container = document.getElementById("catalogContainer");
+      const emptyState = document.getElementById("emptyState");
+
+      if (!container) return;
+
+      if (decks.length === 0) {
+        container.innerHTML = "";
+        emptyState.style.display = "block";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      container.innerHTML = decks
+        .map((deck) => {
+          const previewImg =
+            deck.previewimg ||
+            "https://cards.scryfall.io/art_crop/front/4/4/446ced23-1991-4335-9ead-83ae4a6d09cf.jpg?1675652868";
+
+          return `
+          <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 pt-3 px-2 ">
+            <a href="/decks/public/${deck.id}" class="link-unstyled">
+              <div class="card-deck" style="background-image:linear-gradient(rgba(0, 0, 0, 0.8)),url(${previewImg}); background-repeat: no-repeat, repeat; background-size: cover; background-origin: border-box;">
+                <div class="info">
+                  <h5 class="title">${deck.name}</h5>
+                  <p class="author">by ${deck.owner || "Unknown"}, for ${deck.mainDeckFormat
+            }</p>
+                  <p class="desc">${deck.description || ""}</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        `;
+        })
+        .join("");
+    }
+
+    function resetFiltersCatalog() {
+      document.getElementById("searchCatalog").value = "";
+      document.getElementById("formatFilterCatalog").value = "";
+      document.getElementById("sortCatalog").value = "name";
+      filterCatalog();
+    }
+
+    document
+      .getElementById("createForm")
+      ?.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const res = await fetch("/decks/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            [csrfHeader]: csrfToken,
+          },
+          body: new URLSearchParams({
+            name: document.getElementById("newDeckName").value,
+            description: document.getElementById("newDeckDesc").value,
+            mainDeckFormat: document.getElementById("newDeckFormat").value,
+          }),
+        });
+        if (res.ok) {
+          const newDeck = await res.json();
+          allDecksFromCatalog.mydecks.push(newDeck);
+          switchTab("mydecks");
+          bootstrap.Modal.getInstance(
+            document.getElementById("createDeckModal")
+          )?.hide();
+          document.getElementById("createForm").reset();
+        }
+      });
+  </script>
+</body>
+
 </html>

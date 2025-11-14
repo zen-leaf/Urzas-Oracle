@@ -1,35 +1,124 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="~{fragments/head :: head('Chi Siamo')}"></head>
-
 <body class="bg-dark text-light">
 
-  <div th:replace="~{fragments/navbar :: navbar}"></div>
+  <header th:replace="~{fragments/navbar :: navbar}"></header>
 
   <main class="container py-4">
-    <h1 class="mb-4">Chi Siamo</h1>
-    <p>
-      Benvenuti nel nostro sito! Siamo un team di appassionati di carte collezionabili,
-      dedicati a fornire la migliore esperienza possibile per i nostri utenti.
-    </p>
-    <p>
-      La nostra missione è quella di creare una comunità dove gli amanti delle carte
-      possano condividere, scambiare e collezionare le loro carte preferite.
-    </p>
-    <h2 class="mt-4">Il Nostro Team</h2>
-    <ul>
-      <li><strong>Jeremy Da Roit</strong> - Fondatore e CEO</li>
-      <li><strong>Matteo Di Lernia</strong> - Sviluppatore Frontend</li>
-      <li><strong>Lorenzo Subashi</strong> - Sviluppatore Frontend</li>
-      <li><strong>Gemma Ruggiu</strong> - Sviluppatrice Backend</li>
-      <li><strong>Lorenzo Malara</strong> - Sviluppatore Backend</li>
-    </ul>
-    <h2 class="mt-4">Contattaci</h2>
-    <p>
-      Se hai domande o suggerimenti, non esitare a contattarci all'indirizzo
-      <a href="mailto:info@esempio.com" class="text-light">info@esempio.com</a>.
-    </p>
+    <section class="text-center mb-5">
+      <h1 class="display-4 fw-bold text-warning"
+          style="text-shadow: 0 0 30px rgba(255, 193, 7, 0.6); letter-spacing: 2px;">
+        Our story, your community
+      </h1>
+      <p class="lead mt-3" style="font-size: 1.6rem;">
+        We are a group of friends passionate about collectible cards, united by the desire to create the ultimate portal for every <span class="text-warning fw-bold">Magic: The Gathering</span>'s fan.
+      </p>
+    </section>
+
+    <section class="row align-items-center mb-5 g-4">
+      <div class="col-md-6">
+        <div class="bg-dark rounded-4 p-4 border-start border-warning border-4 shadow" style="min-height:180px;">
+          <h2 class="h4 text-warning mb-3 fw-bold" style="letter-spacing: 1.3px;">
+            Mission
+          </h2>
+          <p>
+            Create a digital community where every player can share, collect, trade, and find inspiration, with unique tools and a platform accessible to all.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="bg-dark rounded-4 p-4 border-end border-warning border-4 shadow" style="min-height:180px;">
+          <h2 class="h4 text-warning mb-3 fw-bold" style="letter-spacing: 1.3px;">
+            Vision
+          </h2>
+          <p>
+            Build a reference site for all TCG enthusiasts: easy to use, rich in features, and constantly evolving with the contribution of our community.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mt-4 mb-3 text-warning fw-bold">Our Team</h2>
+      <div class="row g-4 justify-content-center">
+        <!-- TEAM MEMBER -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card bg-dark border-warning rounded-4 text-center h-100 shadow team-card">
+            <div class="card-body d-flex flex-column align-items-center">
+              <div class="mb-3">
+                <i class="bi bi-person-badge" style="font-size: 2.5rem; color:#ffc107;"></i>
+              </div>
+              <h5 class="card-title text-warning mb-1">Jeremy Da Roit</h5>
+              <span class="badge bg-warning text-dark mb-2">Founder & CEO</span>
+              <p class="card-text small" style="color: white;">
+                                          Guides the project, overseeing vision and overall site experience.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Altri membri... -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card bg-dark border-warning rounded-4 text-center h-100 shadow team-card">
+            <div class="card-body d-flex flex-column align-items-center">
+              <div class="mb-3">
+                <i class="bi bi-palette" style="font-size: 2.5rem; color:#ffc107;"></i>
+              </div>
+              <h5 class="card-title text-warning mb-1">Matteo Di Lernia</h5>
+              <span class="badge bg-warning text-dark mb-2">Frontend Dev</span>
+              <p class="card-text small" style="color: white;">
+                                          Focuses on UI, modern interfaces, and usability.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card bg-dark border-warning rounded-4 text-center h-100 shadow team-card">
+            <div class="card-body d-flex flex-column align-items-center">
+              <div class="mb-3">
+                <i class="bi bi-palette" style="font-size: 2.5rem; color:#ffc107;"></i>
+              </div>
+              <h5 class="card-title text-warning mb-1">Lorenzo Subashi</h5>
+              <span class="badge bg-warning text-dark mb-2">Frontend Dev</span>
+              <p class="card-text small" style="color: white;">Builds dynamic and functional pages.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card bg-dark border-warning rounded-4 text-center h-100 shadow team-card">
+            <div class="card-body d-flex flex-column align-items-center">
+              <div class="mb-3">
+                <i class="bi bi-gear-fill" style="font-size: 2.5rem; color:#ffc107;"></i>
+              </div>
+              <h5 class="card-title text-warning mb-1">Gemma Ruggiu</h5>
+              <span class="badge bg-warning text-dark mb-2">Backend Dev</span>
+              <p class="card-text small" style="color: white;">Optimizes performance and server integrations.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card bg-dark border-warning rounded-4 text-center h-100 shadow team-card">
+            <div class="card-body d-flex flex-column align-items-center">
+              <div class="mb-3">
+                <i class="bi bi-gear-fill" style="font-size: 2.5rem; color:#ffc107;"></i>
+              </div>
+              <h5 class="card-title text-warning mb-1">Lorenzo Malara</h5>
+              <span class="badge bg-warning text-dark mb-2">Backend Dev</span>
+              <p class="card-text small" style="color: white;">Responsible for backend logic and security.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-5 text-center">
+      <div class="alert alert-warning d-inline-block px-4 py-3 fw-bold shadow">
+        Questions or tips?<a href="mailto:info@esempio.com" class="text-dark fw-bold ms-2">Contact us!</a>
+      </div>
+    </section>
   </main>
 
   <footer th:replace="fragments/footer :: footer"></footer>

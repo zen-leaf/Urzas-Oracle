@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
+import lombok.Data;
+
 @Controller
+@Data
 @RequestMapping("/profile")
 public class ProfileController {
 
-    @Autowired
-    private UrzaUserService userService;
+    private final UrzaUserService userService;
 
     @GetMapping
     public String profilePage(Model model, Principal principal) {
@@ -59,6 +63,11 @@ public class ProfileController {
         if (!success) {
             return "redirect:/profile?error=true";
         }
+        UrzaUser myUser = getUserService().findByUsername(principal.getName());
+        Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+        UsernamePasswordAuthenticationToken newAUTH = new UsernamePasswordAuthenticationToken(myUser, currentAuth,
+                myUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAUTH);
 
         return "redirect:/profile?success=true";
     }
@@ -69,7 +78,7 @@ public class ProfileController {
             @RequestParam String newPassword,
             @RequestParam String confirmNewPassword,
             Principal principal) {
-        
+
         if (principal == null) {
             return "redirect:/auth/login";
         }
@@ -126,7 +135,7 @@ public class ProfileController {
             @RequestParam String email,
             @RequestParam String displayName,
             Principal principal) {
-        
+
         if (principal == null) {
             return "redirect:/auth/login";
         }

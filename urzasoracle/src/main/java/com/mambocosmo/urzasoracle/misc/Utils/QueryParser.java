@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-
 @AllArgsConstructor
 public class QueryParser implements Specification<Card> {
     private final SearchCriteria CRITERIA;
@@ -24,16 +23,31 @@ public class QueryParser implements Specification<Card> {
     public Predicate toPredicate(@NonNull Root<Card> root, @Nullable CriteriaQuery<?> query,
             @NonNull CriteriaBuilder criteriaBuilder) {
         if (CRITERIA.getLogic().equalsIgnoreCase(":")) {
-            System.out.println("parsing equals");
+            // System.out.println("parsing equals");
+            if (CRITERIA.getKey().equals("nonplayable")) {
+                // System.out.println("parsing nonplayable " + CRITERIA);
+                if (!CRITERIA.getValue().equals("include") || !CRITERIA.getValue().equals("true")) {
+                    return criteriaBuilder.notLike(criteriaBuilder.lower(root.get("layout")), "art_series");
+                }
+                return criteriaBuilder.notLike(criteriaBuilder.lower(root.get("layout")), "art_series");
+
+                // return criteriaBuilder.isNotEmpty(root.get("layout"));
+                // return criteriaBuilder.isNotNull(criteriaBuilder.lower(root.get("layout")));
+            }
+
             if (CRITERIA.getKey().equals("name") || CRITERIA.getKey().equals("oracle")) {
+
                 return criteriaBuilder.like(criteriaBuilder.lower(root.get(CRITERIA.getKey())),
                         ("%" + CRITERIA.getValue() + "%"));
+            }
+            if (CRITERIA.getKey().equals("set")) {
+                return criteriaBuilder.equal(root.get("expansion").get("code"), CRITERIA.getValue());
             }
             return criteriaBuilder.equal(root.get(CRITERIA.getKey()), CRITERIA.getValue());
         }
         if (CRITERIA.getLogic().equalsIgnoreCase(">")) {
-            System.out.println("parsing " + root.get(CRITERIA.getKey()) + " greater than "
-                    + CRITERIA.getParsedValue());
+            // System.out.println("parsing " + root.get(CRITERIA.getKey()) + " greater than "
+            //         + CRITERIA.getParsedValue());
             return criteriaBuilder.greaterThan(root.get(CRITERIA.getKey()).as(Double.class), CRITERIA.getParsedValue());
         }
         if (CRITERIA.getLogic().equalsIgnoreCase("<")) {

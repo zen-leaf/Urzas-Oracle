@@ -1,128 +1,101 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head('Card info - Urza\'s Oracle')}"></head>
-
+<head th:replace="~{fragments/head :: head('Card info - Urza\'s Oracle')}">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
+
 
 <body class="bg-dark text-light">
   <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-  <main class="container-fluid py-4">
-    <div class="row g-4">
+  <main class="container-fluid ">
+    <div class="row">
       <!-- Immagine Carta -->
-      <div class="col-lg-3">
-        <div class="card-container">
-          <div id="dragCard" class="magic-card">
-            <div class="card-face card-front">
-              <img th:if="${card.images != null and card.images['png'] != null}" th:src="${card.images['png']}"
-                th:alt="${card.name}" class="img-fluid shadow" style="
-              width: 100%;
-              aspect-ratio: 488/680;
-              object-fit: contain;
-              border: 2px solid rgba(255, 193, 7, 0.2);
-              border-radius: 0.85rem;
-              background: rgba(26, 16, 51, 0.5);
-            " />
-            </div>
 
-            <div class="card-face card-back">
-              <div class="card-back-imageflip">
-                <img th:if="${card.backFace != null and card.backFace.images['png'] != null}"
-                  th:src="${card.backFace.images['png']}" th:alt="${card.name}" class="img-fluid shadow" style="
-              width: 100%;
-              aspect-ratio: 488/680;
-              object-fit: contain;
-              border: 2px solid rgba(255, 193, 7, 0.2);
-                            border-radius: 20px;
+      <div class="col-sm-5 col-xl-4 row py-5 ">
+        <div class="col-12 ">
+          <div class="sticky-top" style="top: 2rem;">
+            <div class="card-container" style="    aspect-ratio:  0.714;">
+              <div id="dragCard" class="magic-card" sty>
+                <div class="card-face card-front">
+                  <img th:if="${card.images != null and card.images['large'] != null}" th:src="${card.images['large']}"
+                    th:alt="${card.name}" class=" shadow card-img" />
+                </div>
+                <div class="card-face card-back">
 
-              background: rgba(26, 16, 51, 0.5);
-            " />
+                  <img th:if="${card.backFace != null and card.backFace.images['large'] != null}"
+                    th:src="${card.backFace.images['large']}" th:alt="${card.name}" class="shadow card-img" />
+
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div th:if="${card.images == null or card.images['png'] == null}"
-          class="w-100  d-flex align-items-center justify-content-center text-secondary" style="
+            <div th:if="${card.images == null or card.images['large'] == null}"
+              class="w-100  d-flex align-items-center justify-content-center text-secondary" style="
               aspect-ratio: 488/680;
               background: rgba(108, 117, 125, 0.2);
               border: 2px dashed rgba(255, 193, 7, 0.2);
             ">
-          <span>No Image</span>
+              <span>No Image</span>
+            </div>
+            <div class="row justify-content-center pt-5">
+              <div class="col-12 d-flex justify-content-center">
+                <small class="text-secondary" style="font-size:0.6rem;">Drag or tap the card to rotate it</small>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <a class="btn btn-outline-warning fw-bold" style="width: 100%;" onclick="resetRotation()">Reset</a>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <a class="btn btn-outline-warning fw-bold " style="width: 100%;" onclick="flipCard()">Flip
+                  card</a>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
+
       <!-- Informazioni sulla carta -->
-      <div class="col-lg-9">
-        <!-- Nome e Tipo -->
-        <div class="mb-3">
-          <h1 class="fw-bold text-warning mb-2" style="
+      <div class=" col-sm-7 col-md-7 col-xl-7 p-4 cardinfoholder">
+        <div class="row">
+          <!-- Nome e Tipo -->
+          <div class="col-lg-12">
+            <div class="float-end"
+              style="background-color: #4e435370; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border-radius: 0.5rem; border:1px solid rgba(214, 228, 20, 0.267); color: white; margin-top: 0; padding: auto;">
+              <div class="row px-3 py-1">
+                <!-- Mana Cost come testo -->
+                <div class="col-7">
+                  <small class="text-secondary">COST</small>
+                  <p class="text-light mb-0 fs-5 replaceCandidate" style="font-size: 1.1rem"
+                    th:text="${card.manaCost} == '' ? '{0}' : ${card.manaCost}"></p>
+                </div>
+                <!-- Dati set, rarità, numero -->
+                <a class="col-5 px-2" th:href="@{/cards(q='set:' + ${card.expansionSet.code})}"
+                  style="display: flex; justify-content: center; align-items: center;">
+                  <img th:src="${card.expansionSet.icon_svg_uri}" style="width:100%;max-width: 3rem;">
+                </a>
+              </div>
+            </div>
+            <h1 class="fw-bold text-warning mb-2" style="
                 font-size: 2.2rem;
                 text-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
-                font-family: 'Georgia', serif;
               " th:text="${card.name}"></h1>
-          <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}"></p>
-        </div>
-        <hr class="border-warning mb-4" style="opacity: 0.3" />
-
-        <!-- Mana Cost come testo -->
-        <div class="mb-4" th:if="${card.manaCost != null and card.manaCost != ''}">
-          <small class="text-secondary d-block mb-2">MANA COST</small>
-          <p class="text-warning fw-bold replaceCandidate" style="font-size: 1.1rem" th:text="${card.manaCost}"></p>
-        </div>
-
-        <!-- Dati set, rarità, numero -->
-        <div class="row g-3 mb-4">
-          <div class="col-12">
-            <small class="text-secondary">SET</small>
-            <p class="text-light mb-0 fs-5" th:text="${card.expansionSet != null} ? ${card.expansionSet.name} : 'N/A'">
-            </p>
-          </div>
-          <div class="col-6">
-            <small class="text-secondary">RARITY</small>
-            <p class="text-light mb-0 fs-5" th:text="${card.rarity} ?: 'N/A'"></p>
-          </div>
-          <div class="col-6">
-            <small class="text-secondary">COLLECTOR NUMBER</small>
-            <p class="text-light mb-0 fs-5" th:text="${card.collectorNumber} ?: 'N/A'"></p>
+            <p class="text-secondary mb-1" style="font-size: 1.1rem; font-weight: 500" th:text="${card.typeline}"></p>
           </div>
         </div>
         <hr class="border-warning mb-4" style="opacity: 0.3" />
-
-        <!-- Legalità e formati -->
-        <div class="mb-4" th:if="${card.legalities != null and !#maps.isEmpty(card.legalities)}">
-          <small class="text-secondary d-block mb-3">LEGALITY</small>
-          <div style="
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-              ">
-            <!-- Esempio per STANDARD -->
-            <div class="legality-item" th:with="status=${card.legalities.get('STANDARD')}">
-              <span class="text-light">Standard</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-            <!-- altri formati -->
-            <div class="legality-item" th:with="status=${card.legalities.get('PIONEER')}">
-              <span class="text-light">Pioneer</span>
-              <span th:if="${status == 'legal'}" class="badge-legal">LEGAL</span>
-              <span th:if="${status != 'legal'}" class="badge-not-legal">NOT LEGAL</span>
-            </div>
-            <!-- aggiungi altri formati come necessario -->
-          </div>
-        </div>
-        <hr class="border-warning mb-4" style="opacity: 0.3" />
-
-        <!-- Oracle Text -->
-        <div class="mb-4" th:if="${card.oracleText != null and card.oracleText != ''}">
-          <small class="text-secondary d-block mb-2">ORACLE TEXT</small>
-          <p class="text-light replaceCandidate" style="
+        <div class="row">
+          <!-- Oracle Text -->
+          <div class="col-12 mb-4" th:if="${card.oracleText != null and card.oracleText != ''}">
+            <small class="text-secondary d-block mb-2">ORACLE TEXT</small>
+            <p class="text-light replaceCandidate" style="
                 white-space: pre-wrap;
                 line-height: 1.6;
                 font-size: 0.95rem;
-              " th:text="${card.oracleText}"></p>
+                " th:text="${card.oracleText}"></p>
+          </div>
         </div>
-
         <!-- Flavor Text -->
         <div class="mb-4" th:if="${card.flavorText != null and card.flavorText != ''}">
           <small class="text-secondary d-block mb-2">FLAVOR TEXT</small>
@@ -132,18 +105,56 @@
                 border-left: 3px solid rgba(255, 193, 7, 0.2);
                 padding-left: 1rem;
                 font-size: 0.95rem;
-              " th:text="${card.flavorText}"></p>
+                " th:text="${card.flavorText}"></p>
         </div>
 
         <!-- Artista -->
-
         <small class="text-secondary d-block mb-2">ILLUSTRATED BY</small>
         <p class="text-light" style="font-size: 0.95rem" th:text="${#strings.listJoin(card.artistNames, ', ')}"></p>
+
+        <!-- Legalità e formati -->
+        <div class="mb-4" th:if="${card.legalities != null and !#maps.isEmpty(card.legalities)}">
+          <small class="text-secondary d-block mb-3">LEGALITY</small>
+          <div style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.75rem;
+                ">
+            <th:block th:each="format : ${card.legalities}">
+              <div class="row px-2">
+                <span th:text="${#strings.capitalize(format.key)}" class="col-md-12 format-label">Standard</span>
+                <span th:if="${format.value == 'legal'}" class="col-md-5 badge legal">LEGAL</span>
+                <span th:if="${format.value != 'legal'}" class="col-md-5 badge not-legal">NOT LEGAL</span>
+              </div>
+            </th:block>
+          </div>
+        </div>
+        <hr class="border-warning mb-4" style="opacity: 0.3" />
 
         <!-- Bottone Torna -->
         <div class="mt-5">
           <a href="/cards" class="btn btn-outline-warning fw-bold">&larr; Back to Cards</a>
         </div>
+
+        <!-- Sezione Commenti -->
+        <div class="comments-section mt-5">
+          <h4 class="text-light mb-3">Comments</h4>
+          <div class="comments-list" id="commentsList" style="max-height: 350px; overflow-y: auto;">
+            <!-- Commenti caricati dinamicamente -->
+          </div>
+          <!-- Bottone per aggiungere commento -->
+          <div class="text-center mt-4">
+            <button class="btn btn-outline-warning" id="showAddCommentBtn" type="button"
+              onclick="toggleAddComment()">Add comment</button>
+          </div>
+          <!-- Form di aggiunta commento -->
+          <div class="add-comment mt-3" id="addCommentBox" style="display:none;">
+            <textarea class="form-control mb-2" id="commentInput" rows="2" placeholder="Write a comment..."></textarea>
+            <button class="btn btn-warning fw-bold" type="button" onclick="addComment()">Add comment</button>
+          </div>
+        </div>
+        <!-- Fine Sezione Commenti -->
+
       </div>
     </div>
   </main>
@@ -152,14 +163,9 @@
 
   <style>
     body {
-      background: radial-gradient(60% 40% at 20% 10%,
-          rgba(123, 31, 162, 0.15),
-          transparent 60%),
-        radial-gradient(50% 35% at 80% 20%,
-          rgba(255, 193, 7, 0.08),
-          transparent 60%),
+      background: radial-gradient(60% 40% at 20% 10%, rgba(123, 31, 162, 0.15), transparent 60%),
+        radial-gradient(50% 35% at 80% 20%, rgba(255, 193, 7, 0.08), transparent 60%),
         linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%);
-      font-family: "Roboto", sans-serif;
       min-height: 100vh;
     }
 
@@ -176,40 +182,121 @@
       transform: scale(1.05);
     }
 
-    .legality-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem;
-      background: rgba(26, 16, 51, 0.5);
-      border: 1px solid rgba(255, 193, 7, 0.1);
-      border-radius: 4px;
-      font-size: 0.9rem;
-    }
-
-    .badge-legal {
-      background: #28a745;
-      color: white;
-      padding: 0.3rem 0.6rem;
-      border-radius: 3px;
-      font-weight: bold;
-      font-size: 0.75rem;
-    }
-
-    .badge-not-legal {
-      background: #444;
-      color: #888;
-      padding: 0.3rem 0.6rem;
-      border-radius: 3px;
-      font-weight: bold;
-      font-size: 0.75rem;
-    }
-
     hr {
       opacity: 0.2;
     }
+
+    .card-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-legal,
+    .badge-not-legal {
+      width: 40%;
+      text-align: center;
+    }
+
+    /* Commenti */
+    .comments-section {
+      background: rgba(50, 50, 60, 0.29);
+      border-radius: 0.5rem;
+      border: 1px solid rgba(108, 117, 125, 0.17);
+      padding: 1.5rem 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .comment-user {
+      color: #fffb07;
+    }
+
+    .comments-list .comment {
+      border-left: 3px solid rgba(255, 193, 7, 0.13);
+    }
+
+    #addCommentBox textarea {
+      background-color: #181a20;
+      color: #fff;
+      border: 1px solid rgba(255, 193, 7, 0.15);
+      resize: vertical;
+    }
   </style>
   <script src="/js/cardrotate.js" defer></script>
+
+  <script th:inline="javascript">
+
+    const cardId = /*[[${card.id}]]*/'';
+    // const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    // const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    const csrfToken = /*[[${_csrf.token}]]*/ '';
+    const csrfHeader = /*[[${_csrf.headerName}]]*/ 'X-CSRF-TOKEN';
+
+    function toggleAddComment() {
+      let box = document.getElementById('addCommentBox');
+      box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+    }
+
+    async function loadComments() {
+      try {
+        let res = await fetch('/api/CommentController/comments-refresh?cardId=' + cardId);
+        if (res.ok) {
+          let comments = await res.json();
+          let list = document.getElementById('commentsList');
+          list.innerHTML = '';
+          comments.forEach(c => {
+            let div = document.createElement('div');
+            div.className = 'comment mb-2 p-2 bg-secondary bg-opacity-10 rounded';
+            div.innerHTML = '<span class=comment-user>' + c.userName + '</span>' +
+              '<small class="text-secondary ms-2">' + c.timeOfComment.toLocaleString() + '</small>' +
+              '<p class="mb-1 text-light">' + c.comment + '</p>';
+            list.appendChild(div);
+          });
+        } else {
+          console.error('Error loading comments: ' + res.status);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function addComment() {
+      let input = document.getElementById('commentInput');
+      let text = input.value.trim();
+      if (!text) return;
+      try {
+        let res = await fetch('/api/CommentController/add-comment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            [csrfHeader]: csrfToken,
+          },
+          body: new URLSearchParams({
+            commentText: text,
+            currentCardId: cardId
+          })
+        });
+        if (res.status === 401) {
+          window.location.href = '/login';
+          return;
+        }
+        if (res.ok) {
+          input.value = '';
+          document.getElementById('addCommentBox').style.display = 'none';
+          loadComments();
+        } else {
+          alert('Errore nell\'invio del commento');
+          console.log(res);
+        }
+      } catch (e) {
+        alert('Errore di rete');
+        console.error(e);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadComments);
+
+  </script>
 </body>
 
 </html>
