@@ -35,28 +35,40 @@ public class CardExpansionSetService extends
         return getREPOSITORY().findByName(name);
     }
 
-    public List<CardExpansionSet> generateAllSetsFromJSON() {
+    public long count() {
+        return getREPOSITORY().count();
+    }
+
+    public List<CardExpansionSet> generateSetsFromJSON(String path) {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode setData;
         try {
-            setData = mapper.readTree(new File("urzasoracle/src/main/resources/json/AllSets.json"));
+            System.out.println(path);
+            setData = mapper.readTree(new File(path)).get("data");
+            // System.out.println(setData.get("data"));
 
             List<CardExpansionSet> setList = new ArrayList<>();
             Long myTimer = System.nanoTime();
-            System.out.println("start");
+            System.out.println("Starting set generation");
             setData.forEach(e -> {
                 try {
                     CardExpansionSet mySet = null;
                     mySet = mapper.treeToValue(e, new TypeReference<CardExpansionSet>() {
                     });
-                    System.out.println(mySet.getName());
+                    // System.out.println(mySet.getName());
                     setList.add(mySet);
-                    // System.out.println(myCard.getName());
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
                     System.out.println("Error generating set!!! " + e1.getMessage());
+                    e1.printStackTrace();
                 }
             });
-            System.out.println("Completed set generation - Generated " + setList.size() + " sets in "
+
+            setList.forEach(e -> {
+                save(e);
+                System.out.println("Saved set: " + e.getName() + "(" + e.getCode() + ")");
+            });
+            System.out.println("Completed set generation - Generated " + setList.size() +
+                    " sets in "
                     + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
 
             return setList;

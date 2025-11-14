@@ -41,6 +41,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     private final CardExpansionSetService EXPANSIONSETSERVICE;
     private final CardConverter CARDCONVERTER;
     private final CommentOnCardRepository COMMENTONCARDREPOSITORY;
+    private final CardExpansionSetService SETSERVICE;
     @Value("${urza.bulkfetchtype}")
     private String bulkdatadownloadtype;
 
@@ -111,7 +112,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return getCONVERTER().fromEToD(getREPOSITORY().findById(id).orElse(null));
     }
 
-    public List<Card> generateAllCardsFromJSON(String path) {
+    public List<Card> generateCardsFromJSON(String path) {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
@@ -153,24 +154,20 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         JsonNode bulkEntries;
         String filePath;
         String bPath = Util.downloadTempFile(
-                "https://api.scryfall.com/bulk-data",
+                "https://api.scryfall.com/bulk-data/" + bulkdatadownloadtype,
                 "bulkdata.json");
         try {
 
             bulkEntries = mapper.readTree(new File(bPath));
 
-            for (JsonNode node : bulkEntries) {
-                for (JsonNode innernode : node) {
-                    if (innernode.get("type").asText().equalsIgnoreCase(bulkdatadownloadtype)) {
-                        System.out.println("Fetching up to date " + innernode.get("type").asText());
-                        filePath = Util.downloadTempFile(
-                                innernode.get("download_uri").asText(),
-                                bulkdatadownloadtype + ".json");
-                        return filePath;
-                    }
-                }
-            }
-            return null;
+            System.out.println(bulkEntries.get("type"));
+
+            System.out.println("Fetching up to date " + bulkEntries.get("type").asText());
+            filePath = Util.downloadTempFile(
+                    bulkEntries.get("download_uri").asText(),
+                    bulkdatadownloadtype + ".json");
+            return filePath;
+
         } catch (IOException e) {
             return null;
         }
@@ -253,14 +250,20 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     @EventListener(ApplicationReadyEvent.class)
     public boolean populateDatabaseIfNone() {
         long dbelemnumber = getREPOSITORY().count();
+        long dbsetnumber = getSETSERVICE().count();
+        if (dbsetnumber == 0L) {
+            System.out.println("Fetching up to date set data");
+            Util.downloadTempFile("https://api.scryfall.com/sets/", "sets.json");
+            getSETSERVICE().generateSetsFromJSON(Util.downloadTempFile("https://api.scryfall.com/sets/", "sets.json"));
+        }
         System.out.println("Number of card entries in database: " + dbelemnumber);
         if (dbelemnumber == 0L) {
             System.out.println(
                     "Populating empty database with default card pool - you can change the desired pool from application.properties");
-            if (bulkdatadownloadtype.equalsIgnoreCase("selected_batch")) {
-                generateAllCardsFromJSON("urzasoracle\\src\\main\\resources\\json\\selected_batch.json");
+            if (bulkdatadownloadtype.trim().equalsIgnoreCase("selected_batch")) {
+                generateCardsFromJSON("urzasoracle\\src\\main\\resources\\json\\selected_batch.json");
             } else {
-                generateAllCardsFromJSON(fetchBulkData());
+                generateCardsFromJSON(fetchBulkData());
             }
         }
         return false;
