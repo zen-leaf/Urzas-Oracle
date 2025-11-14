@@ -34,20 +34,20 @@ public class CardRestController {
     private final ArtistService ARTSERVICE;
     private final CardPartService CARDPARTSERVICE;
 
-    @GetMapping("/saveAll")
-    public String saveAll() {
-        System.out.println("Saving cards with their relationships");
-        List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
-        // myCards.forEach(e -> {
-        //     getCARDSERVICE().save(e);
-        //     // System.out.println(e.getCard_faces());
-        // });
-        // System.out.println("Saved card: " + e.getName());
-        // Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
-        // return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique
-        // faces found and "+myCards.size()+" cards saved.";
-        return myCards.size() + " cards saved.";
-    }
+    // @GetMapping("/saveAll")
+    // public String saveAll() {
+    //     System.out.println("Saving cards with their relationships");
+    //     List<Card> myCards = getCARDSERVICE().generateAllCardsFromJSON();
+    //     // myCards.forEach(e -> {
+    //     //     getCARDSERVICE().save(e);
+    //     //     // System.out.println(e.getCard_faces());
+    //     // });
+    //     // System.out.println("Saved card: " + e.getName());
+    //     // Map<String,Integer> uniqueFaces = getCARDSERVICE().getUniqueCardFaces();
+    //     // return uniqueFaces==null?"No unique faces found.":uniqueFaces.size()+" unique
+    //     // faces found and "+myCards.size()+" cards saved.";
+    //     return myCards.size() + " cards saved.";
+    // }
 
     @GetMapping("/delete")
     public String deleteone(@RequestParam String param) {

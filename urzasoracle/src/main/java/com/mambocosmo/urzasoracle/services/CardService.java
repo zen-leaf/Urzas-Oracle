@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,10 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mambocosmo.urzasoracle.DTO.CardDTO;
 import com.mambocosmo.urzasoracle.converters.CardConverter;
 import com.mambocosmo.urzasoracle.entities.Card;
-import com.mambocosmo.urzasoracle.entities.CardCollection;
-import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.misc.Utils.QueryParser;
 import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
+import com.mambocosmo.urzasoracle.misc.Utils.Util;
 import com.mambocosmo.urzasoracle.repositories.CardRepository;
 import com.mambocosmo.urzasoracle.repositories.CommentOnCardRepository;
 
@@ -40,6 +41,8 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     private final CardExpansionSetService EXPANSIONSETSERVICE;
     private final CardConverter CARDCONVERTER;
     private final CommentOnCardRepository COMMENTONCARDREPOSITORY;
+    @Value("${urza.bulkfetchtype}")
+    private String bulkdatadownloadtype;
 
     @Override
     public Card construct(Map<String, String> fromData) {
@@ -108,15 +111,16 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return getCONVERTER().fromEToD(getREPOSITORY().findById(id).orElse(null));
     }
 
-    public List<Card> generateAllCardsFromJSON() {
+    public List<Card> generateAllCardsFromJSON(String path) {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode cardData;
         try {
-            cardData = mapper.readTree(new File("urzasoracle/src/main/resources/json/oracles.json"));
+
+            cardData = mapper.readTree(new File(path));
             List<Card> cardList = new ArrayList<>();
 
             Long myTimer = System.nanoTime();
-            System.out.println("start");
+            System.out.println("Starting save operation");
             cardData.forEach(e -> {
                 try {
                     Card myCard = new Card();
@@ -124,12 +128,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     });
                     myCard.setExpansion(
                             getEXPANSIONSETSERVICE().getEntityByID(UUID.fromString(e.get("set_id").asText())));
-                    // System.out.println(e.toString());
                     cardList.add(myCard);
-                    // System.out.println(
-                    // myCard.getName() + " - " + myCard.getId() + " - \n" + "Artist:\n" +
-                    // myCard.getArtistRef());
-
                 } catch (JsonProcessingException | IllegalArgumentException e1) {
                     System.out.println("Error generating card!!! " + e1.getMessage());
                 }
@@ -143,6 +142,35 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
                     + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
 
             return cardList;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    // @EventListener(ApplicationReadyEvent.class)
+    public String fetchBulkData() {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode bulkEntries;
+        String filePath;
+        String bPath = Util.downloadTempFile(
+                "https://api.scryfall.com/bulk-data",
+                "bulkdata.json");
+        try {
+
+            bulkEntries = mapper.readTree(new File(bPath));
+
+            for (JsonNode node : bulkEntries) {
+                for (JsonNode innernode : node) {
+                    if (innernode.get("type").asText().equalsIgnoreCase(bulkdatadownloadtype)) {
+                        System.out.println("Fetching up to date " + innernode.get("type").asText());
+                        filePath = Util.downloadTempFile(
+                                innernode.get("download_uri").asText(),
+                                bulkdatadownloadtype + ".json");
+                        return filePath;
+                    }
+                }
+            }
+            return null;
         } catch (IOException e) {
             return null;
         }
@@ -220,6 +248,22 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
         return getREPOSITORY().findAll(spec, pageable).map(e -> getCONVERTER().fromEToD(e));
 
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public boolean populateDatabaseIfNone() {
+        long dbelemnumber = getREPOSITORY().count();
+        System.out.println("Number of card entries in database: " + dbelemnumber);
+        if (dbelemnumber == 0L) {
+            System.out.println(
+                    "Populating empty database with default card pool - you can change the desired pool from application.properties");
+            if (bulkdatadownloadtype.equalsIgnoreCase("selected_batch")) {
+                generateAllCardsFromJSON("urzasoracle\\src\\main\\resources\\json\\selected_batch.json");
+            } else {
+                generateAllCardsFromJSON(fetchBulkData());
+            }
+        }
+        return false;
     }
 
 }
