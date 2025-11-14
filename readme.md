@@ -2,6 +2,8 @@
 
 This is the repository for Urza's Oracle, a web application that allows user to browse and comment on Magic the Gathering cards.
 
+The project is currently still under development (and refactoring) on separate branches.
+
 ## Features
 
 - #### Browse Magic the Gathering cards.
