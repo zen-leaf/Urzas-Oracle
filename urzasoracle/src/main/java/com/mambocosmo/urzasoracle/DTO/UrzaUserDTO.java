@@ -7,8 +7,6 @@ import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.mambocosmo.urzasoracle.entities.CardCollection;
-
 import lombok.Data;
 
 @Data
@@ -19,6 +17,6 @@ public class UrzaUserDTO implements GenericDTO {
     private String email;
     private String displayName;
     List<? extends GrantedAuthority> authorities;
-    private LocalDate registerDate;
+    private Date registerDate;
     private Set<CardCollectionDTO> userDecks;
 }

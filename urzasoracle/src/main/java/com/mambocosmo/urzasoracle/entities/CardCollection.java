@@ -45,16 +45,15 @@ public class CardCollection extends GenericEntity {
     private String description;
 
     @Column(nullable = true)
-    private Format mainDeckFormat; // ← TORNA A Format, NON String!
+    private Format mainDeckFormat; 
 
     @ElementCollection
     @CollectionTable(name = "deck_legal_formats", joinColumns = @JoinColumn(name = "deck_id"))
     @MapKeyColumn(name = "format")
     private Map<Format, String> legalIn = new HashMap<>();
 
-   @OneToMany(mappedBy = "id.deck", cascade = CascadeType.ALL, orphanRemoval = true)
-private List<CardInDeck> cardList = new ArrayList<>();
-
+    @OneToMany(mappedBy = "id.deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CardInDeck> cardList = new ArrayList<>();
 
     @ManyToOne()
     @JoinColumn(name = "commander")

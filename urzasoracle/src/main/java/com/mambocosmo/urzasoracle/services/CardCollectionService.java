@@ -36,6 +36,7 @@ public class CardCollectionService
     private final CardInDeckConverter CARDINDECKCONVERTER;
     private final CardConverter CARDCONVERTER;
     private final CardService CARDSERVICE;
+    private final UrzaUserService URZAUSERSERVICE;
 
     @Override
     public CardCollection construct(Map<String, String> fromData) {
@@ -86,7 +87,10 @@ public class CardCollectionService
 
     @Override
     public boolean save(CardCollection fromEntity) {
-        try {
+        try{
+            //TODO need a check to not do these lines if user is already complete
+            String userNameFromDTO = fromEntity.getOwner().getUsername(); // needed for the fromdto conversion
+            fromEntity.setOwner(getURZAUSERSERVICE().findByUsername(userNameFromDTO));
             getREPOSITORY().save(fromEntity);
         } catch (Exception ex) {
             ex.printStackTrace();

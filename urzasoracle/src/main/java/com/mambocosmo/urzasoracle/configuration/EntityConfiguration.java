@@ -1,7 +1,6 @@
 package com.mambocosmo.urzasoracle.configuration;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +14,12 @@ import com.mambocosmo.urzasoracle.entities.CardPart;
 import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
-import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
 
 @Data
 @Configuration
 public class EntityConfiguration {
-
-    private final UrzaUserService URZAUSERSERVICE;
 
     @Bean
     @Scope("prototype")

@@ -4,11 +4,10 @@ import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.CardCollectionDTO;
 import com.mambocosmo.urzasoracle.entities.CardCollection;
-import com.mambocosmo.urzasoracle.entities.CardDeckPK;
 import com.mambocosmo.urzasoracle.entities.CardInDeck;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.misc.enums.Format;
-import com.mambocosmo.urzasoracle.services.UrzaUserService;
+import com.mambocosmo.urzasoracle.repositories.CardRepository;
 
 import lombok.Data;
 
@@ -17,6 +16,7 @@ import lombok.Data;
 public class CardCollectionConverter implements GenericConverter<CardCollection, CardCollectionDTO> {
 
     private final CardConverter CARDCONVERTER;
+    private final CardRepository CARDREPOSITORY;
 
     @Override
     public CardCollection fromDToE(CardCollectionDTO dto) {
@@ -32,7 +32,7 @@ public class CardCollectionConverter implements GenericConverter<CardCollection,
         e.setMainDeckFormat(Format.valueOf(dto.getMainDeckFormat()));
 
         dto.getCardInDeck().forEach((key,value) -> { // converting dto's Map<CardDTO,String(quantity)> to List<CardInDeck> 
-            CardInDeck tempCid = new CardInDeck(e, getCARDCONVERTER().fromDToE(key), value);
+            CardInDeck tempCid = new CardInDeck(e, getCARDREPOSITORY().findById(key.getId()).orElse(null), value);
             e.getCardList().add(tempCid);
         });
 

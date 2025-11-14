@@ -19,7 +19,7 @@ public class CardCollectionDTO implements GenericDTO {
     private String name;
     private String description;
     private String mainDeckFormat;
-    private Map<CardDTO,String> cardInDeck;
+    private Map<CardDTO,Integer> cardInDeck; // CardDTO and quantity
     private Integer totalCards;
     
     // private String previewimg;

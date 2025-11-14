@@ -1,9 +1,5 @@
 package com.mambocosmo.urzasoracle.converters;
 
-import java.sql.Date;
-import java.time.LocalDate;
-
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.UrzaUserDTO;
