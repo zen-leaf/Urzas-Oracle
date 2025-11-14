@@ -1,0 +1,22 @@
+.comments-section {
+    background: rgba(50, 50, 60, 0.29);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(108, 117, 125, 0.17);
+    padding: 1.5rem 1rem;
+    margin-top: 2.5rem;
+}
+
+.comment-user {
+    color: #fffb07;
+}
+
+.comments-list .comment {
+    border-left: 3px solid rgba(255, 193, 7, 0.13);
+}
+
+#addCommentBox textarea {
+    background-color: #181a20;
+    color: #fff;
+    border: 1px solid rgba(255, 193, 7, 0.15);
+    resize: vertical;
+}
