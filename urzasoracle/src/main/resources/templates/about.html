@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: head('Chi Siamo')}"></head>
+
+<head>
+  <div th:replace="~{fragments/head :: head('Chi Siamo')}"></div>
+</head>
+
 <body class="bg-dark text-light">
 
   <header th:replace="~{fragments/navbar :: navbar}"></header>
@@ -8,11 +12,12 @@
   <main class="container py-4">
     <section class="text-center mb-5">
       <h1 class="display-4 fw-bold text-warning"
-          style="text-shadow: 0 0 30px rgba(255, 193, 7, 0.6); letter-spacing: 2px;">
+        style="text-shadow: 0 0 30px rgba(255, 193, 7, 0.6); letter-spacing: 2px;">
         Our story, your community
       </h1>
       <p class="lead mt-3" style="font-size: 1.6rem;">
-        We are a group of friends passionate about collectible cards, united by the desire to create the ultimate portal for every <span class="text-warning fw-bold">Magic: The Gathering</span>'s fan.
+        We are a group of friends passionate about collectible cards, united by the desire to create the ultimate portal
+        for every <span class="text-warning fw-bold">Magic: The Gathering</span>'s fan.
       </p>
     </section>
 
@@ -23,7 +28,8 @@
             Mission
           </h2>
           <p>
-            Create a digital community where every player can share, collect, trade, and find inspiration, with unique tools and a platform accessible to all.
+            Create a digital community where every player can share, collect, trade, and find inspiration, with unique
+            tools and a platform accessible to all.
           </p>
         </div>
       </div>
@@ -33,7 +39,8 @@
             Vision
           </h2>
           <p>
-            Build a reference site for all TCG enthusiasts: easy to use, rich in features, and constantly evolving with the contribution of our community.
+            Build a reference site for all TCG enthusiasts: easy to use, rich in features, and constantly evolving with
+            the contribution of our community.
           </p>
         </div>
       </div>
@@ -52,7 +59,7 @@
               <h5 class="card-title text-warning mb-1">Jeremy Da Roit</h5>
               <span class="badge bg-warning text-dark mb-2">Founder & CEO</span>
               <p class="card-text small" style="color: white;">
-                                          Guides the project, overseeing vision and overall site experience.
+                Guides the project, overseeing vision and overall site experience.
               </p>
             </div>
           </div>
@@ -67,7 +74,7 @@
               <h5 class="card-title text-warning mb-1">Matteo Di Lernia</h5>
               <span class="badge bg-warning text-dark mb-2">Frontend Dev</span>
               <p class="card-text small" style="color: white;">
-                                          Focuses on UI, modern interfaces, and usability.
+                Focuses on UI, modern interfaces, and usability.
               </p>
             </div>
           </div>
@@ -123,4 +130,5 @@
 
   <footer th:replace="fragments/footer :: footer"></footer>
 </body>
+
 </html>
