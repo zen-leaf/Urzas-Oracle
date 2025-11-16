@@ -5,6 +5,8 @@ import lombok.Data;
 
 @Data
 public class CardInDeckDTO {
+
+    //TODO refactor from here
     private UUID cardId;
     private CardDTO refCard;
     private String cardName;
