@@ -29,20 +29,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Data
 public class DeckController {
 
-    private final CardCollectionService cardCollectionService;
-    private final UrzaUserService urzaUserService;
-    private final CardService cardService;
+    private final CardCollectionService CARDCOLLECTIONSERVICE;
+    private final UrzaUserService URZAUSERSERVICE;
+    private final CardService CARDSERVICE;
 
     // ============ DECKS PUBBLICI ============
     @GetMapping
     public String listAllDecks(Model model, Authentication authentication, HttpServletRequest request) {
-        List<CardCollectionDTO> allDecks = cardCollectionService.getAllDecks();
+        List<CardCollectionDTO> allDecks = getCARDCOLLECTIONSERVICE().getAllDecks();
 
         for (CardCollectionDTO deck : allDecks) {
-            Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
+            Integer cardCount = getCARDCOLLECTIONSERVICE().getTotalCardsByDeckId(deck.getId());
             deck.setTotalCards(cardCount != null ? cardCount : 0);
 
-            List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
+            List<CardInDeckDTO> allCards = getCARDCOLLECTIONSERVICE().getCardsByDeck(deck.getId());
             List<CardInDeckDTO> preview = allCards.stream()
                     .limit(4)
                     .collect(Collectors.toList());
@@ -61,11 +61,12 @@ public class DeckController {
         return "decks";
     }
 
+    //TODO ???
     @PostMapping("/bulkadd")
     public String getMethodName(@RequestParam("bulktext") String text, @RequestParam String deckId,
             HttpServletRequest request) {
 
-        getCardCollectionService().bulksave(text, deckId);
+        getCARDCOLLECTIONSERVICE().bulksave(text, deckId);
 
         return "redirect:" + request.getHeader("Referer");
     }
@@ -73,7 +74,7 @@ public class DeckController {
     @GetMapping("/public/{id}")
     public String viewPublicDeck(@PathVariable UUID id, Model model, Authentication authentication,
             HttpServletRequest request) {
-        CardCollectionDTO deck = cardCollectionService.getByID(id);
+        CardCollectionDTO deck = getCARDCOLLECTIONSERVICE().getByID(id);
 
         if (deck == null) {
             return "redirect:/decks";
@@ -85,7 +86,7 @@ public class DeckController {
             isOwner = deck.getOwner() != null && deck.getOwner().equals(username);
         }
 
-        List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
+        List<CardInDeckDTO> cards = getCARDCOLLECTIONSERVICE().getCardsByDeck(id);
         // System.out.println("CARDLIST " + cards);
         int totalCards = cards.stream()
                 .mapToInt(c -> c.getQuantity())
@@ -98,8 +99,8 @@ public class DeckController {
         model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
         model.addAttribute("active", "decks");
         model.addAttribute("card",
-                cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
-                        : getCardService().getByName("Forest").get(0));
+                cards.size() > 0 ? getCARDSERVICE().getByID(cards.get(0).getCardId())
+                        : getCARDSERVICE().getByName("Forest").get(0));
 
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
@@ -125,9 +126,9 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
-        CardCollectionDTO clonedDeck = cardCollectionService.cloneDeck(deckId, user.getId());
+        CardCollectionDTO clonedDeck = getCARDCOLLECTIONSERVICE().cloneDeck(deckId, user.getId());
         if (clonedDeck == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -143,14 +144,14 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
-        List<CardCollectionDTO> userDecks = cardCollectionService.getDecksByUser(user.getId());
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
+        List<CardCollectionDTO> userDecks = getCARDCOLLECTIONSERVICE().getDecksByUser(user.getId());
 
         for (CardCollectionDTO deck : userDecks) {
-            Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
+            Integer cardCount = getCARDCOLLECTIONSERVICE().getTotalCardsByDeckId(deck.getId());
             deck.setTotalCards(cardCount != null ? cardCount : 0);
 
-            List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
+            List<CardInDeckDTO> allCards = getCARDCOLLECTIONSERVICE().getCardsByDeck(deck.getId());
             List<CardInDeckDTO> preview = allCards.stream()
                     .limit(4)
                     .collect(Collectors.toList());
@@ -177,14 +178,14 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
-        List<CardCollectionDTO> userDecks = cardCollectionService.getDecksByUser(user.getId());
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
+        List<CardCollectionDTO> userDecks = getCARDCOLLECTIONSERVICE().getDecksByUser(user.getId());
 
         for (CardCollectionDTO deck : userDecks) {
-            Integer cardCount = cardCollectionService.getTotalCardsByDeckId(deck.getId());
+            Integer cardCount = getCARDCOLLECTIONSERVICE().getTotalCardsByDeckId(deck.getId());
             deck.setTotalCards(cardCount != null ? cardCount : 0);
 
-            List<CardInDeckDTO> allCards = cardCollectionService.getCardsByDeck(deck.getId());
+            List<CardInDeckDTO> allCards = getCARDCOLLECTIONSERVICE().getCardsByDeck(deck.getId());
             List<CardInDeckDTO> preview = allCards.stream()
                     .limit(4)
                     .collect(Collectors.toList());
@@ -197,7 +198,7 @@ public class DeckController {
     @GetMapping("/mydecks/{id}")
     public String deckDetail(@PathVariable UUID id, Model model, Authentication authentication,
             HttpServletRequest request) {
-        CardCollectionDTO deck = cardCollectionService.getByID(id);
+        CardCollectionDTO deck = getCARDCOLLECTIONSERVICE().getByID(id);
 
         if (deck == null) {
             return "redirect:/decks/decks";
@@ -213,7 +214,7 @@ public class DeckController {
             return "redirect:/decks/decks";
         }
 
-        List<CardInDeckDTO> cards = cardCollectionService.getCardsByDeck(id);
+        List<CardInDeckDTO> cards = getCARDCOLLECTIONSERVICE().getCardsByDeck(id);
         int totalCards = cards.stream()
                 .mapToInt(c -> c.getQuantity())
                 .sum();
@@ -224,8 +225,8 @@ public class DeckController {
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isLoggedIn", authentication != null && authentication.isAuthenticated());
         model.addAttribute("active", "mydecks");
-        model.addAttribute("card", cards.size() > 0 ? getCardService().getByID(cards.get(0).getCardId())
-                : getCardService().getAll().get(0));
+        model.addAttribute("card", cards.size() > 0 ? getCARDSERVICE().getByID(cards.get(0).getCardId())
+                : getCARDSERVICE().getAll().get(0));
 
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
@@ -240,7 +241,7 @@ public class DeckController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
         try {
-            var pageResult = cardService.getAllPaged(page, size);
+            var pageResult = getCARDSERVICE().getAllPaged(page, size);
             return ResponseEntity.ok(pageResult);
         } catch (Exception e) {
             System.err.println("❌ Errore caricamento carte: " + e.getMessage());
@@ -261,10 +262,10 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
         try {
-            CardCollectionDTO newDeck = cardCollectionService.createDeck(
+            CardCollectionDTO newDeck = getCARDCOLLECTIONSERVICE().createDeck(
                     user.getId(), name, description, mainDeckFormat);
             return ResponseEntity.status(HttpStatus.CREATED).body(newDeck);
         } catch (Exception e) {
@@ -287,9 +288,9 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
-        CardCollectionDTO updatedDeck = cardCollectionService.updateDeck(
+        CardCollectionDTO updatedDeck = getCARDCOLLECTIONSERVICE().updateDeck(
                 id, user.getId(), name, description);
 
         if (updatedDeck == null) {
@@ -310,9 +311,9 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
-        boolean deleted = cardCollectionService.deleteDeck(id, user.getId());
+        boolean deleted = getCARDCOLLECTIONSERVICE().deleteDeck(id, user.getId());
         if (!deleted) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -333,9 +334,9 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
-        CardInDeckDTO result = cardCollectionService.addCardToDeck(
+        CardInDeckDTO result = getCARDCOLLECTIONSERVICE().addCardToDeck(
                 deckId, user.getId(), cardId, quantity);
 
         if (result == null) {
@@ -357,9 +358,9 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
-        boolean removed = cardCollectionService.removeCardFromDeck(
+        boolean removed = getCARDCOLLECTIONSERVICE().removeCardFromDeck(
                 deckId, user.getId(), cardId);
 
         if (!removed) {
@@ -381,9 +382,9 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
-        CardInDeckDTO result = cardCollectionService.increaseCardQuantity(
+        CardInDeckDTO result = getCARDCOLLECTIONSERVICE().increaseCardQuantity(
                 deckId, user.getId(), cardId);
 
         if (result == null) {
@@ -405,9 +406,9 @@ public class DeckController {
         }
 
         String username = authentication.getName();
-        UrzaUser user = urzaUserService.findByUsername(username);
+        UrzaUser user = getURZAUSERSERVICE().findByUsername(username);
 
-        CardInDeckDTO result = cardCollectionService.decreaseCardQuantity(
+        CardInDeckDTO result = getCARDCOLLECTIONSERVICE().decreaseCardQuantity(
                 deckId, user.getId(), cardId);
 
         if (result == null) {

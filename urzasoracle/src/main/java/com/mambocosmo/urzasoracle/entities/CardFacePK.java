@@ -1,8 +1,8 @@
-package com.mambocosmo.urzasoracle.entities;
+// package com.mambocosmo.urzasoracle.entities;
 
-import java.util.UUID;
+// import java.util.UUID;
 
-public class CardFacePK {
-    private String name;
-    private UUID card_id;
-}
+// public class CardFacePK {
+//     private String name;
+//     private UUID card_id;
+// }

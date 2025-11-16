@@ -39,14 +39,14 @@ public class CardCollectionController {
 
    @GetMapping("/allCardCollection")
    public ResponseEntity<List<CardCollectionDTO>> getAllCardCollection() {
-      List<CardCollectionDTO> cardCollections = CARDCOLLECTIONSERVICE.getAll();
+      List<CardCollectionDTO> cardCollections = getCARDCOLLECTIONSERVICE().getAll();
 
       return ResponseEntity.ok().body(cardCollections);
    }
 
    @GetMapping("byId/{id}")
    public ResponseEntity<CardCollectionDTO> CardExpansionSetById(@PathVariable UUID id) {
-      CardCollectionDTO c = CARDCOLLECTIONSERVICE.getByID(id);
+      CardCollectionDTO c = getCARDCOLLECTIONSERVICE().getByID(id);
       if (c != null) {
 
          return ResponseEntity.ok().body(c);
@@ -58,12 +58,12 @@ public class CardCollectionController {
 
    @PostMapping("/save")
    public ResponseEntity<Boolean> save(@RequestParam Map<String, String> params) {
-      return ResponseEntity.ok().body(CARDCOLLECTIONSERVICE.save(params));
+      return ResponseEntity.ok().body(getCARDCOLLECTIONSERVICE().save(params));
    }
 
    @PostMapping("/delete/{id}")
    public ResponseEntity<Void> deleteCardExpansionSet(@PathVariable UUID id) {
-      CARDCOLLECTIONSERVICE.delete(id);
+      getCARDCOLLECTIONSERVICE().delete(id);
 
       return ResponseEntity.noContent().build();
    }

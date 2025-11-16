@@ -1,9 +1,5 @@
 package com.mambocosmo.urzasoracle.converters;
 
-import java.sql.Date;
-import java.time.LocalDate;
-
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.mambocosmo.urzasoracle.DTO.UrzaUserDTO;
@@ -15,6 +11,8 @@ import lombok.Data;
 @Data
 public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO> {
 
+    private final CardCollectionConverter CARDCOLLECTIONCONVERTER;
+
     @Override
     public UrzaUser fromDToE(UrzaUserDTO dto) {
         UrzaUser u = new UrzaUser();
@@ -23,9 +21,11 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         u.setEmail(dto.getEmail());
         u.setDisplayName(dto.getDisplayName());
         u.setAuthorities(dto.getAuthorities());
-        u.setRegisterDate(dto.getRegistrerDate());
-        u.setUserDecks(dto.getUserDecks());
-
+        u.setRegisterDate(dto.getRegisterDate());
+        dto.getUserDecks().forEach(entry -> {
+            u.getUserDecks().add(getCARDCOLLECTIONCONVERTER().fromDToE(entry));
+        });;
+        
         return u;
     }
 
@@ -37,10 +37,11 @@ public class UrzaUserConverter implements GenericConverter<UrzaUser, UrzaUserDTO
         dto.setEmail(e.getEmail());
         dto.setDisplayName(e.getDisplayName());
         dto.setAuthorities(e.getAuthorities());
-        System.out.println(e.getRegisterDate());
-        dto.setRegistrerDate(e.getRegisterDate());
-        dto.setUserDecks(e.getUserDecks());
-
+        dto.setRegisterDate(e.getRegisterDate());
+        e.getUserDecks().forEach(entry -> {
+            dto.getUserDecks().add(getCARDCOLLECTIONCONVERTER().fromEToD(entry));
+        });;
+        
         return dto;
     }
 

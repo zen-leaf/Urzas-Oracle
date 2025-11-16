@@ -14,15 +14,12 @@ import com.mambocosmo.urzasoracle.entities.CardPart;
 import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.entities.UrzaUser;
 import com.mambocosmo.urzasoracle.misc.Utils.SearchCriteria;
-import com.mambocosmo.urzasoracle.services.UrzaUserService;
 
 import lombok.Data;
 
 @Data
 @Configuration
 public class EntityConfiguration {
-
-    private final UrzaUserService URZAUSERSERVICE;
 
     @Bean
     @Scope("prototype")
@@ -62,8 +59,9 @@ public class EntityConfiguration {
         CardCollection cc = new CardCollection();
         cc.fromMap(fromData);
         // TODO placeholder per testing
-        UrzaUser u = getURZAUSERSERVICE().findByUsername("dummy_user");
-        cc.setOwner(u);
+        // if(fromData.containsKey("user_id"))
+        //     UrzaUser u = getURZAUSERSERVICE().findById(UUID.fromString(fromData.get("user_id")));
+        // cc.setOwner(u);
         return cc;
     }
 

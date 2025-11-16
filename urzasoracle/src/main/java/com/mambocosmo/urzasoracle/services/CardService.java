@@ -58,11 +58,13 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         if (fromEntity.getAll_parts() == null) {
             fromEntity.setAll_parts(new ArrayList<>());
         }
-
-        if (fromEntity.getCard_faces() == null) {
+        
+        if (fromEntity.getCard_faces() == null 
+        // || !fromEntity.getCard_faces().isEmpty()
+        ) {
             fromEntity.setCard_faces(new ArrayList<>());
         }
-
+        
         // System.out.println("Card from expansion:" +
         // fromEntity.getExpansion().getName());
 
@@ -87,8 +89,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         return out;
     }
 
-    // TODO IMPORTANT THIS METHOD IS HERE ONLY FOR COMMENT TESTING, CREATE COMMENT
-    // DTO AND USE THAT
+    // TODO let's see if unused
     public List<Card> getByNameEntity(String name) {
         List<Card> out = getREPOSITORY().findByNameContainingIgnoreCase(name).stream().map(e -> {
             return e;

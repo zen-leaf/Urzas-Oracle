@@ -102,7 +102,7 @@ public class Card extends GenericEntity {
     @CollectionTable(name = "card_keyword_table", joinColumns = @JoinColumn(name = "card_id"))
     private Set<String> keywords;
 
-    @OneToMany(mappedBy = "faceOfCard", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @OneToMany(mappedBy = "faceOfCard", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
     // @JsonUnwrapped
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CardFace> card_faces;
