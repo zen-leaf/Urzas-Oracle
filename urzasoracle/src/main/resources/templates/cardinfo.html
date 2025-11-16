@@ -6,8 +6,8 @@
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   </div>
-    <link href="/css/manasymbols.css" rel="stylesheet" />
-    <link href="/css/comments.css" rel="stylesheet" />
+  <link href="/css/manasymbols.css" rel="stylesheet" />
+  <link href="/css/comments.css" rel="stylesheet" />
 </head>
 
 
@@ -59,7 +59,7 @@
         </div>
 
       </div>
-
+<p th:text="${card}"></p>
       <!-- Informazioni sulla carta -->
       <div class=" col-sm-7 col-md-7 col-xl-7 p-4 cardinfoholder">
         <div class="row">
@@ -165,14 +165,6 @@
 
   <div th:replace="~{fragments/footer :: footer}"></div>
 
-  <style>
-    body {
-      background: radial-gradient(60% 40% at 20% 10%, rgba(123, 31, 162, 0.15), transparent 60%),
-        radial-gradient(50% 35% at 80% 20%, rgba(255, 193, 7, 0.08), transparent 60%),
-        linear-gradient(180deg, #0b0f1a 0%, #1a1033 50%, #0b0f1a 100%);
-      min-height: 100vh;
-    }
-  </style>
   <script src="/js/cardrotate.js" defer></script>
   <script th:inline="javascript">
     const cardId = /*[[${card.id}]]*/'';
