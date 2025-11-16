@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import com.mambocosmo.urzasoracle.entities.CommentOnCard;
 import com.mambocosmo.urzasoracle.services.CardService;
 import com.mambocosmo.urzasoracle.services.CommentOnCardService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 
 @Controller
@@ -45,7 +47,7 @@ public class CardController {
 
     @GetMapping("/cards/{id}")
     @Transactional(readOnly = true)
-    public String getCardInfo(@PathVariable UUID id, Model model) {
+    public String getCardInfo(@PathVariable UUID id, Model model, HttpServletRequest request){
         try {
             CardDTO card = getCARDSERVICE().getCardById(id);
             if (card == null) {
@@ -53,13 +55,18 @@ public class CardController {
                 return "redirect:/cards";
             }
 
-            List<CommentOnCardDTO> comments = getCOMMENTONCARDSERVICE().getCommentsByCard(card.getId()); 
+            List<CommentOnCardDTO> comments = getCOMMENTONCARDSERVICE().getCommentsByCard(card.getId());
             // Log per debug
             System.out.println("Card found: " + card.getName());
 
             model.addAttribute("card", card);
             model.addAttribute("active", "cards");
             model.addAttribute("comments", comments);
+
+            CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            model.addAttribute("csrfToken", csrf != null ? csrf.getToken() : "");
+            model.addAttribute("csrfHeader", csrf != null ? csrf.getHeaderName() : "X-CSRF-TOKEN");
+
             return "cardinfo";
         } catch (Exception e) {
             System.err.println("Error loading card: " + e.getMessage());
