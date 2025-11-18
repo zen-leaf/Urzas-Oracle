@@ -28,8 +28,8 @@ public class Util {
         try {
             InputStream stream = new BufferedInputStream(new URI(from).toURL().openStream());
             ReadableByteChannel bc = Channels.newChannel(stream);
-            FileOutputStream fos = new FileOutputStream(System.getProperty("java.io.tmpdir") + "Urza\\" + to);
             Files.createDirectories(Paths.get(System.getProperty("java.io.tmpdir") + "Urza\\"));
+            FileOutputStream fos = new FileOutputStream(System.getProperty("java.io.tmpdir") + "Urza\\" + to);
 
             FileChannel fc = fos.getChannel();
             fc.transferFrom(bc, 0, Long.MAX_VALUE);
