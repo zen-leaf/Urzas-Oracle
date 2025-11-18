@@ -1,826 +1,119 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-  <head
-    th:replace="~{fragments/head :: head('Profilo - Urza\'s Oracle')}"
-  ></head>
 
-  <body class="bg-dark text-light">
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+<head th:replace="~{fragments/head :: head('Profilo - Urza\'s Oracle')}"></head>
 
-    <main class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="card bg-dark border-warning shadow-lg">
-            <div class="card-header bg-dark border-warning p-4 text-center">
-              <h1
-                class="text-warning fw-bold mb-2"
-                style="text-shadow: 0 0 20px rgba(255, 193, 7, 0.5)"
-              >
-                Il Mio Profilo
-              </h1>
-              <p class="text-secondary mb-0">
-                Gestisci le informazioni del tuo account
-              </p>
+<body class="bg-dark text-light">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <main class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card bg-dark border-warning shadow-lg">
+          <div class="card-header bg-dark border-warning p-4 text-center">
+            <h1 class="text-warning fw-bold mb-2" style="text-shadow: 0 0 20px rgba(255, 193, 7, 0.5)">
+              Profile
+            </h1>
+            <p class="text-secondary mb-0">
+              Modify your account information.
+            </p>
+          </div>
+
+          <div class="card-body p-5">
+            <h5 class="text-warning fw-bold mb-4 border-bottom border-warning pb-2">
+              Account information
+            </h5>
+
+            <form th:action="@{/profile/update}" method="post" class="mb-5">
+              <div class="mb-4">
+                <label for="username" class="form-label text-warning fw-bold">Username</label>
+                <input type="text" id="username"
+                  class="form-control bg-dark text-secondary border-warning form-control-lg" th:value="${user.username}"
+                  disabled />
+              </div>
+
+              <div class="mb-4">
+                <label for="email" class="form-label text-warning fw-bold">Email</label>
+                <input type="email" id="email" name="email"
+                  class="form-control bg-dark text-warning border-warning form-control-lg" th:value="${user.email}"
+                  required />
+              </div>
+
+              <div class="mb-4">
+                <label for="displayName" class="form-label text-warning fw-bold">Display name</label>
+                <input type="text" id="displayName" name="displayName"
+                  class="form-control bg-dark text-warning border-warning form-control-lg"
+                  th:value="${user.displayName}" placeholder="Come vuoi essere visto" maxlength="50" />
+              </div>
+
+              <div class="mb-4">
+                <label for="registerDate" class="form-label text-warning fw-bold">Member since:</label>
+
+                <input type="text" id="registerDate"
+                  class="form-control bg-dark text-secondary border-warning form-control-lg"
+                  th:value="${#dates.format(user.registerDate, 'dd MMMM yyyy')}" disabled />
+              </div>
+
+              <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold shadow mb-3">
+                Save
+              </button>
+            </form>
+
+            <div class="text-center mb-4">
+              <button type="button" class="btn btn-outline-warning fw-bold" onclick="togglePasswordSection()"
+                id="togglePasswordBtn">
+                Change password
+              </button>
             </div>
 
-            <div class="card-body p-5">
-              <h5
-                class="text-warning fw-bold mb-4 border-bottom border-warning pb-2"
-              >
-                Informazioni Personali
+            <div id="passwordSection" style="display: none" class="mb-5">
+              <h5 class="text-warning fw-bold mb-4 border-bottom border-warning pb-2">
+                Change password
               </h5>
 
-              <form th:action="@{/profile/update}" method="post" class="mb-5">
+              <form th:action="@{/profile/change-password}" method="post">
                 <div class="mb-4">
-                  <label for="username" class="form-label text-warning fw-bold"
-                    >Username</label
-                  >
-                  <input
-                    type="text"
-                    id="username"
-                    class="form-control bg-dark text-secondary border-warning form-control-lg"
-                    th:value="${user.username}"
-                    disabled
-                  />
-                  <small class="text-muted"
-                    >Il tuo username non può essere modificato</small
-                  >
+                  <label for="currentPassword" class="form-label text-warning fw-bold">Old password</label>
+                  <input type="password" id="currentPassword" name="currentPassword"
+                    class="form-control bg-dark text-warning border-warning form-control-lg" placeholder="" required />
                 </div>
 
                 <div class="mb-4">
-                  <label for="email" class="form-label text-warning fw-bold"
-                    >Email</label
-                  >
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="form-control bg-dark text-warning border-warning form-control-lg"
-                    th:value="${user.email}"
-                    required
-                  />
+                  <label for="newPassword" class="form-label text-warning fw-bold">New password</label>
+                  <input type="password" id="newPassword" name="newPassword"
+                    class="form-control bg-dark text-warning border-warning form-control-lg" placeholder="" required />
+
                 </div>
 
                 <div class="mb-4">
-                  <label
-                    for="displayName"
-                    class="form-label text-warning fw-bold"
-                    >Nome Visualizzato</label
-                  >
-                  <input
-                    type="text"
-                    id="displayName"
-                    name="displayName"
-                    class="form-control bg-dark text-warning border-warning form-control-lg"
-                    th:value="${user.displayName}"
-                    placeholder="Come vuoi essere visto"
-                    maxlength="50"
-                  />
+                  <label for="confirmNewPassword" class="form-label text-warning fw-bold">Confirm new password</label>
+                  <input type="password" id="confirmNewPassword" name="confirmNewPassword"
+                    class="form-control bg-dark text-warning border-warning form-control-lg" placeholder="" required />
                 </div>
 
-                <div class="mb-4">
-                  <label
-                    for="registerDate"
-                    class="form-label text-warning fw-bold"
-                    >Membro da</label
-                  >
+                <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold shadow mb-3">
+                  Submit password change request
+                </button>
 
-                  <input
-                    type="text"
-                    id="registerDate"
-                    class="form-control bg-dark text-secondary border-warning form-control-lg"
-                    th:value="${#dates.format(user.registerDate, 'dd MMMM yyyy')}"
-                    disabled
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  class="btn btn-warning btn-lg w-100 fw-bold shadow mb-3"
-                >
-                  Salva Modifiche
+                <button type="button" class="btn btn-outline-secondary w-100 fw-bold" onclick="togglePasswordSection()">
+                  Cancel
                 </button>
               </form>
-
-              <div class="text-center mb-4">
-                <button
-                  type="button"
-                  class="btn btn-outline-warning fw-bold"
-                  onclick="togglePasswordSection()"
-                  id="togglePasswordBtn"
-                >
-                  Cambia Password
-                </button>
-              </div>
-
-              <div id="passwordSection" style="display: none" class="mb-5">
-                <h5
-                  class="text-warning fw-bold mb-4 border-bottom border-warning pb-2"
-                >
-                  Cambia Password
-                </h5>
-
-                <form th:action="@{/profile/change-password}" method="post">
-                  <div class="mb-4">
-                    <label
-                      for="currentPassword"
-                      class="form-label text-warning fw-bold"
-                      >Password Attuale</label
-                    >
-                    <input
-                      type="password"
-                      id="currentPassword"
-                      name="currentPassword"
-                      class="form-control bg-dark text-warning border-warning form-control-lg"
-                      placeholder="Inserisci la tua password attuale"
-                      required
-                    />
-                  </div>
-
-                  <div class="mb-4">
-                    <label
-                      for="newPassword"
-                      class="form-label text-warning fw-bold"
-                      >Nuova Password</label
-                    >
-                    <input
-                      type="password"
-                      id="newPassword"
-                      name="newPassword"
-                      class="form-control bg-dark text-warning border-warning form-control-lg"
-                      placeholder="Crea una nuova password"
-                      minlength="6"
-                      required
-                    />
-                    <small class="text-muted">Minimo 6 caratteri</small>
-                  </div>
-
-                  <div class="mb-4">
-                    <label
-                      for="confirmNewPassword"
-                      class="form-label text-warning fw-bold"
-                      >Conferma Nuova Password</label
-                    >
-                    <input
-                      type="password"
-                      id="confirmNewPassword"
-                      name="confirmNewPassword"
-                      class="form-control bg-dark text-warning border-warning form-control-lg"
-                      placeholder="Ripeti la nuova password"
-                      minlength="6"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    class="btn btn-warning btn-lg w-100 fw-bold shadow mb-3"
-                  >
-                    Conferma Cambio Password
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary w-100 fw-bold"
-                    onclick="togglePasswordSection()"
-                  >
-                    Annulla
-                  </button>
-                </form>
-              </div>
-
-              <div th:if="${user.admin}" class="mb-5">
-                <h5
-                  class="text-warning fw-bold mb-4 border-bottom border-warning pb-2"
-                >
-                  👑 Pannello Amministratore
-                </h5>
-
-                <div class="text-center mb-4">
-                  <button
-                    type="button"
-                    class="btn btn-warning btn-lg w-100 fw-bold shadow"
-                    onclick="toggleAdminSection()"
-                    id="toggleAdminBtn"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      class="bi bi-people-fill me-2"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"
-                      />
-                    </svg>
-                    Gestisci Utenti Registrati
-                  </button>
-                </div>
-
-                <div id="adminSection" style="display: none">
-                  <div
-                    th:if="${param.success == 'user_deleted'}"
-                    class="alert alert-success alert-dismissible fade show mb-3"
-                    role="alert"
-                  >
-                    Utente eliminato con successo
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="alert"
-                    ></button>
-                  </div>
-
-                  <div
-                    th:if="${param.success == 'user_updated'}"
-                    class="alert alert-success alert-dismissible fade show mb-3"
-                    role="alert"
-                  >
-                    Utente modificato con successo
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="alert"
-                    ></button>
-                  </div>
-
-                  <div
-                    th:if="${param.error == 'cannot_delete_self'}"
-                    class="alert alert-danger alert-dismissible fade show mb-3"
-                    role="alert"
-                  >
-                    Non puoi eliminare il tuo account admin
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="alert"
-                    ></button>
-                  </div>
-
-                  <div
-                    th:if="${param.error == 'cannot_delete_admin'}"
-                    class="alert alert-danger alert-dismissible fade show mb-3"
-                    role="alert"
-                  >
-                    Non puoi eliminare altri amministratori
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="alert"
-                    ></button>
-                  </div>
-
-                  <div
-                    th:if="${param.error == 'cannot_edit_admin'}"
-                    class="alert alert-danger alert-dismissible fade show mb-3"
-                    role="alert"
-                  >
-                    Non puoi modificare altri amministratori
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="alert"
-                    ></button>
-                  </div>
-
-                  <div
-                    class="p-3 border border-warning rounded"
-                    style="
-                      background: linear-gradient(
-                        135deg,
-                        rgba(255, 193, 7, 0.05) 0%,
-                        rgba(255, 193, 7, 0.02) 100%
-                      );
-                    "
-                  >
-                    <div class="mb-3">
-                      <span class="badge bg-warning text-dark fs-6 px-3 py-2">
-                        Totale Utenti:
-                        <span th:text="${#lists.size(allUsers)}">0</span>
-                      </span>
-                    </div>
-
-                    <div class="table-responsive">
-                      <table
-                        class="table table-dark table-hover table-bordered mb-0"
-                      >
-                        <thead class="table-warning">
-                          <tr>
-                            <th class="text-dark fw-bold">Username</th>
-                            <th class="text-dark fw-bold">Nome Visualizzato</th>
-                            <th class="text-dark fw-bold">Email</th>
-                            <th class="text-dark fw-bold">Ruolo</th>
-                            <th class="text-dark fw-bold">
-                              Data Registrazione
-                            </th>
-                            <th
-                              class="text-dark fw-bold text-center"
-                              style="min-width: 180px"
-                            >
-                              Azioni
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            th:each="u : ${allUsers}"
-                            th:classappend="${u.id == user.id} ? 'table-active' : ''"
-                          >
-                            <td class="text-light" th:text="${u.username}">
-                              username
-                            </td>
-                            <td class="text-light" th:text="${u.displayName}">
-                              Display Name
-                            </td>
-                            <td class="text-light" th:text="${u.email}">
-                              email@example.com
-                            </td>
-                            <td>
-                              <span
-                                th:if="${u.admin}"
-                                class="badge bg-danger px-2 py-1"
-                                >ADMIN</span
-                              >
-                              <span
-                                th:unless="${u.admin}"
-                                class="badge bg-secondary px-2 py-1"
-                                >USER</span
-                              >
-                            </td>
-                            <td
-                              class="text-light"
-                              th:text="${#dates.format(u.registerDate, 'dd/MM/yyyy')}"
-                            >
-                              01/01/2025
-                            </td>
-                            <td class="text-center">
-                              <div
-                                th:if="${!u.admin && u.id != user.id}"
-                                class="d-flex justify-content-center gap-2"
-                              >
-                                <button
-                                  type="button"
-                                  class="btn btn-primary btn-sm d-flex align-items-center"
-                                  style="min-width: 85px"
-                                  th:data-user-id="${u.id}"
-                                  th:data-username="${u.username}"
-                                  th:data-displayname="${u.displayName}"
-                                  th:data-email="${u.email}"
-                                  onclick="showEditModalFromData(this)"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="14"
-                                    height="14"
-                                    fill="currentColor"
-                                    class="bi bi-pencil-fill me-1"
-                                    viewBox="0 0 16 16"
-                                  >
-                                    <path
-                                      d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
-                                    />
-                                  </svg>
-                                  Modifica
-                                </button>
-                                <button
-                                  type="button"
-                                  class="btn btn-danger btn-sm d-flex align-items-center"
-                                  style="min-width: 85px"
-                                  th:data-user-id="${u.id}"
-                                  th:data-username="${u.username}"
-                                  onclick="showDeleteModal(this)"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="14"
-                                    height="14"
-                                    fill="currentColor"
-                                    class="bi bi-trash-fill me-1"
-                                    viewBox="0 0 16 16"
-                                  >
-                                    <path
-                                      d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
-                                    />
-                                  </svg>
-                                  Elimina
-                                </button>
-                              </div>
-                              <span
-                                th:if="${u.id == user.id}"
-                                class="badge bg-info text-dark px-3 py-2"
-                                >Tu</span
-                              >
-                              <span
-                                th:if="${u.admin && u.id != user.id}"
-                                class="badge bg-secondary px-3 py-2"
-                                >Protetto</span
-                              >
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="text-center mt-5 pt-4 border-top border-secondary">
-                <p class="text-secondary mb-3">Vuoi uscire dal tuo account?</p>
-                <form
-                  th:action="@{/auth/logout}"
-                  method="post"
-                  class="d-inline"
-                >
-                  <button
-                    type="submit"
-                    class="btn btn-outline-danger btn-lg fw-bold px-5"
-                  >
-                    Logout
-                  </button>
-                </form>
-              </div>
             </div>
+            <div th:if="${user.admin}" th:replace="~{fragments/adminpanel :: adminpanel}"></div>
           </div>
-        </div>
-      </div>
-    </main>
-
-    <div
-      class="modal fade"
-      id="editUserModal"
-      tabindex="-1"
-      aria-labelledby="editUserModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-warning">
-          <div class="modal-header border-warning">
-            <h5
-              class="modal-title text-warning fw-bold"
-              id="editUserModalLabel"
-            >
-              Modifica Utente
-            </h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <form id="editUserForm" method="post">
-            <input
-              type="hidden"
-              th:name="${_csrf.parameterName}"
-              th:value="${_csrf.token}"
-            />
-
-            <div class="modal-body">
-              <input type="hidden" id="editUserId" name="userId" />
-
-              <div class="mb-3">
-                <label
-                  for="editUsername"
-                  class="form-label text-warning fw-bold"
-                  >Username</label
-                >
-                <input
-                  type="text"
-                  class="form-control bg-dark text-warning border-warning"
-                  id="editUsername"
-                  name="username"
-                  required
-                />
-              </div>
-
-              <div class="mb-3">
-                <label
-                  for="editDisplayName"
-                  class="form-label text-warning fw-bold"
-                  >Nome Visualizzato</label
-                >
-                <input
-                  type="text"
-                  class="form-control bg-dark text-warning border-warning"
-                  id="editDisplayName"
-                  name="displayName"
-                  required
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="editEmail" class="form-label text-warning fw-bold"
-                  >Email</label
-                >
-                <input
-                  type="email"
-                  class="form-control bg-dark text-warning border-warning"
-                  id="editEmail"
-                  name="email"
-                  required
-                />
-              </div>
-            </div>
-            <div class="modal-footer border-warning">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                data-bs-dismiss="modal"
-              >
-                Annulla
-              </button>
-              <button type="submit" class="btn btn-warning fw-bold">
-                Salva Modifiche
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
+  </main>
 
-    <div
-      class="modal fade"
-      id="deleteUserModal"
-      tabindex="-1"
-      aria-labelledby="deleteUserModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-danger">
-          <div class="modal-header border-danger">
-            <h5
-              class="modal-title text-danger fw-bold"
-              id="deleteUserModalLabel"
-            >
-              ⚠️ Conferma Eliminazione
-            </h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <form id="deleteUserForm" method="post">
-            <input
-              type="hidden"
-              th:name="${_csrf.parameterName}"
-              th:value="${_csrf.token}"
-            />
 
-            <div class="modal-body">
-              <div class="alert alert-danger" role="alert">
-                <strong>Attenzione!</strong> Questa azione è irreversibile.
-              </div>
 
-              <p class="text-light mb-3">
-                Stai per eliminare l'utente
-                <strong id="deleteUsernameDisplay" class="text-warning"></strong
-                >.
-              </p>
+  <div th:replace="~{fragments/footer :: footer}"></div>
 
-              <p class="text-light mb-3">
-                Per confermare, scrivi esattamente il nome utente nel campo
-                sottostante:
-              </p>
+  <script>
+    
+  </script>
+</body>
 
-              <div class="mb-3">
-                <label
-                  for="confirmUsername"
-                  class="form-label text-warning fw-bold"
-                  >Conferma Username</label
-                >
-                <input
-                  type="text"
-                  class="form-control bg-dark text-warning border-danger"
-                  id="confirmUsername"
-                  placeholder="Scrivi il nome utente"
-                  autocomplete="off"
-                  required
-                />
-                <div
-                  id="usernameError"
-                  class="text-danger mt-2"
-                  style="display: none"
-                >
-                  Il nome utente non corrisponde!
-                </div>
-              </div>
-
-              <input type="hidden" id="deleteUserId" />
-              <input type="hidden" id="deleteUsername" />
-            </div>
-            <div class="modal-footer border-danger">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                data-bs-dismiss="modal"
-              >
-                Annulla
-              </button>
-              <button
-                type="button"
-                onclick="confirmDelete()"
-                class="btn btn-danger fw-bold"
-              >
-                Elimina Utente
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div th:replace="~{fragments/footer :: footer}"></div>
-
-    <style>
-      body {
-        background: linear-gradient(
-          180deg,
-          #0b0f1a 0%,
-          #1a1033 50%,
-          #0b0f1a 100%
-        );
-        font-family: "Roboto", sans-serif;
-        min-height: 100vh;
-      }
-
-      .card {
-        border-radius: 0.5rem;
-        transition: all 0.3s ease;
-      }
-
-      .card:hover {
-        box-shadow: 0 0 30px rgba(255, 193, 7, 0.3) !important;
-      }
-
-      .form-control {
-        transition: all 0.3s ease;
-      }
-
-      .form-control:focus {
-        background-color: #1a1a1a;
-        color: #ffc107;
-        border-color: #ffc107;
-        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
-      }
-
-      .form-control:disabled {
-        background-color: #0f1419;
-        border-color: #495057;
-      }
-
-      .btn-warning:hover {
-        background-color: #ffce3d;
-        transform: scale(1.02);
-        box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
-      }
-
-      .btn-outline-warning:hover {
-        background-color: #ffc107;
-        color: #000;
-        box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
-      }
-
-      .btn-outline-danger:hover {
-        background-color: #dc3545;
-        color: #fff;
-        box-shadow: 0 0 15px rgba(220, 53, 69, 0.4);
-      }
-
-      .btn-outline-secondary:hover {
-        background-color: #6c757d;
-        color: #fff;
-      }
-
-      h1,
-      h5 {
-        letter-spacing: 0.5px;
-      }
-
-      #passwordSection,
-      #adminSection {
-        animation: fadeIn 0.3s ease-in;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .modal-content {
-        box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
-      }
-
-      .gap-2 {
-        gap: 0.5rem !important;
-      }
-
-      .btn-sm {
-        padding: 0.375rem 0.75rem;
-        font-size: 0.875rem;
-      }
-    </style>
-
-    <script>
-      function togglePasswordSection() {
-        const section = document.getElementById("passwordSection");
-        const btn = document.getElementById("togglePasswordBtn");
-
-        if (section.style.display === "none") {
-          section.style.display = "block";
-          btn.style.display = "none";
-        } else {
-          section.style.display = "none";
-          btn.style.display = "inline-block";
-        }
-      }
-
-      function toggleAdminSection() {
-        const section = document.getElementById("adminSection");
-        const btn = document.getElementById("toggleAdminBtn");
-
-        if (section.style.display === "none") {
-          section.style.display = "block";
-          btn.textContent = "Nascondi Gestione Utenti";
-        } else {
-          section.style.display = "none";
-          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill me-2" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/></svg>Gestisci Utenti Registrati`;
-        }
-      }
-
-      function showEditModalFromData(button) {
-        const userId = button.getAttribute("data-user-id");
-        const username = button.getAttribute("data-username");
-        const displayName = button.getAttribute("data-displayname");
-        const email = button.getAttribute("data-email");
-
-        document.getElementById("editUserId").value = userId;
-        document.getElementById("editUsername").value = username;
-        document.getElementById("editDisplayName").value = displayName;
-        document.getElementById("editEmail").value = email;
-
-        document.getElementById("editUserForm").action =
-          "/profile/edit-user/" + userId;
-
-        var modal = new bootstrap.Modal(
-          document.getElementById("editUserModal")
-        );
-        modal.show();
-      }
-
-      function showDeleteModal(button) {
-        const userId = button.getAttribute("data-user-id");
-        const username = button.getAttribute("data-username");
-
-        document.getElementById("deleteUserId").value = userId;
-        document.getElementById("deleteUsername").value = username;
-        document.getElementById("deleteUsernameDisplay").textContent = username;
-        document.getElementById("confirmUsername").value = "";
-        document.getElementById("usernameError").style.display = "none";
-        document
-          .getElementById("confirmUsername")
-          .classList.remove("border-danger");
-
-        var modal = new bootstrap.Modal(
-          document.getElementById("deleteUserModal")
-        );
-        modal.show();
-      }
-
-      function confirmDelete() {
-        const username = document.getElementById("deleteUsername").value;
-        const confirmUsername =
-          document.getElementById("confirmUsername").value;
-        const userId = document.getElementById("deleteUserId").value;
-
-        if (confirmUsername === username) {
-          document.getElementById("deleteUserForm").action =
-            "/profile/delete-user/" + userId;
-          document.getElementById("deleteUserForm").submit();
-        } else {
-          document.getElementById("usernameError").style.display = "block";
-          document
-            .getElementById("confirmUsername")
-            .classList.add("border-danger");
-        }
-      }
-
-      const confirmUsernameInput = document.getElementById("confirmUsername");
-      if (confirmUsernameInput) {
-        confirmUsernameInput.addEventListener("input", function () {
-          document.getElementById("usernameError").style.display = "none";
-          this.classList.remove("border-danger");
-        });
-      }
-    </script>
-  </body>
 </html>

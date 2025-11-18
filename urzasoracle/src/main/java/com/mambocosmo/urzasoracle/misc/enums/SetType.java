@@ -23,5 +23,6 @@ public enum SetType {
     funny,
     duel_deck,
     masterpiece,
-    arsenal
+    arsenal,
+    minigame
 }
