@@ -1,9 +1,12 @@
-{
-    "properties": [
-        {
-            "name": "urza.bulkfetchtype",
-            "type": "java.lang.String",
-            "description": "defines the type of bulk data to fetch to update the database. one of: selected_batch, oracle_cards, unique_artworks, default_cards, all_cards. WARNING - anything other than selected_batch will result in very long save times due to the amount of entries to save."
-        }
-    ]
-}
+{"properties": [
+  {
+    "name": "urza.bulkfetchtype",
+    "type": "java.lang.String",
+    "description": "defines the type of bulk data to fetch to update the database. one of: selected_batch, oracle_cards, unique_artworks, default_cards, all_cards. WARNING - anything other than selected_batch will result in very long save times due to the amount of entries to save."
+  },
+  {
+    "name": "urza.dataloader.json-location",
+    "type": "java.lang.String",
+    "description": "classpath for json batch file"
+  }
+]}

@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "UrzasoracleApplication",
+            "request": "launch",
+            "mainClass": "com.mambocosmo.urzasoracle.UrzasoracleApplication",
+            "projectName": "urzasoracle"
+        },
+        {
+            "name": "Spring Boot (Local Profile)",
+            "type": "java",
+            "request": "launch",
+            "mainClass": "com.mambocosmo.urzasoracle.UrzasoracleApplication",
+            "projectName": "urzasoracle",
+            "args": "--spring.profiles.active=local"
+        },
+        {
+            "name": "Spring Boot (Default/Production)",
+            "type": "java",
+            "request": "launch",
+            "mainClass": "com.mambocosmo.urzasoracle.UrzasoracleApplication",
+            "projectName": "urzasoracle"
+        }
+    ]
+}

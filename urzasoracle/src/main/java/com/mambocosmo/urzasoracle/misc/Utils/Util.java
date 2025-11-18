@@ -12,6 +12,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,17 +25,19 @@ import lombok.Data;
 @Data
 public class Util {
 
-    public static String downloadTempFile(String from, String to) {
+    public static Path downloadTempFile(String from, String to) {
+        Path absolutePath = Paths.get("/tmp/urza", to);
         try {
             InputStream stream = new BufferedInputStream(new URI(from).toURL().openStream());
             ReadableByteChannel bc = Channels.newChannel(stream);
-            FileOutputStream fos = new FileOutputStream(System.getProperty("java.io.tmpdir") + "Urza\\" + to);
-            Files.createDirectories(Paths.get(System.getProperty("java.io.tmpdir") + "Urza\\"));
-
+            Files.createDirectories(Paths.get("/tmp/urza/"));
+            FileOutputStream fos = new FileOutputStream(absolutePath.toFile());
+            absolutePath.toFile().getPath();
             FileChannel fc = fos.getChannel();
             fc.transferFrom(bc, 0, Long.MAX_VALUE);
             fos.close();
-            return System.getProperty("java.io.tmpdir") + "Urza\\" + to;
+            System.out.println("TEMPDIR " + absolutePath.toString());
+            return absolutePath;
 
         } catch (IOException | URISyntaxException e) {
             // TODO Auto-generated catch block

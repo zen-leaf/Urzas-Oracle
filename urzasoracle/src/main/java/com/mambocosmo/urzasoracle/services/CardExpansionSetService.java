@@ -39,12 +39,10 @@ public class CardExpansionSetService extends
         return getREPOSITORY().count();
     }
 
-    public List<CardExpansionSet> generateSetsFromJSON(String path) {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode setData;
+    public List<CardExpansionSet> generateSetsFromJSON(File file) {
         try {
-            System.out.println(path);
-            setData = mapper.readTree(new File(path)).get("data");
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode setData = mapper.readTree(file).get("data");
             // System.out.println(setData.get("data"));
 
             List<CardExpansionSet> setList = new ArrayList<>();
@@ -70,7 +68,7 @@ public class CardExpansionSetService extends
             System.out.println("Completed set generation - Generated " + setList.size() +
                     " sets in "
                     + Double.valueOf((System.nanoTime() - myTimer)) / 1000000000 + " seconds");
-
+            System.out.println("DOWNLOADSETS: " + file.getPath());
             return setList;
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -78,6 +76,12 @@ public class CardExpansionSetService extends
             return null;
 
         }
+    }
+
+    public List<CardExpansionSet> generateSetsFromJSON(String path) {
+        File file = new File(path);
+        return generateSetsFromJSON(file);
+
     }
 
 }

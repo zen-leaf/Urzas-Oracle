@@ -10,6 +10,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,8 +44,11 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     private final CardConverter CARDCONVERTER;
     private final CommentOnCardRepository COMMENTONCARDREPOSITORY;
     private final CardExpansionSetService SETSERVICE;
+    private final ResourceLoader resLoad;
     @Value("${urza.bulkfetchtype}")
     private String bulkdatadownloadtype;
+    @Value("${urza.dataloader.json-location}")
+    private String batchjsonPath;
 
     @Override
     public Card construct(Map<String, String> fromData) {
@@ -58,13 +63,13 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         if (fromEntity.getAll_parts() == null) {
             fromEntity.setAll_parts(new ArrayList<>());
         }
-        
-        if (fromEntity.getCard_faces() == null 
+
+        if (fromEntity.getCard_faces() == null
         // || !fromEntity.getCard_faces().isEmpty()
         ) {
             fromEntity.setCard_faces(new ArrayList<>());
         }
-        
+
         // System.out.println("Card from expansion:" +
         // fromEntity.getExpansion().getName());
 
@@ -145,6 +150,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
 
             return cardList;
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -156,7 +162,7 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         String filePath;
         String bPath = Util.downloadTempFile(
                 "https://api.scryfall.com/bulk-data/" + bulkdatadownloadtype,
-                "bulkdata.json");
+                "bulkdata.json").toString();
         try {
 
             bulkEntries = mapper.readTree(new File(bPath));
@@ -166,7 +172,9 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
             System.out.println("Fetching up to date " + bulkEntries.get("type").asText());
             filePath = Util.downloadTempFile(
                     bulkEntries.get("download_uri").asText(),
-                    bulkdatadownloadtype + ".json");
+                    bulkdatadownloadtype + ".json").toString();
+
+            System.out.println("DOWNLOAD: " + filePath);
             return filePath;
 
         } catch (IOException e) {
@@ -255,14 +263,21 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         if (dbsetnumber == 0L) {
             System.out.println("Fetching up to date set data");
             Util.downloadTempFile("https://api.scryfall.com/sets/", "sets.json");
-            getSETSERVICE().generateSetsFromJSON(Util.downloadTempFile("https://api.scryfall.com/sets/", "sets.json"));
+            getSETSERVICE().generateSetsFromJSON(
+                    Util.downloadTempFile("https://api.scryfall.com/sets/", "sets.json").toFile());
         }
         System.out.println("Number of card entries in database: " + dbelemnumber);
         if (dbelemnumber == 0L) {
+            System.out.println("Bulk download type: " + bulkdatadownloadtype);
             System.out.println(
                     "Populating empty database with default card pool - you can change the desired pool from application.properties");
             if (bulkdatadownloadtype.trim().equalsIgnoreCase("selected_batch")) {
-                generateCardsFromJSON("urzasoracle\\src\\main\\resources\\json\\selected_batch.json");
+                System.out.println("ABSOLUTEPATH");
+
+                System.out.println("/Urzapp/src/main/resources/json/selected_batch.json");
+
+                generateCardsFromJSON("/Urzapp/src/main/resources/json/selected_batch.json");
+
             } else {
                 generateCardsFromJSON(fetchBulkData());
             }

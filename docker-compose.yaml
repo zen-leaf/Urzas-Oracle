@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      # Required for the MySQL image to create the initial database
+      - MYSQL_ROOT_PASSWORD=admin
+      # MUST match DB_NAME=mydatabase_db in .env.docker
+      - MYSQL_DATABASE=urzas_db_docker
+    networks:
+      - stack
+    healthcheck:
+      # Use 127.0.0.1 and $$ to securely access environment variable within the container shell
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "--password=$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s # <-- Added: Grace period for MySQL initialization
+
+  application:
+    container_name: application
+    image: zenleaf/urzasoracle
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    # This file will pass the correct connection details to the Spring Boot app
+    env_file:
+      - .env.docker
+    networks:
+      - stack
+    depends_on:
+      mysql:
+        condition: service_healthy # Wait for the DB to be fully ready before starting app
+
+networks:
+  stack:
+    name: stack
+    driver: bridge
