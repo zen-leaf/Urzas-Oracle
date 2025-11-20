@@ -1,298 +1,123 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-  <head
-    th:replace="~{fragments/head :: head('Registrati - Urza\'s Oracle')}"
-  ></head>
 
-  <body class="bg-dark text-light">
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+<head th:replace="~{fragments/head :: head('Registrati - Urza\'s Oracle')}"></head>
 
-    <section
-      class="container d-flex flex-column align-items-center justify-content-center py-5"
-      style="min-height: 90vh"
-    >
-      <div
-        class="card bg-dark text-light border-warning shadow-lg p-5"
-        style="width: 100%; max-width: 500px"
-      >
-        <div class="mb-4 text-center">
-          <h1 class="display-5 fw-bold text-warning mb-3">
-            Unisciti a Urza's Oracle
-          </h1>
-          <p class="lead text-white fs-4 mb-0">
-            Crea il tuo account e inizia a giocare
-          </p>
+<body class="bg-dark text-light">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <section class="container d-flex flex-column align-items-center justify-content-center py-5" style="min-height: 90vh">
+    <div class="card bg-dark text-light border-warning shadow-lg p-5" style="width: 100%; max-width: 500px">
+      <div class="mb-4 text-center">
+        <h1 class="display-5 fw-bold text-warning mb-3">
+          Join Urza's Oracle.
+        </h1>
+        <p class="lead text-white fs-4 mb-0">
+          Create decks and post comments to let others know how you feel!
+        </p>
+      </div>
+
+      <form th:action="@{/auth/register}" method="post" class="needs-validation" novalidate>
+        <div class="mb-4">
+          <label for="username" class="form-label text-warning fw-bold mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffc107" class="bi bi-person"
+              viewBox="0 0 16 16">
+              <path
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm.027 7a5.007 5.007 0 0 0-9.054 0H1a6 6 0 0 1 12 0H10.027z" />
+            </svg>
+            Username
+          </label>
+          <input type="text" id="username" name="username"
+            class="form-control bg-dark text-warning border-warning form-control-lg" placeholder="Scegli un username"
+            minlength="3" required />
+          <div class="invalid-feedback text-warning">
+            Username must be at least 3 characters long. </div>
         </div>
 
-        <form
-          th:action="@{/auth/register}"
-          method="post"
-          class="needs-validation"
-          novalidate
-        >
-          <div class="mb-4">
-            <label for="username" class="form-label text-warning fw-bold mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="#ffc107"
-                class="bi bi-person"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm.027 7a5.007 5.007 0 0 0-9.054 0H1a6 6 0 0 1 12 0H10.027z"
-                />
-              </svg>
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              class="form-control bg-dark text-warning border-warning form-control-lg"
-              placeholder="Scegli un username"
-              minlength="3"
-              required
-            />
-            <div class="invalid-feedback text-warning">
-              Username deve contenere almeno 3 caratteri.
-            </div>
+        <div class="mb-4">
+          <label for="displayName" class="form-label text-warning fw-bold mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffc107" class="bi bi-person-badge"
+              viewBox="0 0 16 16">
+              <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+              <path
+                d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z" />
+            </svg>
+            Display name
+          </label>
+          <input type="text" id="displayName" name="displayName"
+            class="form-control bg-dark text-warning border-warning form-control-lg"
+            placeholder="Scegli un nome visualizzato" minlength="3" required />
+          <div class="invalid-feedback text-warning">
+            Display name must be at least 3 characters long.
           </div>
+        </div>
 
-          <div class="mb-4">
-            <label
-              for="displayName"
-              class="form-label text-warning fw-bold mb-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="#ffc107"
-                class="bi bi-person-badge"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"
-                />
-                <path
-                  d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"
-                />
-              </svg>
-              Display Name
-            </label>
-            <input
-              type="text"
-              id="displayName"
-              name="displayName"
-              class="form-control bg-dark text-warning border-warning form-control-lg"
-              placeholder="Scegli un nome visualizzato"
-              minlength="3"
-              required
-            />
-            <div class="invalid-feedback text-warning">
-              Nome visualizzato deve contenere almeno 3 caratteri.
-            </div>
+        <div class="mb-4">
+          <label for="email" class="form-label text-warning fw-bold mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffc107" class="bi bi-envelope"
+              viewBox="0 0 16 16">
+              <path
+                d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2V8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.878-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z" />
+            </svg>
+            Email
+          </label>
+          <input type="email" id="email" name="email"
+            class="form-control bg-dark text-warning border-warning form-control-lg" placeholder="email" required />
+          <div class="invalid-feedback text-warning">
+            Insert a valid email.
           </div>
+        </div>
 
-          <div class="mb-4">
-            <label for="email" class="form-label text-warning fw-bold mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="#ffc107"
-                class="bi bi-envelope"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2V8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.878-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"
-                />
-              </svg>
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="form-control bg-dark text-warning border-warning form-control-lg"
-              placeholder="email"
-              required
-            />
-            <div class="invalid-feedback text-warning">
-              Insert a valid email.
-            </div>
+        <div class="mb-4">
+          <label for="password" class="form-label text-warning fw-bold mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffc107" class="bi bi-lock"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.213 2.363 9.337a11.777 11.777 0 0 0 2.605 2.69.5.5 0 0 0 .698-.045.5.5 0 0 0-.045-.698c-.737-.703-1.588-1.538-2.127-2.394-.54-.856-.94-1.546-.91-2.367.027-.763.252-1.508.889-2.14 1.946-1.946 4.481-1.948 7.334 0l.006.006c.92.92 1.446 2.119 1.446 3.406s-.526 2.487-1.446 3.406l-.006.006c-.92.92-2.119 1.446-3.406 1.446s-2.487-.526-3.406-1.446l-.007-.007a.5.5 0 0 0-.708.707l.007.007a5.406 5.406 0 0 0 4.814 2.246 5.406 5.406 0 0 0 4.814-2.246l.006-.006a5.406 5.406 0 0 0 1.446-3.83 5.406 5.406 0 0 0-1.446-3.831l-.006-.006c-1.354-1.354-3.169-2.031-4.814-2.031-1.646 0-3.461.677-4.814 2.031zm7.81 5.209-5.228 5.228a.5.5 0 0 1-.707 0l-2.614-2.614a.5.5 0 0 1 .707-.707L6.938 10.46l4.882-4.882a.5.5 0 1 1 .707.707z" />
+            </svg>
+            Password
+          </label>
+          <input type="password" id="password" name="password"
+            class="form-control bg-dark text-warning border-warning form-control-lg"
+            placeholder="Crea una password sicura" minlength="6" required />
+          <div class="invalid-feedback text-warning">
+            Password must contain at least 6 characters.
           </div>
+        </div>
 
-          <div class="mb-4">
-            <label for="password" class="form-label text-warning fw-bold mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="#ffc107"
-                class="bi bi-lock"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.213 2.363 9.337a11.777 11.777 0 0 0 2.605 2.69.5.5 0 0 0 .698-.045.5.5 0 0 0-.045-.698c-.737-.703-1.588-1.538-2.127-2.394-.54-.856-.94-1.546-.91-2.367.027-.763.252-1.508.889-2.14 1.946-1.946 4.481-1.948 7.334 0l.006.006c.92.92 1.446 2.119 1.446 3.406s-.526 2.487-1.446 3.406l-.006.006c-.92.92-2.119 1.446-3.406 1.446s-2.487-.526-3.406-1.446l-.007-.007a.5.5 0 0 0-.708.707l.007.007a5.406 5.406 0 0 0 4.814 2.246 5.406 5.406 0 0 0 4.814-2.246l.006-.006a5.406 5.406 0 0 0 1.446-3.83 5.406 5.406 0 0 0-1.446-3.831l-.006-.006c-1.354-1.354-3.169-2.031-4.814-2.031-1.646 0-3.461.677-4.814 2.031zm7.81 5.209-5.228 5.228a.5.5 0 0 1-.707 0l-2.614-2.614a.5.5 0 0 1 .707-.707L6.938 10.46l4.882-4.882a.5.5 0 1 1 .707.707z"
-                />
-              </svg>
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              class="form-control bg-dark text-warning border-warning form-control-lg"
-              placeholder="Crea una password sicura"
-              minlength="6"
-              required
-            />
-            <div class="invalid-feedback text-warning">
-              Password deve contenere almeno 6 caratteri.
-            </div>
+        <div class="mb-4">
+          <label for="confirmPassword" class="form-label text-warning fw-bold mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffc107" class="bi bi-check-circle"
+              viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+              <path
+                d="m10.97 4.97-.02.02-3.6 3.85-1.74-1.885a.5.5 0 0 0-.77.093.5.5 0 0 0 .073.776l2.399 2.585a.5.5 0 0 0 .771-.001l4.228-4.832a.5.5 0 0 0-.74-.739z" />
+            </svg>
+            Confirm passowrd
+          </label>
+          <input type="password" id="confirmPassword" name="confirmPassword"
+            class="form-control bg-dark text-warning border-warning form-control-lg" placeholder="Ripeti la password"
+            minlength="6" required />
+          <div class="invalid-feedback text-warning">
+            Passwords do not match.
           </div>
+        </div>
+        <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold mb-4 shadow">
+          Register
+        </button>
 
-          <div class="mb-4">
-            <label
-              for="confirmPassword"
-              class="form-label text-warning fw-bold mb-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="#ffc107"
-                class="bi bi-check-circle"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                />
-                <path
-                  d="m10.97 4.97-.02.02-3.6 3.85-1.74-1.885a.5.5 0 0 0-.77.093.5.5 0 0 0 .073.776l2.399 2.585a.5.5 0 0 0 .771-.001l4.228-4.832a.5.5 0 0 0-.74-.739z"
-                />
-              </svg>
-              Conferma Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              class="form-control bg-dark text-warning border-warning form-control-lg"
-              placeholder="Ripeti la password"
-              minlength="6"
-              required
-            />
-            <div class="invalid-feedback text-warning">
-              Le password non corrispondono.
-            </div>
-          </div>
+        <div class="text-center border-top border-secondary pt-4">
+          <p class="text-secondary mb-0">Already have an account?</p>
+          <a class="btn btn-outline-warning btn-sm fw-bold mt-2" th:href="@{/auth/login}">
+            Login here
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
 
-          <!-- <div class="mb-4">
-            <label for="isAdmin" class="form-label text-warning fw-bold mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="#ffc107"
-                class="bi bi-shield-lock"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M5.5 9a.5.5 0 0 1 .5.5v1.5h1V9.5a.5.5 0 0 1 1 0V11h1V9.5a.5.5 0 0 1 1 0V11h.5a.5.5 0 0 1 .5.5v1A5.53 5.53 0 0 1 8 16a5.53 5.53 0 0 1-4-1.5v-1a.5.5 0 0 1 .5-.5h.5V9.5a.5.5 0 0 1 .5-.5z"
-                />
-              </svg>
-              Is Admin
-            </label>
-            <select
-              id="isAdmin"
-              name="isAdmin"
-              class="form-select bg-dark text-warning border-warning form-select-lg"
-              required
-            >
-              <option value="" disabled selected>Seleziona...</option>
-              <option value="true">Sì</option>
-              <option value="false">No</option>
-            </select>
-            <div class="invalid-feedback text-warning">
-              Seleziona se l'utente è admin.
-            </div>
-          </div> -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
 
-          <button
-            type="submit"
-            class="btn btn-warning btn-lg w-100 fw-bold mb-4 shadow"
-          >
-            Registrati
-          </button>
+</body>
 
-          <div class="text-center border-top border-secondary pt-4">
-            <p class="text-secondary mb-0">Hai già un account?</p>
-            <a
-              class="btn btn-outline-warning btn-sm fw-bold mt-2"
-              th:href="@{/auth/login}"
-            >
-              Accedi Qui
-            </a>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <div th:replace="~{fragments/footer :: footer}"></div>
-
-    <style>
-      body {
-        background: linear-gradient(
-          180deg,
-          #0b0f1a 0%,
-          #1a1033 50%,
-          #0b0f1a 100%
-        );
-        font-family: "Roboto", sans-serif;
-        min-height: 100vh;
-      }
-
-      .card {
-        border-radius: 0.5rem;
-        transition: all 0.3s ease;
-      }
-
-      .card:hover {
-        box-shadow: 0 0 30px rgba(255, 193, 7, 0.3) !important;
-      }
-
-      .form-control,
-      .form-select {
-        transition: all 0.3s ease;
-      }
-
-      .form-control:focus,
-      .form-select:focus {
-        background-color: #1a1a1a;
-        color: #ffc107;
-        border-color: #ffc107;
-        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
-      }
-
-      .btn-warning:hover {
-        background-color: #ffce3d;
-        transform: scale(1.02);
-        box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
-      }
-
-      .btn-outline-warning:hover {
-        background-color: #ffc107;
-        color: #000;
-        box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
-      }
-
-      .invalid-feedback {
-        display: block;
-      }
-    </style>
-  </body>
 </html>

@@ -2,6 +2,12 @@
   --bs-secondary-color: #ffc107;
 }
 
+* {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 body {
   background:
     radial-gradient(60% 40% at 20% 10%, rgba(123, 31, 162, .15), transparent 60%),
@@ -10,6 +16,7 @@ body {
   font-family: 'Roboto', sans-serif;
   min-height: 100vh;
 }
+
 
 
 .link-wrapper {
