@@ -1,0 +1,91 @@
+:root {
+    --mi-background: #FFD797;
+    --mirari-tan: #EEDDBC;
+    /* The main background color */
+    --mirari-brown: #907C5C;
+    /* The border/shadow color */
+    --mirari-dark-brown: #110f0b;
+    /* Text color */
+}
+
+@font-face {
+    font-family: myFont;
+    /* set name */
+    src: url(sansation_light.woff);
+    /* url of the font */
+}
+
+/* div {
+    box-shadow: inset 0px 0px 0px 1px #f00;
+
+} */
+
+.nav-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-evenly;
+    width: 1000px;
+    /* Padding inside the shape */
+    padding-bottom: 22px;
+
+    z-index: 2;
+    /* Ensure content is above the shape */
+}
+
+.mirarinav {
+    height: 150px;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    /* border: 1px solid red; */
+    /* background-color: var(--mi-background); */
+    background-image: url("data:image/svg+xml,%3Csvg%20width%3D%225938%22%20height%3D%22158%22%20viewBox%3D%220%200%205938%20158%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20filter%3D%22url(%23filter0_dn_356_1276)%22%3E%3Cpath%20d%3D%22M9%205H5929V69H3520.63C3513.98%2069%203507.77%2072.2993%203504.05%2077.8049L3464.94%20135.706C3461.23%20141.205%203455.02%20144.504%203448.39%20144.511L2969%20145H2489.66C2483%20145%202476.77%20141.679%202473.06%20136.144L2433.94%2077.8556C2430.23%2072.3207%202424%2069%202417.34%2069H9V5Z%22%20fill%3D%22%23FFD797%22%2F%3E%3Cpath%20d%3D%22M5931.5%202.5V71.5H3520.62C3514.81%2071.5002%203509.38%2074.387%203506.12%2079.2041L3467.01%20137.105C3462.83%20143.292%203455.86%20147.003%203448.39%20147.011L2969%20147.5H2489.67C2482.17%20147.5%202475.16%20143.764%202470.98%20137.537L2431.87%2079.249C2428.62%2074.406%202423.17%2071.5%202417.33%2071.5H6.5V2.5H5931.5Z%22%20stroke%3D%22%23270C00%22%20stroke-width%3D%225%22%2F%3E%3C%2Fg%3E%3Cdefs%3E%3Cfilter%20id%3D%22filter0_dn_356_1276%22%20x%3D%220%22%20y%3D%220%22%20width%3D%225938%22%20height%3D%22158%22%20filterUnits%3D%22userSpaceOnUse%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22%2F%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22%20result%3D%22hardAlpha%22%2F%3E%3CfeOffset%20dy%3D%224%22%2F%3E%3CfeGaussianBlur%20stdDeviation%3D%222%22%2F%3E%3CfeComposite%20in2%3D%22hardAlpha%22%20operator%3D%22out%22%2F%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200.5%200%22%2F%3E%3CfeBlend%20mode%3D%22normal%22%20in2%3D%22BackgroundImageFix%22%20result%3D%22effect1_dropShadow_356_1276%22%2F%3E%3CfeBlend%20mode%3D%22normal%22%20in%3D%22SourceGraphic%22%20in2%3D%22BackgroundImageFix%22%20result%3D%22shape%22%2F%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221%201%22%20stitchTiles%3D%22stitch%22%20numOctaves%3D%223%22%20result%3D%22noise%22%20seed%3D%223005%22%20%2F%3E%3CfeColorMatrix%20in%3D%22noise%22%20type%3D%22luminanceToAlpha%22%20result%3D%22alphaNoise%22%20%2F%3E%3CfeComponentTransfer%20in%3D%22alphaNoise%22%20result%3D%22coloredNoise1%22%3E%3CfeFuncA%20type%3D%22discrete%22%20tableValues%3D%221%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%201%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20%22%2F%3E%3C%2FfeComponentTransfer%3E%3CfeComposite%20operator%3D%22in%22%20in2%3D%22shape%22%20in%3D%22coloredNoise1%22%20result%3D%22noise1Clipped%22%20%2F%3E%3CfeFlood%20flood-color%3D%22rgba(0%2C%200%2C%200%2C%200.05)%22%20result%3D%22color1Flood%22%20%2F%3E%3CfeComposite%20operator%3D%22in%22%20in2%3D%22noise1Clipped%22%20in%3D%22color1Flood%22%20result%3D%22color1%22%20%2F%3E%3CfeMerge%20result%3D%22effect2_noise_356_1276%22%3E%3CfeMergeNode%20in%3D%22shape%22%20%2F%3E%3CfeMergeNode%20in%3D%22color1%22%20%2F%3E%3C%2FfeMerge%3E%3CfeBlend%20mode%3D%22normal%22%20in%3D%22effect2_noise_356_1276%22%20in2%3D%22effect1_dropShadow_356_1276%22%20result%3D%22effect2_noise_356_1276%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3C%2Fsvg%3E");
+    /* clip-path: polygon(0% 0%, 100% 0%, 100% 43.243%, 78.731% 43.243%, 78.731% 43.243%, 78.628% 43.309%, 78.527% 43.505%, 78.428% 43.825%, 78.333% 44.266%, 78.242% 44.823%, 78.155% 45.491%, 78.074% 46.267%, 77.998% 47.145%, 77.929% 48.122%, 77.867% 49.193%, 75.83% 88.315%, 75.83% 88.315%, 75.768% 89.384%, 75.7% 90.36%, 75.624% 91.238%, 75.543% 92.013%, 75.456% 92.681%, 75.365% 93.238%, 75.27% 93.679%, 75.172% 94%, 75.071% 94.197%, 74.968% 94.264%, 50% 94.595%, 25.035% 94.595%, 25.035% 94.595%, 24.931% 94.528%, 24.83% 94.331%, 24.731% 94.009%, 24.636% 93.565%, 24.544% 93.005%, 24.458% 92.333%, 24.376% 91.553%, 24.301% 90.669%, 24.231% 89.687%, 24.17% 88.611%, 22.132% 49.227%, 22.132% 49.227%, 22.071% 48.15%, 22.002% 47.168%, 21.926% 46.285%, 21.844% 45.505%, 21.758% 44.833%, 21.666% 44.272%, 21.571% 43.829%, 21.472% 43.507%, 21.371% 43.31%, 21.267% 43.243%, 0% 43.243%, 0% 0%); */
+    background-size: cover;
+    background-repeat: no-repeat;
+background-position: 50% calc(50% - 5px) ;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+.mirarinavleft {
+    display: inline-flex;
+    align-self: flex-end;
+}
+
+.mirarinavright {
+    display: inline-flex;
+    align-self: flex-end;
+}
+
+.mirarinavlogo {
+    width: 50%;
+    position: relative;
+    display: inline-flex;
+    align-self: flex-end;
+}
+
+.logotext {
+    position: relative;
+}
+
+.logoimg {
+    position: absolute;
+    top: -150px;
+}
+
+.mirarilinks a {
+    color: var(--mirari-dark-brown);
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0 10px;
+    margin: 0 5px;
+    display: inline-block;
+}

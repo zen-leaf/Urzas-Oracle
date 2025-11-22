@@ -1,0 +1,20 @@
+<nav th:fragment="mirariNavbar" class="mirarinav">
+    <div class="nav-wrapper">
+        <div class="mirarinavleft mirarilinks">
+            <a href="/cards" th:classappend="${active}=='cards' ? ' active'">Cards</a>
+            <a href="/decks" th:classappend="${active}=='decks' ? ' active'">Decks</a>
+
+        </div>
+        <div class="mirarinavlogo">
+            <img class="logoimg" src="img/logo/Logo.png" width="100%"></img>
+            <img class="logotext" src="img/logo/MIRARI.svg" width="100%"></img>
+        </div>
+        <div class="mirarinavright mirarilinks">
+            <a href="/auth/login" th:classappend="${active}=='login' ? ' active'">Login</a>
+            <a href="/auth/register" th:classappend="${active}=='login' ? ' active'">Register</a>
+
+        </div>
+
+    </div>
+    </div>
+</nav>

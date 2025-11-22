@@ -4,7 +4,7 @@
 <head th:replace="~{fragments/head :: head('Home - Urza\'s Oracle')}"></head>
 
 <body class="bg-dark text-light d-flex flex-column">
-  <div th:replace="~{fragments/navbar :: navbar}"></div>
+  <div th:replace="~{fragments/mirariNavbar :: mirariNavbar}"></div>
 
   <div class="cards-full-background" id="cardsMosaicFull">
     <th:block th:each="card : ${topCards}">
@@ -24,7 +24,9 @@
 
       <!-- LOGO UFFICIALE MAGIC CON GLOW RIDOTTO -->
       <div class="mtg-logo-container pb-2 mb-3">
-        <img src="https://images.ctfassets.net/s5n2t79q9icq/3dB5uyWzUH95O1ZPBNNUX5/6cff7c65a809285755ea24b164b6ac65/magic-logo.png?fm=webp" alt="Magic: The Gathering" class="mtg-logo" />
+        <img
+          src="https://images.ctfassets.net/s5n2t79q9icq/3dB5uyWzUH95O1ZPBNNUX5/6cff7c65a809285755ea24b164b6ac65/magic-logo.png?fm=webp"
+          alt="Magic: The Gathering" class="mtg-logo" />
       </div>
 
       <div class="d-flex gap-3 justify-content-center flex-wrap">
@@ -93,8 +95,8 @@
           </div>
         </div> -->
 
-        <!-- Card 2 -->
-        <!-- <div
+          <!-- Card 2 -->
+          <!-- <div
             class="col-12 col-sm-6 col-md-4 animate-item"
             style="--direction-x: 0; --direction-y: 120; animation-delay: 0.8s"
           >
@@ -137,8 +139,8 @@
             </div>
           </div> -->
 
-        <!-- Card 3 -->
-        <!-- <div class="col-12 col-sm-6 col-md-4 animate-item"
+          <!-- Card 3 -->
+          <!-- <div class="col-12 col-sm-6 col-md-4 animate-item"
           style="--direction-x: 120; --direction-y: 80; animation-delay: 1s">
           <div class="card glass-card bg-dark border-warning h-100 shadow-lg">
             <div class="card-body text-center p-3">
