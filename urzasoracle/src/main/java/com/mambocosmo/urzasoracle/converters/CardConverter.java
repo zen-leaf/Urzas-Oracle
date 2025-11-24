@@ -109,7 +109,7 @@ public class CardConverter implements GenericConverter<Card, CardDTO> {
         dto.setExpansionSet(getCARDSETCONVERTER().fromEToD(e.getExpansion()==null? new CardExpansionSet():e.getExpansion()));
 
         // System.out.println("WARNING EXPENSIVE OPERATION: CARD CONVERT TO DTO");
-        System.out.println("loaded DTO: " + dto.getName());
+        // System.out.println("loaded DTO: " + dto.getName());
         return dto;
     }
 

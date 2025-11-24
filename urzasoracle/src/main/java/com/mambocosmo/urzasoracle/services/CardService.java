@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -58,13 +59,13 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
         if (fromEntity.getAll_parts() == null) {
             fromEntity.setAll_parts(new ArrayList<>());
         }
-        
-        if (fromEntity.getCard_faces() == null 
+
+        if (fromEntity.getCard_faces() == null
         // || !fromEntity.getCard_faces().isEmpty()
         ) {
             fromEntity.setCard_faces(new ArrayList<>());
         }
-        
+
         // System.out.println("Card from expansion:" +
         // fromEntity.getExpansion().getName());
 
@@ -220,9 +221,12 @@ public class CardService extends GenericService<Card, CardDTO, CardConverter, Ca
     public Page<CardDTO> getRandomPaged(int size) {
         Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "released"));
         Page<Card> temp = getREPOSITORY().findRandomSubSet(size, pageable);
-        return temp.map(card -> getCONVERTER().fromEToD(card));
+
+        return Util.batchConvert(temp,getCONVERTER());
 
     }
+
+    
 
     public List<Card> getAllCardEntities() {
         List<Card> page = getREPOSITORY().findAll();
