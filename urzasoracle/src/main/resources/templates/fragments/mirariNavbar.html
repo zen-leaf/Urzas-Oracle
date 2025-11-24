@@ -1,15 +1,23 @@
 <nav th:fragment="mirariNavbar" class="mirarinav">
-    <div class="nav-wrapper">
-        <div class="mirarinavleft mirarilinks">
+    <div class="nav-wrapper ">
+        <div class="navbg">
+            <svg class="navbg-inline" width="5920" height="140" viewBox="0 0 5920 140" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0 0H5920V64H3511.63C3504.98 64 3498.77 67.2993 3495.05 72.8049L3455.94 130.706C3452.23 136.205 3446.02 139.504 3439.39 139.511L2960 140H2480.66C2474 140 2467.77 136.679 2464.06 131.144L2424.94 72.8556C2421.23 67.3207 2415 64 2408.34 64H0V0Z"
+                    fill="var(--mi-background)" />
+            </svg>
+        </div>
+        <div class="mirarinavleft mirarilinks montserrat bold">
             <a href="/cards" th:classappend="${active}=='cards' ? ' active'">Cards</a>
             <a href="/decks" th:classappend="${active}=='decks' ? ' active'">Decks</a>
 
         </div>
         <div class="mirarinavlogo">
-            <img class="logoimg" src="img/logo/Logo.png" width="100%"></img>
+            <img class="logoimg" src="img/logo/LogoShadow.png" width="100%"></img>
             <img class="logotext" src="img/logo/MIRARI.svg" width="100%"></img>
         </div>
-        <div class="mirarinavright mirarilinks">
+        <div class="mirarinavright mirarilinks montserrat bold">
             <a href="/auth/login" th:classappend="${active}=='login' ? ' active'">Login</a>
             <a href="/auth/register" th:classappend="${active}=='login' ? ' active'">Register</a>
 
